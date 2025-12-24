@@ -6,7 +6,8 @@ export default async function Page() {
         config: configPromise
     })
     const data = await payload.find({
-        collection: "users"
+        collection: "users",
+        depth: 0
     })
     return (
         <div>

@@ -33,15 +33,9 @@ const categories = [
     ],
   },
   {
-    name: "Phân loại",
-    slug: "formats",
-    subCategories: [
-      { name: "Manga", slug: "manga" },
-      { name: "Manhwa", slug: "manhwa" },
-      { name: "Manhua", slug: "manhua" },
-      { name: "Webtoon", slug: "webtoon" },
-      { name: "Doujinshi", slug: "doujinshi" },
-    ],
+    name: "Lịch sử",
+    slug: "history",
+    
   },
   {
     name: "Xếp hạng",
