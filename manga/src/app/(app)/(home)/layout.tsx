@@ -22,7 +22,8 @@ const Layout = async ({children}: Props) => {
                 parent: {
                     exists: false
                 }
-            }
+            },
+            sort:"order",
         })
 
     const formatData = data.docs.map((doc) => (

@@ -3,7 +3,7 @@ import Image from "next/image";
 import { NavbarCategory } from "./navbar-category";
 import { Search } from "../home/search";
 import { Button } from "@/components/ui/button";
-import { Bookmark, FacebookIcon, History, LogOut, MenuIcon, Trophy, Users, YoutubeIcon } from "lucide-react";
+import { Bookmark, Carrot, FacebookIcon, History, LogOut, MenuIcon, Trophy, Users, YoutubeIcon } from "lucide-react";
 import { NavbarSidebar } from "./navbar-sidebar";
 import { useState } from "react";
 
@@ -27,6 +27,12 @@ const NavbarItem = [
         href: "/facebook.com",
         icon: FacebookIcon
     }, 
+    {
+        label: "Thể loại",
+        href: '/',
+        icon: Carrot
+    },
+    
     {
         label: "Nhóm dịch",
         href: "/team",
@@ -52,7 +58,7 @@ export const Navbar = ({ data }: NavbarProps) => {
         <div className="">
           <Image src="/img/logo.png" alt="logo" width={60} height={60} />
         </div>
-        <div className="w-75">
+        <div className="">
           <NavbarCategory data={data} />
         </div>
         <div className="flex items-center gap-2">

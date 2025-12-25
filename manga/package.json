@@ -10,8 +10,8 @@
     "lint": "eslint",
     "generate:types": "payload generate:types",
     "db:fresh": "payload migrate:fresh",
-    "db:seed": "bun run src/seed.ts",
-    "db:reset": "bun run db:fresh && bun run db:seed"
+    "db:seed": "bun run src/lib/seed.ts"
+    
   },
   "dependencies": {
     "@payloadcms/db-postgres": "^3.69.0",

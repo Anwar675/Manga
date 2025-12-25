@@ -1,10 +1,13 @@
+import { getPayload } from "payload";
+import config from "@payload-config"
 const categories = [
   {
     name: "Trang chủ",
     slug: "home",
+    order: 0
   },
   {
-    name: "Thể loại",
+    name: "Thể loại", 
     slug: "genres",
     subCategories: [
       { name: "Hành động", slug: "action" },
@@ -31,11 +34,12 @@ const categories = [
       { name: "Shoujo", slug: "shoujo" },
       { name: "Josei", slug: "josei" },
     ],
+    order: 1
   },
   {
     name: "Lịch sử",
     slug: "history",
-    
+    order: 3
   },
   {
     name: "Xếp hạng",
@@ -46,6 +50,7 @@ const categories = [
       { name: "Top tháng", slug: "top-monthly" },
       { name: "Top mọi thời đại", slug: "top-all-time" },
     ],
+    order: 4
   },
   {
   name: "Khác",
@@ -59,6 +64,36 @@ const categories = [
     { name: "Đánh giá cao", slug: "top-rated" },
     { name: "Truyện ngẫu nhiên", slug: "random" },
   ],
+  order: 5
 }
 
 ];
+
+const seed = async () => {
+  const payload = await getPayload({config})
+  for (const category of categories) {
+    const parentCategory = await payload.create({
+      collection: "categories",
+      data: {
+        name: category.name,
+        slug: category.slug,
+        parent: null,
+        order: category.order,
+      }
+    })
+    for(const subCategory of category.subCategories || []) {
+      await payload.create({
+        collection: "categories",
+        data: {
+          name: subCategory.name,
+          slug: subCategory.slug,
+          parent: parentCategory.id,
+          order: category.order,
+        }
+      })
+    }
+  }
+}
+
+await seed()
+process.exit(0)

@@ -179,6 +179,7 @@ export interface Category {
     hasNextPage?: boolean;
     totalDocs?: number;
   };
+  order: number;
   updatedAt: string;
   createdAt: string;
 }
@@ -309,6 +310,7 @@ export interface CategoriesSelect<T extends boolean = true> {
   slug?: T;
   parent?: T;
   subcategories?: T;
+  order?: T;
   updatedAt?: T;
   createdAt?: T;
 }

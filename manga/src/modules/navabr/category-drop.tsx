@@ -14,7 +14,7 @@ export const CategoryDropdown = ({ category }: Props) => {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const { getDropPosition } = UsePosition(dropdownRef, {
     category,
-    columnWidth: 90,
+    columnWidth: 100,
     gap: 16,
   });
   const onMouseEnter = () => {

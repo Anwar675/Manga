@@ -22,11 +22,19 @@ export const Categories: CollectionConfig = {
       hasMany: false,
     },
     {
-        name: "subcategories",
-        type: "join",
-        collection: "categories",
-        on: 'parent',
-        hasMany: true,
-    }
+      name: "subcategories",
+      type: "join",
+      collection: "categories",
+      on: "parent",
+      hasMany: true,
+      defaultLimit: 100,
+    },
+    {
+      name: "order",
+      type: "number",
+      required: true,
+      defaultValue: 0,
+      index: true,
+    },
   ],
 };

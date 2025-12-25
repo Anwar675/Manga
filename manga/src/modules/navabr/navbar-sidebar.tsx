@@ -27,7 +27,7 @@ export const NavbarSidebar = ({ items, open, onOpenChange }: Props) => {
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent
         side="left"
-        className="p-0 transition-none text-[#fae1c2] bg-[#94928b]"
+        className="p-0 transition-none text-[#fae1c2] bg-[#777468]"
       >
         <SheetHeader className="p-4 border-b">
           <div className="flex items-center">
@@ -50,7 +50,7 @@ export const NavbarSidebar = ({ items, open, onOpenChange }: Props) => {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`flex gap-4 items-center p-4 rounded-md m-3 transition ${isActive ? "text-[#94928b] bg-[#fae1c2]" : "text-[#fae1c2] bg-[#94928b]"}`} 
+                className={`flex gap-4 items-center p-4 rounded-md m-3 transition ${isActive ? "text-[#777468] bg-[#fae1c2]" : "text-[#fae1c2] bg-[#777468]"}`} 
               >
                 {item.icon && <item.icon size={20} />}
                 <span className="pl-4">{item.label}</span>
