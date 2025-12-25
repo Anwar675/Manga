@@ -12,14 +12,14 @@ export const Search = () => {
         placeholder="Tìm kiếm..."
         value={value}
         onChange={(e) => setValue(e.target.value)}
-        className="text-base1 font-light pr-8 2xl:pr-12 md:w-60 w-full "
+        className="text-base1 placeholder:text-base1/50 font-light pr-8 2xl:pr-12 md:w-60 w-full "
       />
       {!value ? (
         <SearchIcon className="absolute top-1/2 -translate-y-1/2 right-2 text-[#cdcdcd]" />
       ) : (
         <XIcon
           onClick={() => setValue("")}
-          className="absolute top-1/2 -translate-y-1/2 right-2 text-[#74777a]"
+          className="absolute top-1/2 -translate-y-1/2 right-2 text-base1/20"
         />
       )}
     </div>

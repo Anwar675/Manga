@@ -54,7 +54,7 @@ export const Navbar = ({ data }: NavbarProps) => {
     const [isSidebar, setIsSidebar] = useState(false)
   return (
     <>
-      <div className="bg-[#3C392B]/90 2xl:px-16 absolute w-full left-0 right-0  z-20  hidden md:flex top-0 2xl:py-8 px-12 py-4 items-center justify-between">
+      <div className="bg-[#3C392B]/83 2xl:px-16 absolute w-full left-0 right-0  z-20  hidden md:flex top-0 2xl:py-8 px-12 py-4 items-center justify-between">
         <div className="">
           <Image src="/img/logo.png" alt="logo" width={60} height={60} />
         </div>
@@ -67,7 +67,7 @@ export const Navbar = ({ data }: NavbarProps) => {
           <Button variant="default">Đăng nhập</Button>
         </div>
       </div>
-      <div className="md:hidden bg-[#3C392B]/90 px-4 py-3">
+      <div className="md:hidden bg-[#837b54] px-4 py-3">
         
         <div className="flex items-center justify-between">
           <Image src="/img/logo.png" alt="logo" width={48} height={48} />
