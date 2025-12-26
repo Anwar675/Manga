@@ -54,7 +54,7 @@ export const Navbar = ({ data }: NavbarProps) => {
     const [isSidebar, setIsSidebar] = useState(false)
   return (
     <>
-      <div className="bg-[#3C392B]/83 2xl:px-16 absolute w-full left-0 right-0  z-20  hidden md:flex top-0 2xl:py-8 px-12 py-4 items-center justify-between">
+      <div className="bg-[#3C392B]/83 2xl:px-16  w-full hidden md:flex top-0 2xl:py-8 px-12 py-4 items-center justify-between">
         <div className="">
           <Image src="/img/logo.png" alt="logo" width={60} height={60} />
         </div>

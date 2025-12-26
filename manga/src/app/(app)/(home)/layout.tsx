@@ -47,7 +47,7 @@ const Layout = async ({ children }: Props) => {
         image: banner.image
     }
   ))
-  console.log(slides)
+  
 
   const formatData = data.docs.map((doc) => ({
     ...doc,
