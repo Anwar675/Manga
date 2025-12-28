@@ -1,17 +1,15 @@
-import { getPayload } from "payload"
-import configPromise from '@payload-config'
+'use client'
+import { useTRPC } from "@/trpc/client"
+import { useQuery } from "@tanstack/react-query"
 
-export default async function Page() {
-    const payload = await getPayload({
-        config: configPromise
-    })
-    const data = await payload.find({
-        collection: "users",
-        depth: 0
-    })
+
+export default function Page() {
+   const trpc = useTRPC()
+   const category = useQuery(trpc.category.getMany.queryOptions())
     return (
         <div>
-            {JSON.stringify(data, null,2)}
+            <p>is Loading: {`${category.isLoading}`}</p>
+            {JSON.stringify(category, null,2)}
         </div>
     )
 }

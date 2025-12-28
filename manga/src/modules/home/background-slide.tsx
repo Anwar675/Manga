@@ -6,6 +6,8 @@ import { Media } from "@/payload-types";
 import "swiper/css";
 import "swiper/css/pagination";
 import { Pagination, Autoplay } from "swiper/modules";
+import { useTRPC } from "@/trpc/client";
+import { useSuspenseQuery } from "@tanstack/react-query";
 
 export interface Slide {
   id: string;
@@ -14,20 +16,20 @@ export interface Slide {
   image: string | Media;
 }
 
-interface BackgroundSliderProps {
-  slides: Slide[];
-}
-export const BackgroundSlider = ({ slides }: BackgroundSliderProps) => {
+
+export const BackgroundSlider = () => {
+  const trpc = useTRPC()
+  const {data:slides} = useSuspenseQuery(trpc.brand.getMany.queryOptions())
   return (
     <Swiper
       modules={[Autoplay, Pagination]}
       autoplay={{
-        delay: 5000,
+        delay: 5000, 
         disableOnInteraction: false,
       }}
       pagination={{ dynamicBullets: true }}
       loop
-      className="h-125"
+      className="md:h-100 h-52"
     >
       {slides.map((slide, index) => (
         <SwiperSlide key={slide.id ?? index}>

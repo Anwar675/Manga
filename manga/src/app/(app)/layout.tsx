@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 
 import "./globals.css";
 import { Kanit } from "next/font/google"
+import {  TRPCReactProvider } from "@/trpc/client";
 
 const kanit = Kanit({
   subsets: ["latin", "thai", "vietnamese"],
@@ -62,7 +63,9 @@ export default function RootLayout({
     return (
       <html lang="en" >
         <body className={kanit.className}>
-          {children}
+          <TRPCReactProvider>
+            {children}
+          </TRPCReactProvider>
         </body>
       </html>
     );
