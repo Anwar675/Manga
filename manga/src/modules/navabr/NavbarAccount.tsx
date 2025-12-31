@@ -23,7 +23,7 @@ export const NavbarAccount = () => {
   })
 );
   return (
-    <div className="bg-[#fae1c2] w-60 rounded-md overflow-hidden ">
+    <div  onMouseDown={(e) => e.stopPropagation()} className="bg-[#fae1c2] w-60 rounded-md overflow-hidden ">
       <div className=" flex items-center text-[#4f4c40]  text-md  2xl:text-[16px] font-light gap-4 p-4">
         <div className="w-11 relative h-11">
           <Image
@@ -45,7 +45,7 @@ export const NavbarAccount = () => {
             <button
               key="logout"
               onClick={() => logout.mutate()}
-              className="flex w-full items-center gap-4 px-4 py-3 hover:bg-[#cfccb3]"
+              className="flex w-full cursor-pointer items-center gap-4 px-4 py-3 hover:bg-[#cfccb3]"
             >
               <Icon className="text-2xl" />
               {item.label}
@@ -57,7 +57,7 @@ export const NavbarAccount = () => {
             <Link
               key={item.href}
               href={item.href}
-              className="flex items-center text-[#4f4c40] hover:bg-[#cfccb3] text-md  2xl:text-[16px] font-light gap-4 px-4 py-3 "
+              className="flex items-center  text-[#4f4c40] hover:bg-[#cfccb3] text-md  2xl:text-[16px] font-light gap-4 px-4 py-3 "
             >
               <Icon className="text-2xl" />
               <p>{item.label}</p>

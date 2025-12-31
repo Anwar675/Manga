@@ -18,21 +18,26 @@ export const Navbar = () => {
   const [isActive, setIsActive] = useState(false);
   const trpc = useTRPC();
   const accountRef = useRef<HTMLDivElement>(null);
+  const DeskaccountRef = useRef<HTMLDivElement>(null);
   const { data } = useSuspenseQuery(trpc.category.getMany.queryOptions());
   const session = useQuery(trpc.auth.session.queryOptions());
   useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (
-        accountRef.current &&
-        !accountRef.current.contains(e.target as Node)
-      ) {
-        setIsActive(false);
-      }
-    };
+  const handleClickOutside = (e: MouseEvent) => {
+    const target = e.target as Node;
 
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+    if (
+      DeskaccountRef.current?.contains(target) ||
+      accountRef.current?.contains(target)
+    ) {
+      return;
+    }
+
+    setIsActive(false);
+  };
+
+  document.addEventListener("click", handleClickOutside);
+  return () => document.removeEventListener("click", handleClickOutside);
+}, []);
   return (
     <>
       <div className="bg-[#3C392B]/83 2xl:px-16  w-full hidden md:flex top-0 2xl:py-8 px-12 py-4 items-center justify-between">
@@ -46,7 +51,7 @@ export const Navbar = () => {
           <Search />
 
           {session.data?.user ? (
-            <div ref={accountRef} className="h-10 w-12  relative">
+            <div ref={DeskaccountRef}  className="h-10 w-12  relative">
               <Image
                 onClick={() => setIsActive((prev) => !prev)}
                 src="/img/background.png"
