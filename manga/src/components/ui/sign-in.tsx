@@ -12,16 +12,16 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 
-import { RegisterFormValues } from "@/modules/auth/registerSchema";
+import { LoginFormValue } from "@/modules/auth/registerSchema";
 import Link from "next/link";
 
 interface LoginProps {
-  form: UseFormReturn<RegisterFormValues>;
-  onSubmit: (values: RegisterFormValues) => void;
+  form: UseFormReturn<LoginFormValue>;
+  onSubmit: (values: LoginFormValue) => void;
   isLoading?: boolean;
 }
 
-export function SignUpForm({ form, onSubmit, isLoading }: LoginProps) {
+export function SignInForm({ form, onSubmit, isLoading }: LoginProps) {
   return (
     <div className={cn("flex flex-col gap-6")}>
       <Card className="overflow-hidden p-0">
@@ -37,19 +37,6 @@ export function SignUpForm({ form, onSubmit, isLoading }: LoginProps) {
                   Login to your account to exploring
                 </p>
               </div>
-              <Field>
-                <FieldLabel htmlFor="username">Username</FieldLabel>
-                <Input
-                  id="username"
-                  type="username"
-                  placeholder="Tên của bạn"
-                  required
-                  {...form.register("username")}
-                />
-                <p className="text-sm text-red-500">
-                  {form.formState.errors.username?.message?.toString()}
-                </p>
-              </Field>
               <Field>
                 <FieldLabel htmlFor="email">Email</FieldLabel>
                 <Input
@@ -79,7 +66,7 @@ export function SignUpForm({ form, onSubmit, isLoading }: LoginProps) {
               </Field>
               <Field>
                 <Button disabled={isLoading} type="submit">
-                  Đăng ký
+                  Đăng nhập
                 </Button>
               </Field>
               <FieldSeparator className="*:data-[slot=field-separator-content]:bg-card">
@@ -114,13 +101,13 @@ export function SignUpForm({ form, onSubmit, isLoading }: LoginProps) {
                   <span className="sr-only">Login with Meta</span>
                 </Button>
               </Field>
-              <FieldDescription className="text-center">
+              <FieldDescription className="text-center ">
                 Don&apos;t have an account?
                 <Link
-                  href="/sign-in"
-                  className="underline underline-offset-4 hover:text-primary px-2"
+                  href="/sign-up"
+                  className="underline underline-offset-4 px-2 hover:text-primary"
                 >
-                  Đăng nhập
+                  Đăng ký
                 </Link>
               </FieldDescription>
             </FieldGroup>

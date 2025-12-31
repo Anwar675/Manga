@@ -1,18 +1,43 @@
 "use client";
-import { LoginForm } from "@/components/login-form";
+
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import z from "zod";
-import { registerSchema } from "../registerSchema";
+import { toast } from "sonner";
+import { LoginFormValue, loginSchema, RegisterFormValues, registerSchema } from "../registerSchema";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useTRPC } from "@/trpc/client";
+import { useRouter } from "next/navigation";
+import { SignInForm } from "@/components/ui/sign-in";
+
+
+
 export const SignInView = () => {
-  const form = useForm<z.infer<typeof registerSchema>>({
-    resolver: zodResolver(registerSchema),
-    defaultValues: { email: "", password: "", username: "" },
+  const trpc = useTRPC();
+  const queryClient = useQueryClient()
+  const router = useRouter();
+  const form = useForm<LoginFormValue>({
+    resolver: zodResolver(loginSchema),
+    defaultValues: { email: "", password: "" },
   });
+ 
+  const login = useMutation(
+    trpc.auth.login.mutationOptions({
+      onError: (error) => {
+        toast.error(error.message);
+      },
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.auth.session.queryFilter())
+        router.push("/");
+      },
+    })
+  );
+   const onSubmit = (values: LoginFormValue) => {
+    login.mutate(values);
+  };
   return (
     <div className=" flex bg-[#4c4c4c] min-h-svh flex-col items-center justify-center p-6 md:p-10">
       <div className="w-full max-w-sm md:max-w-4xl">
-        <LoginForm />
+        <SignInForm form={form} onSubmit={onSubmit}  />
       </div>
     </div>
   );

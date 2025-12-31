@@ -37,8 +37,8 @@ const categories = [
     order: 1
   },
   {
-    name: "Lịch sử",
-    slug: "history",
+    name: "FanPage",
+    slug: "facebook",
     order: 3
   },
   {

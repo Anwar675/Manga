@@ -5,11 +5,11 @@ import { useQuery } from "@tanstack/react-query"
 
 export default function Page() {
    const trpc = useTRPC()
-   const category = useQuery(trpc.category.getMany.queryOptions())
+   const category = useQuery(trpc.auth.session.queryOptions())
     return (
         <div>
-            <p>is Loading: {`${category.isLoading}`}</p>
-            {JSON.stringify(category, null,2)}
+            
+            {JSON.stringify(category.data?.user, null,2)}
         </div>
     )
 }
