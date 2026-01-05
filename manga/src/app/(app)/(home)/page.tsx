@@ -1,15 +1,15 @@
-'use client'
-import { useTRPC } from "@/trpc/client"
-import { useQuery } from "@tanstack/react-query"
+import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
+import HomeClient from "./home-client";
+import { getQueryClient, trpc } from "@/trpc/server";
 
+const Page = async () => {
+  const queryClient = getQueryClient();
+  await queryClient.prefetchQuery(trpc.brand.getMany.queryOptions());
+  return (
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <HomeClient />
+    </HydrationBoundary>
+  );
+};
 
-export default function Page() {
-   const trpc = useTRPC()
-   const category = useQuery(trpc.auth.session.queryOptions())
-    return (
-        <div>
-            
-            {JSON.stringify(category.data?.user, null,2)}
-        </div>
-    )
-}
+export default Page;

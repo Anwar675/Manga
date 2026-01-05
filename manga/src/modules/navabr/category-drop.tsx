@@ -3,6 +3,7 @@ import { Category } from "@/payload-types";
 import { useRef, useState } from "react";
 import { UsePosition } from "./use-position";
 import { SubcategoryMenu } from "./subcategory-menu";
+import Link from "next/link";
 
 interface Props {
   category: Category;
@@ -33,7 +34,11 @@ export const CategoryDropdown = ({ category }: Props) => {
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
     >
-      <div className="2xl:text-xl md:text-[12px] xl:text-[16px]">{category.name}</div>
+      <div className="2xl:text-xl md:text-[12px] xl:text-[16px]">
+        <Link href="/">
+          {category.name}
+        </Link>
+      </div>
 
       <SubcategoryMenu
         category={category}
