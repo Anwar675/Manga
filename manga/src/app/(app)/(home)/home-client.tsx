@@ -1,5 +1,6 @@
 "use client"
 import { BackgroundSlider } from "@/modules/home/background-slide"
+import { NewUpdate } from "@/modules/home/ui/newUpdate"
 import { Popular } from "@/modules/home/ui/popular"
 import { useTRPC } from "@/trpc/client"
 import { useQuery } from "@tanstack/react-query"
@@ -12,6 +13,7 @@ export default function HomeClient() {
         <div className="relative">
             <BackgroundSlider  />
             <Popular />
+            <NewUpdate />
         </div>
     )
 }

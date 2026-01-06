@@ -12,10 +12,10 @@ export const Search = () => {
         placeholder="Tìm kiếm..."
         value={value}
         onChange={(e) => setValue(e.target.value)}
-        className="text-base1 text-[#6d3c27] placeholder:text-[#6d3c27]/50 font-light pr-8 2xl:pr-12 md:w-60 w-full "
+        className="text-base1 text-foreground placeholder:text-foreground/50 font-light pr-8 2xl:pr-12 md:w-60 w-full "
       />
       {!value ? (
-        <SearchIcon className="absolute top-1/2 -translate-y-1/2 right-2 " />
+        <SearchIcon className="absolute top-1/2 -translate-y-1/2 right-4 " />
       ) : (
         <XIcon
           onClick={() => setValue("")}

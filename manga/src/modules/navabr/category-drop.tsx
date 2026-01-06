@@ -39,7 +39,7 @@ export const CategoryDropdown = ({ category }: Props) => {
           {category.name}
         </Link>
       </div>
-
+      
       <SubcategoryMenu
         category={category}
         isOpen={isOpen}

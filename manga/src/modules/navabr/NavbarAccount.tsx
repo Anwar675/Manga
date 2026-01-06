@@ -45,7 +45,7 @@ export const NavbarAccount = () => {
             <button
               key="logout"
               onClick={() => logout.mutate()}
-              className="flex w-full cursor-pointer items-center gap-4 px-4 py-3 hover:bg-[#cfccb3]"
+              className="flex w-full cursor-pointer text-[#4f4c40] items-center gap-4 px-4 py-3 hover:bg-[#cfccb3]"
             >
               <Icon className="text-2xl" />
               {item.label}

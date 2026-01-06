@@ -9,6 +9,8 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useRef, useState } from "react";
 import type { Swiper as SwiperType } from "swiper";
 
+
+
 export const CardManga = () => {
   const swiperRef = useRef<SwiperType | null>(null);
   const [isBeginning, setIsBeginning] = useState(false);
