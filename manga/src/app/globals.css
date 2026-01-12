@@ -4,6 +4,8 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
+  --color-kind: var(--kind);
+  --animate-hot: hot 7s ease infinite;
   --color-background: var(--background);
   --color-rank: var(--rank);
   --color-text-popular: var(--text-popular);
@@ -53,6 +55,7 @@
 
 :root {
   --radius: 0.625rem;
+  --kind: #feaa39;
   --view: #7b8084;
   --rank: #fdd39e;
   --popular:#fde9d3;
@@ -92,6 +95,8 @@
 }
 
 .dark {
+  --kind: #242526;
+
   --background: oklch(0.145 0 0);
   --navbar: oklch(0.145 0 0) ;
   --rank: #726c66;
@@ -100,6 +105,18 @@
   --popular: #3c3c3c;
   --text-popular: #feaa39;
   
+}
+
+@keyframes hot {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 .text-base1 {

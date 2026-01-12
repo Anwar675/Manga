@@ -10,7 +10,7 @@ type NavItem =
   | {
       type: "action";
       label: string;
-      action: "logout";
+      action: "logout" | "toggle-theme";
       icon: LucideIcon;
     }
   | {
@@ -46,9 +46,9 @@ export const navAccount: NavItem[] = [
     type: "divider",
   },
   {
-    type:"item",
+    type:"action",
     label: "Giao diện",
-    href: '/',
+    action: "toggle-theme",
     icon: Moon
   },
   {

@@ -1,0 +1,12 @@
+:root {
+  color-scheme: dark !important;
+}
+
+/* Ép Payload dùng dark theme */
+html,
+body,
+[data-theme],
+[data-theme="light"] {
+  background-color: black !important;
+  color: #e5e7eb !important;
+}

@@ -71,6 +71,11 @@ export interface Config {
     media: Media;
     categories: Category;
     banners: Banner;
+    authors: Author;
+    mangas: Mangas;
+    chapters: Chapter;
+    'effect-comments': EffectComment;
+    'admin-comments': AdminComment;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -86,6 +91,11 @@ export interface Config {
     media: MediaSelect<false> | MediaSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     banners: BannersSelect<false> | BannersSelect<true>;
+    authors: AuthorsSelect<false> | AuthorsSelect<true>;
+    mangas: MangasSelect<false> | MangasSelect<true>;
+    chapters: ChaptersSelect<false> | ChaptersSelect<true>;
+    'effect-comments': EffectCommentsSelect<false> | EffectCommentsSelect<true>;
+    'admin-comments': AdminCommentsSelect<false> | AdminCommentsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -202,6 +212,108 @@ export interface Banner {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "authors".
+ */
+export interface Author {
+  id: string;
+  name: string;
+  slug?: string | null;
+  bio?: string | null;
+  avatar?: (string | null) | Media;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "mangas".
+ */
+export interface Mangas {
+  id: string;
+  title: string;
+  slug: string;
+  cover: string | Media;
+  author: string | Author;
+  status?: ('ongoing' | 'completed' | 'hiatus') | null;
+  views?: number | null;
+  followers?: number | null;
+  latestChapter?: {
+    number?: string | null;
+    slug?: string | null;
+    updatedAt?: string | null;
+  };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "chapters".
+ */
+export interface Chapter {
+  id: string;
+  manga: string | Mangas;
+  title: string;
+  chapterNumber: number;
+  slug?: string | null;
+  pages: {
+    image: string | Media;
+    id?: string | null;
+  }[];
+  views?: number | null;
+  status?: ('draft' | 'published') | null;
+  createdBy?: (string | null) | User;
+  publishedAt?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "effect-comments".
+ */
+export interface EffectComment {
+  id: string;
+  title: string;
+  content: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  images?: (string | Media)[] | null;
+  tag?: ('important' | 'normal' | 'release') | null;
+  effect?: ('none' | 'glow' | 'confetti') | null;
+  isPinned?: boolean | null;
+  author: string | User;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "admin-comments".
+ */
+export interface AdminComment {
+  id: string;
+  EffectComment: string | EffectComment;
+  user: string | User;
+  content: string;
+  parent?: (string | null) | AdminComment;
+  /**
+   * Comment từ admin / team dịch
+   */
+  isOfficial?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
@@ -239,6 +351,26 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'banners';
         value: string | Banner;
+      } | null)
+    | ({
+        relationTo: 'authors';
+        value: string | Author;
+      } | null)
+    | ({
+        relationTo: 'mangas';
+        value: string | Mangas;
+      } | null)
+    | ({
+        relationTo: 'chapters';
+        value: string | Chapter;
+      } | null)
+    | ({
+        relationTo: 'effect-comments';
+        value: string | EffectComment;
+      } | null)
+    | ({
+        relationTo: 'admin-comments';
+        value: string | AdminComment;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -346,6 +478,90 @@ export interface BannersSelect<T extends boolean = true> {
   link?: T;
   order?: T;
   active?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "authors_select".
+ */
+export interface AuthorsSelect<T extends boolean = true> {
+  name?: T;
+  slug?: T;
+  bio?: T;
+  avatar?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "mangas_select".
+ */
+export interface MangasSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  cover?: T;
+  author?: T;
+  status?: T;
+  views?: T;
+  followers?: T;
+  latestChapter?:
+    | T
+    | {
+        number?: T;
+        slug?: T;
+        updatedAt?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "chapters_select".
+ */
+export interface ChaptersSelect<T extends boolean = true> {
+  manga?: T;
+  title?: T;
+  chapterNumber?: T;
+  slug?: T;
+  pages?:
+    | T
+    | {
+        image?: T;
+        id?: T;
+      };
+  views?: T;
+  status?: T;
+  createdBy?: T;
+  publishedAt?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "effect-comments_select".
+ */
+export interface EffectCommentsSelect<T extends boolean = true> {
+  title?: T;
+  content?: T;
+  images?: T;
+  tag?: T;
+  effect?: T;
+  isPinned?: T;
+  author?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "admin-comments_select".
+ */
+export interface AdminCommentsSelect<T extends boolean = true> {
+  EffectComment?: T;
+  user?: T;
+  content?: T;
+  parent?: T;
+  isOfficial?: T;
   updatedAt?: T;
   createdAt?: T;
 }

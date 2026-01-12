@@ -1,19 +1,23 @@
 "use client"
+import { AdminChat } from "@/modules/comments/ui/admin-chat"
 import { BackgroundSlider } from "@/modules/home/background-slide"
 import { NewUpdate } from "@/modules/home/ui/newUpdate"
 import { Popular } from "@/modules/home/ui/popular"
 import { useTRPC } from "@/trpc/client"
-import { useQuery } from "@tanstack/react-query"
+import { useQuery, useSuspenseQuery } from "@tanstack/react-query"
+
 
 
 export default function HomeClient() {
-   const trpc = useTRPC()
-   const category = useQuery(trpc.auth.session.queryOptions())
+    const trpc = useTRPC()
+   const { data:category } = useSuspenseQuery(trpc.category.getSubMany.queryOptions());
+   console.log(category)
     return (
-        <div className="relative">
+        <div className="relative bg-popular text-text-popular">
             <BackgroundSlider  />
             <Popular />
-            <NewUpdate />
+            <NewUpdate category={category} />
+            <AdminChat />
         </div>
     )
 }

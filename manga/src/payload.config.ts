@@ -9,6 +9,11 @@ import { Users } from "./collections/Users";
 import { Media } from "./collections/Media";
 import { Categories } from "./collections/Category";
 import { Banners } from "./collections/Banner";
+import { Authors } from "./collections/Author";
+import { Manga } from "./collections/Manga";
+import { Chapters } from "./collections/Chapter";
+import { EffecComment } from "./collections/EffectComment";
+import { AdminComment } from "./collections/AdminComment";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -20,7 +25,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Media, Categories, Banners],
+  collections: [Users, Media, Categories, Banners, Authors, Manga, Chapters, EffecComment, AdminComment],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || "",
   typescript: {

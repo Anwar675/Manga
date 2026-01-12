@@ -40,11 +40,18 @@ export const NavbarAccount = () => {
           return <div key={`divider-${index}`} className="h-px bg-gray-800" />;
         }
         const Icon = item.icon;
-        if (item.type === "action" && item.action === "logout") {
+        if (item.type === "action") {
           return (
             <button
               key="logout"
-              onClick={() => logout.mutate()}
+              onClick={() => {
+                if(item.action === "logout") {
+                  logout.mutate();
+                }
+                if(item.action === "toggle-theme") {
+                  document.documentElement.classList.toggle('dark')
+                }
+              }}
               className="flex w-full cursor-pointer text-[#4f4c40] items-center gap-4 px-4 py-3 hover:bg-[#cfccb3]"
             >
               <Icon className="text-2xl" />

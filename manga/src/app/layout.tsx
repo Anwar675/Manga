@@ -3,19 +3,23 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Kanit } from "next/font/google"
 import {  TRPCReactProvider } from "@/trpc/client";
+import { ScrollTop } from "@/modules/advend_UI/scroll-top";
 
 const kanit = Kanit({
   subsets: ["latin", "thai", "vietnamese"],
   weight: ["300", "400", "500", "600", "700"],
   variable: "--font-kanit",
 })
-  export const metadata: Metadata = {
+ export const metadata: Metadata = {
+  metadataBase: new URL("https://alga.vn"),
+
   title: {
     default: "Alga – Đọc truyện tranh online",
     template: "%s | Alga",
   },
+
   description:
-    "Web đọc manga miễn phí, cập nhật nhanh, hỗ trợ dark mode, đọc mượt trên mọi thiết bị.",
+    "Web đọc manga miễn phí, cập nhật nhanh, hỗ trợ dark mode.",
 
   keywords: [
     "đọc manga",
@@ -23,12 +27,15 @@ const kanit = Kanit({
     "manga tiếng việt",
   ],
 
+  themeColor: "#0f172a",
+
   openGraph: {
     title: "Alga – Đọc truyện tranh online",
-    description:
-      "Đọc manga miễn phí, tốc độ cao, giao diện đẹp.",
-    url: "https://Alga.vn",
+    description: "Đọc manga miễn phí, tốc độ cao.",
+    url: "https://alga.vn",
     siteName: "Alga",
+    locale: "vi_VN",
+    type: "website",
     images: [
       {
         url: "/og-image.jpg",
@@ -37,34 +44,36 @@ const kanit = Kanit({
         alt: "Alga",
       },
     ],
-    locale: "vi_VN",
-    type: "website",
   },
 
   twitter: {
     card: "summary_large_image",
     title: "Alga – Đọc truyện tranh online",
-    description:
-      "Web đọc manga miễn phí, giao diện đẹp.",
+    description: "Web đọc manga miễn phí.",
     images: ["/og-image.jpg"],
   },
 
   robots: {
     index: true,
     follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+    },
   },
-}
-
+};
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
   }>) {
     return (
-      <html lang="en" >
+      <html lang="vi" >
         <body className={kanit.className}>
           <TRPCReactProvider>
             {children}
+            <ScrollTop />
           </TRPCReactProvider>
         </body>
       </html>
