@@ -46,6 +46,7 @@ export function SignInForm({ form, onSubmit, isLoading }: LoginProps) {
                   required
                   {...form.register("email")}
                 />
+                
               </Field>
               <Field>
                 <div className="flex items-center">
@@ -63,6 +64,11 @@ export function SignInForm({ form, onSubmit, isLoading }: LoginProps) {
                   required
                   {...form.register("password")}
                 />
+                {form.formState.errors.root?.message && (
+                  <p className="text-sm text-red-500">
+                    {form.formState.errors.root.message}
+                  </p>
+                )}
               </Field>
               <Field>
                 <Button disabled={isLoading} type="submit">

@@ -17,9 +17,7 @@ export const SignUpView = () => {
     resolver: zodResolver(registerSchema),
     defaultValues: { email: "", password: "", username: "" },
   });
-  const onSubmit = (values: RegisterFormValues)  => {
-    register.mutate(values)
-  }
+  
   const register = useMutation(trpc.auth.register.mutationOptions({
     onError: (error) => {
       toast.error(error.message)
@@ -29,6 +27,9 @@ export const SignUpView = () => {
       router.push("/")
     }
   }))
+  const onSubmit = (values: RegisterFormValues)  => {
+    register.mutate(values)
+  }
   return (
     <div className=" flex bg-[#4c4c4c] min-h-svh flex-col items-center justify-center p-6 md:p-10">
       <div className="w-full max-w-sm md:max-w-4xl">

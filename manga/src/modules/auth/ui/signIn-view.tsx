@@ -21,10 +21,13 @@ export const SignInView = () => {
   });
  
   const login = useMutation(
-    trpc.auth.login.mutationOptions({
-      onError: (error) => {
-        toast.error(error.message);
-      },
+      trpc.auth.login.mutationOptions({
+        onError: (error) => {
+          form.setError("root", {
+          message: error.message || "Email hoặc mật khẩu không đúng",
+      });
+         
+        },
       onSuccess: async () => {
         await queryClient.invalidateQueries(trpc.auth.session.queryFilter())
         router.push("/");
@@ -34,6 +37,8 @@ export const SignInView = () => {
    const onSubmit = (values: LoginFormValue) => {
     login.mutate(values);
   };
+  
+
   return (
     <div className=" flex bg-[#4c4c4c] min-h-svh flex-col items-center justify-center p-6 md:p-10">
       <div className="w-full max-w-sm md:max-w-4xl">
