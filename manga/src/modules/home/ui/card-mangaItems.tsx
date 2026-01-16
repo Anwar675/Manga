@@ -11,7 +11,7 @@ export const CardMangaItems = ({ newCard }: CardMangaItemsProps) => {
     <>
       {newCard ? (
         <div className="pb-2 mt-4  rounded-md bg-[#fde9d3] dark:bg-[#242526] shadow-sm  cursor-pointer ">
-          <div className="relative h-55 ">
+          <div className="relative h-70 ">
             <Image
               src="/img/card1.jpg"
               alt="card"

@@ -5,7 +5,7 @@ import { CardMangaItems } from "./card-mangaItems";
 import { rankcolor } from "@/lib/rankColor";
 import { RankCard } from "./rank-card";
 import { Category } from '@/payload-types';
-import { Button } from '@/components/ui/button';
+
 
 
 interface NewUpdateProps {
@@ -61,7 +61,7 @@ export const NewUpdate = ({category}: NewUpdateProps) => {
             <h1 className='font-bold text-xl' >Thể loại</h1>
             <BookMarked />
           </div>
-          <div className='relative gap-2 h-55 overflow-auto no-scrollbar  p-4 flex flex-wrap '>
+          <div className='relative gap-2 h-78 overflow-auto no-scrollbar  p-4 flex flex-wrap '>
 
             {category.map((subcategory: Category) => (
               <p key={subcategory.id} className='px-2 cursor-pointer py-1 rounded-md whitespace-nowrap bg-kind'>{subcategory.name}</p>
