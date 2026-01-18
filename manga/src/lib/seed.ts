@@ -1,14 +1,34 @@
-import { getPayload } from "payload";
-import config from "@payload-config"
-const categories = [
+
+
+type CategoryType = "menu" | "genre" | "ranking" | "other";
+
+type SeedSubCategory = {
+  name: string;
+  slug: string;
+  type?: CategoryType;
+};
+
+type SeedCategory = {
+  name: string;
+  slug: string;
+  type: CategoryType;
+  order?: number;
+  subCategories?: SeedSubCategory[];
+};
+
+
+const categories: SeedCategory[] = [
   {
     name: "Trang chủ",
     slug: "home",
-    order: 0
+    type: "menu",
+    order: 0,
   },
   {
-    name: "Thể loại", 
+    name: "Thể loại",
     slug: "genres",
+    type: "menu",
+    order: 1,
     subCategories: [
       { name: "Hành động", slug: "action" },
       { name: "Phiêu lưu", slug: "adventure" },
@@ -34,66 +54,102 @@ const categories = [
       { name: "Shoujo", slug: "shoujo" },
       { name: "Josei", slug: "josei" },
     ],
-    order: 1
   },
   {
     name: "FanPage",
     slug: "facebook",
-    order: 3
+    type: "menu",
+    order: 3,
   },
   {
     name: "Xếp hạng",
     slug: "ranking",
+    type: "menu",
+    order: 4,
     subCategories: [
-      { name: "Top ngày", slug: "top-daily" },
-      { name: "Top tuần", slug: "top-weekly" },
-      { name: "Top tháng", slug: "top-monthly" },
-      { name: "Top mọi thời đại", slug: "top-all-time" },
+      { name: "Top ngày", slug: "top-daily", type: "ranking" },
+      { name: "Top tuần", slug: "top-weekly", type: "ranking" },
+      { name: "Top tháng", slug: "top-monthly", type: "ranking" },
+      { name: "Top mọi thời đại", slug: "top-all-time", type: "ranking" },
     ],
-    order: 4
   },
   {
-  name: "Khác",
-  slug: "others",
-  subCategories: [
-    { name: "Truyện mới", slug: "new-release" },
-    { name: "Mới cập nhật", slug: "recent-updated" },
-    { name: "Truyện hot", slug: "trending" },
-    { name: "Được yêu thích", slug: "most-favorite" },
-    { name: "Xem nhiều", slug: "most-viewed" },
-    { name: "Đánh giá cao", slug: "top-rated" },
-    { name: "Truyện ngẫu nhiên", slug: "random" },
-  ],
-  order: 5
-}
-
+    name: "Khác",
+    slug: "others",
+    type: "menu",
+    order: 5,
+    subCategories: [
+      { name: "Truyện mới", slug: "new-release", type: "other" },
+      { name: "Mới cập nhật", slug: "recent-updated", type: "other" },
+      { name: "Truyện hot", slug: "trending", type: "other" },
+      { name: "Được yêu thích", slug: "most-favorite", type: "other" },
+      { name: "Xem nhiều", slug: "most-viewed", type: "other" },
+      { name: "Đánh giá cao", slug: "top-rated", type: "other" },
+      { name: "Truyện ngẫu nhiên", slug: "random", type: "other" },
+    ],
+  },
 ];
 
+import config from "@payload-config";
+
+import { getPayload } from "payload";
+
+
 const seed = async () => {
-  const payload = await getPayload({config})
+  const payload = await getPayload({ config });
+
   for (const category of categories) {
-    const parentCategory = await payload.create({
+  
+    const existingParent = await payload.find({
       collection: "categories",
-      data: {
-        name: category.name,
-        slug: category.slug,
-        parent: null,
-        order: category.order,
-      }
-    })
-    for(const subCategory of category.subCategories || []) {
-      await payload.create({
+      where: {
+        slug: { equals: category.slug },
+      },
+      limit: 1,
+    });
+
+    const parent =
+      existingParent.docs[0] ??
+      (await payload.create({
         collection: "categories",
         data: {
-          name: subCategory.name,
-          slug: subCategory.slug,
-          parent: parentCategory.id,
-          order: category.order,
-        }
-      })
+          name: category.name,
+          slug: category.slug,
+          type: category.type,
+          parent: null,
+          order: category.order ?? 0,
+        },
+      }));
+
+    
+    for (const [index, sub] of (category.subCategories ?? []).entries()) {
+      const existingSub = await payload.find({
+        collection: "categories",
+        where: {
+          slug: { equals: sub.slug },
+        },
+        limit: 1,
+      });
+
+      if (!existingSub.docs.length) {
+        await payload.create({
+          collection: "categories",
+          data: {
+            name: sub.name,
+            slug: sub.slug,
+            type: sub.type ?? "genre",
+            parent: parent.id,
+            order: index,
+          },
+        });
+      }
     }
   }
-}
 
-await seed()
-process.exit(0)
+  
+};
+
+await seed();
+process.exit(0);
+
+

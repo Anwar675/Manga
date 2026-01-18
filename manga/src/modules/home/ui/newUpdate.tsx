@@ -4,16 +4,17 @@ import { CardMangaItems } from "./card-mangaItems";
 
 import { rankcolor } from "@/lib/rankColor";
 import { RankCard } from "./rank-card";
-import { Category } from '@/payload-types';
+import { Category, Mangas } from '@/payload-types';
 
 
 
 interface NewUpdateProps {
     category: Category[]
+    mangas: Mangas[]
 }
 
-export const NewUpdate = ({category}: NewUpdateProps) => {
-  
+export const NewUpdate = ({category,mangas}: NewUpdateProps) => {
+  console.log(mangas)
   return (
     <div className=" 2xl:px-16 md:flex block justify-between  w-full px-4 py-6  2xl:py-8 md:px-12 md:py-6">
       <div className="flex-1">
@@ -22,14 +23,11 @@ export const NewUpdate = ({category}: NewUpdateProps) => {
           <div className="flex-1 h-px bg-text-popular" />
         </div>
         <div className="grid md:grid-cols-3 xl:grid-cols-4 grid-cols-2 gap-4">
-          <CardMangaItems newCard/>
-          <CardMangaItems newCard/>
-          <CardMangaItems newCard/>
-          <CardMangaItems newCard/>
-          <CardMangaItems newCard/>
-          <CardMangaItems newCard/>
-          <CardMangaItems newCard/>
-          <CardMangaItems newCard/>
+          {mangas.map((manga) => (
+             <CardMangaItems newCard manga={manga} />
+          ))}
+         
+          
           
         </div>
         {/* <div className='text-center relative my-4  '>
@@ -38,7 +36,7 @@ export const NewUpdate = ({category}: NewUpdateProps) => {
           </Button>
         </div> */}
       </div>
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col  gap-4">
         <div className="rounded-md ml-0 md:ml-8 md:w-90 w-full h-100 bg-rank flex flex-col">
     
           <div className="sticky top-0 z-10 bg-rank py-2 rounded-t-2xl font-bold text-center">
@@ -56,7 +54,7 @@ export const NewUpdate = ({category}: NewUpdateProps) => {
           
           </div>
         </div>
-        <div className="rounded-md ml-0 md:ml-8 md:w-90 w-full h-full bg-rank flex flex-col">
+        <div className="rounded-md ml-0 md:ml-8 md:w-90 w-full h-100 bg-rank flex flex-col">
           <div className='flex justify-between bg-kind rounded-t-md p-4'>
             <h1 className='font-bold text-xl' >Thể loại</h1>
             <BookMarked />

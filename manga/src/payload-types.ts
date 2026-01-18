@@ -186,13 +186,14 @@ export interface Category {
   id: string;
   name: string;
   slug: string;
+  type: 'menu' | 'genre' | 'ranking' | 'other';
   parent?: (string | null) | Category;
   subcategories?: {
     docs?: (string | Category)[];
     hasNextPage?: boolean;
     totalDocs?: number;
   };
-  order: number;
+  order?: number | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -231,9 +232,12 @@ export interface Mangas {
   id: string;
   title: string;
   slug: string;
+  owner: string | User;
+  genres: (string | Category)[];
   cover: string | Media;
   author: string | Author;
   status?: ('ongoing' | 'completed' | 'hiatus') | null;
+  publishedAt?: string | null;
   views?: number | null;
   followers?: number | null;
   latestChapter?: {
@@ -259,7 +263,7 @@ export interface Chapter {
     id?: string | null;
   }[];
   views?: number | null;
-  status?: ('draft' | 'published') | null;
+  status?: 'published' | null;
   createdBy?: (string | null) | User;
   publishedAt?: string | null;
   updatedAt: string;
@@ -462,6 +466,7 @@ export interface MediaSelect<T extends boolean = true> {
 export interface CategoriesSelect<T extends boolean = true> {
   name?: T;
   slug?: T;
+  type?: T;
   parent?: T;
   subcategories?: T;
   order?: T;
@@ -500,9 +505,12 @@ export interface AuthorsSelect<T extends boolean = true> {
 export interface MangasSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
+  owner?: T;
+  genres?: T;
   cover?: T;
   author?: T;
   status?: T;
+  publishedAt?: T;
   views?: T;
   followers?: T;
   latestChapter?:

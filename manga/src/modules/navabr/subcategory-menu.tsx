@@ -28,7 +28,7 @@ export const SubcategoryMenu = ({
     >
       <div className="h-3 w-full" />
       <div
-        className="w-full bg-[#fae1c2]  grid  rounded-md overflow-hidden border"
+        className="w-full bg-[#FCF3E4]  grid  rounded-md overflow-hidden border"
         style={{
           gridTemplateColumns: `repeat(${position.columns}, 1fr)`,
         }}

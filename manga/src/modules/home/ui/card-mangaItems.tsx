@@ -1,51 +1,65 @@
+import { timeAgo } from "@/lib/formatime";
 import { cn } from "@/lib/utils";
+import { Mangas } from "@/payload-types";
 import { Bookmark, Clock, Eye, Star } from "lucide-react";
 import Image from "next/image";
 
+
+
 interface CardMangaItemsProps {
   newCard?: boolean;
+  manga: Mangas;
 }
 
-export const CardMangaItems = ({ newCard }: CardMangaItemsProps) => {
+export const CardMangaItems = ({ newCard, manga }: CardMangaItemsProps) => {
+  
+  const updateAt = manga?.latestChapter?.updatedAt
+  const coverUrl =
+    manga?.cover &&
+    typeof manga.cover === "object" &&
+    "url" &&
+    typeof manga.cover.url === "string"
+      ? manga.cover.url
+      : "/img/card1.jpg";
+
+  console.log(coverUrl);
   return (
     <>
       {newCard ? (
         <div className="pb-2 mt-4  rounded-md bg-[#fde9d3] dark:bg-[#242526] shadow-sm  cursor-pointer ">
           <div className="relative h-70 ">
-            <Image
-              src="/img/card1.jpg"
-              alt="card"
-              fill
-              className="rounded-t-xl"
-            />
-            <p className="px-2 py-0.5 m-2 rounded-md text-center text-white text-sm font-light absolute  bg-[linear-gradient(149deg,#d9534f,#ff9400,#ffd800,#ffd800,#ff9400,#d9534f)]
+            <Image src={coverUrl} alt="card" fill className="rounded-t-xl" />
+            <p
+              className="px-2 py-0.5 m-2 rounded-md text-center text-white text-sm font-light absolute  bg-[linear-gradient(149deg,#d9534f,#ff9400,#ffd800,#ffd800,#ff9400,#d9534f)]
                 bg-size-[1200%_1200%]
-                animate-hot">
+                animate-hot"
+            >
               Hot
             </p>
-            <p
-              className="px-2 py-0.5 m-2 rounded-md text-center bg-[#d9534f] text-white text-sm right-0 font-light absolute"
-            >
+            <p className="px-2 py-0.5 m-2 rounded-md text-center bg-[#d9534f] text-white text-sm right-0 font-light absolute">
               18+
             </p>
           </div>
-          <p className="truncate font-normal p-2">Natra ma đồng náo hải 2</p>
+          <p className="truncate font-normal p-2">{manga.title}</p>
           <div className="flex px-2 justify-between items-center">
             <div className="flex items-center text-[#7b8084] dark:text-white text-sm">
               <Eye size={20} className="fill-gray-400" />
-              <p>12.5k</p>
+              <p>{manga.views}</p>
             </div>
-             <div className="flex gap-0.5 items-center text-sm">
+            <div className="flex gap-0.5 items-center text-sm">
               <Clock size={20} />
-              <p>2 giờ trước</p>
+              <p>{updateAt ? timeAgo(updateAt): "Chưa cập nhập"}</p>
             </div>
-            
           </div>
           <div className="flex px-2 justify-between items-center ">
-            <p className="p-1 hover:bg-[#fdd39e] rounded-md">Chap 10</p>
+            <p className="p-1 hover:bg-[#fdd39e] rounded-md">
+              {manga.latestChapter?.number
+                ? `Chap ${manga.latestChapter.number}`
+                : "Chưa có chap"}
+            </p>
             <div className="flex gap-0.5 items-center text-[#7b8084] dark:text-white text-sm">
               <Bookmark size={20} className="fill-[#7b8084]" />
-              <p>6.4k</p>
+              <p>{manga.followers}</p>
             </div>
           </div>
         </div>
@@ -67,7 +81,7 @@ export const CardMangaItems = ({ newCard }: CardMangaItemsProps) => {
                   size={12}
                   className={cn(
                     " text-yellow-500",
-                    index >= 4 ? "fill-white" : " fill-yellow-500"
+                    index >= 4 ? "fill-white" : " fill-yellow-500",
                   )}
                 />
               ))}

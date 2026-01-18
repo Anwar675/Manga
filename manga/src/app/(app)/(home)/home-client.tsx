@@ -2,6 +2,7 @@
 import { ScrollTop } from "@/modules/advend_UI/scroll-top";
 import { AdminChat } from "@/modules/comments/ui/admin-chat";
 import { BackgroundSlider } from "@/modules/home/background-slide";
+import { Footer } from "@/modules/home/ui/footer";
 import { HotManga } from "@/modules/home/ui/hot-maga";
 import { NewUpdate } from "@/modules/home/ui/newUpdate";
 import { Popular } from "@/modules/home/ui/popular";
@@ -16,6 +17,7 @@ export default function HomeClient() {
   const { data: category } = useSuspenseQuery(
     trpc.category.getSubMany.queryOptions()
   );
+  const {data: mangas} = useSuspenseQuery(trpc.magas.getMany.queryOptions())
   const popularRef = useRef<HTMLDivElement>(null);
   const newUpdateRef = useRef<HTMLDivElement>(null);
   const adminChatRef = useRef<HTMLDivElement>(null);
@@ -45,7 +47,7 @@ export default function HomeClient() {
       </div>
 
       <div ref={newUpdateRef}>
-        <NewUpdate category={category} />
+        <NewUpdate category={category} mangas={mangas} />
       </div>
 
       <div ref={adminChatRef}>
@@ -54,7 +56,7 @@ export default function HomeClient() {
       <div>
         <HotManga />
       </div>
-
+      <Footer />
       <ScrollTop onScroll={scrollTo} />
     </div>
   );

@@ -23,7 +23,7 @@ export const NavbarAccount = () => {
   })
 );
   return (
-    <div  onMouseDown={(e) => e.stopPropagation()} className="bg-[#fae1c2] w-60 rounded-md overflow-hidden ">
+    <div  onMouseDown={(e) => e.stopPropagation()} className="bg-[#FCF3E4] w-60 rounded-md overflow-hidden ">
       <div className=" flex items-center text-[#4f4c40]  text-md  2xl:text-[16px] font-light gap-4 p-4">
         <div className="w-11 relative h-11">
           <Image

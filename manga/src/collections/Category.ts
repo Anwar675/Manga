@@ -2,12 +2,18 @@ import type { CollectionConfig } from "payload";
 
 export const Categories: CollectionConfig = {
   slug: "categories",
+
+  admin: {
+    useAsTitle: "name",
+  },
+
   fields: [
     {
       name: "name",
       type: "text",
       required: true,
     },
+
     {
       name: "slug",
       type: "text",
@@ -15,12 +21,25 @@ export const Categories: CollectionConfig = {
       unique: true,
       index: true,
     },
+
+    {
+      name: "type",
+      type: "select",
+      required: true,
+      options: [
+        { label: "Menu", value: "menu" },
+        { label: "Genre", value: "genre" },
+        { label: "Ranking", value: "ranking" },
+        { label: "Other", value: "other" },
+      ],
+    },
+
     {
       name: "parent",
       type: "relationship",
       relationTo: "categories",
-      hasMany: false,
     },
+
     {
       name: "subcategories",
       type: "join",
@@ -29,10 +48,10 @@ export const Categories: CollectionConfig = {
       hasMany: true,
       defaultLimit: 100,
     },
+
     {
       name: "order",
       type: "number",
-      required: true,
       defaultValue: 0,
       index: true,
     },

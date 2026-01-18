@@ -10,7 +10,9 @@ import { Media } from "./collections/Media";
 import { Categories } from "./collections/Category";
 import { Banners } from "./collections/Banner";
 import { Authors } from "./collections/Author";
-import { Manga } from "./collections/Manga";
+import { Manga
+  
+ } from "./collections/Manga";
 import { Chapters } from "./collections/Chapter";
 import { EffecComment } from "./collections/EffectComment";
 import { AdminComment } from "./collections/AdminComment";

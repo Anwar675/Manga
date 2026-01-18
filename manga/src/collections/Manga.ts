@@ -18,6 +18,23 @@ export const Manga: CollectionConfig = {
       required: true,
     },
     {
+      name: "owner",
+      type: "relationship",
+      relationTo: "users",
+      required: true,
+    },
+    {
+      name: "genres",
+      type: "relationship",
+      relationTo: "categories",
+      hasMany: true,
+      required: true,
+      filterOptions: () => ({
+        type: { equals: "genre" },
+      }),
+    },
+
+    {
       name: "cover",
       type: "upload",
       relationTo: "media",
@@ -33,6 +50,18 @@ export const Manga: CollectionConfig = {
       name: "status",
       type: "select",
       options: ["ongoing", "completed", "hiatus"],
+    },
+    {
+      name: "publishedAt",
+      type: "date",
+      admin: {
+        readOnly: true,
+        position: "sidebar",
+        date: {
+          pickerAppearance: "dayAndTime", // 👈 BẮT BUỘC
+          displayFormat: "dd/MM/yyyy HH:mm",
+        },
+      },
     },
 
     { name: "views", type: "number", defaultValue: 0 },
