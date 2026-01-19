@@ -1,6 +1,11 @@
 import { CardManga } from "./card-maga"
+import { Mangas } from "@/payload-types"
 
-export const HotManga = () => {
+interface HotMangaProps {
+    mangas?: Mangas[]
+}
+
+export const HotManga = ({ mangas }: HotMangaProps) => {
     return (
         <div className="2xl:px-16   w-full px-4 py-6 mt-14  2xl:py-8 md:px-12 md:py-6">
             <div className="flex items-center">
@@ -10,7 +15,7 @@ export const HotManga = () => {
                 
                 <div className="flex-1 h-px bg-text-popular" />
             </div>
-            <CardManga />
+            <CardManga mangas={mangas} />
 
         </div>
     )

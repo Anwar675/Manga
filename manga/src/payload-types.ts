@@ -76,6 +76,7 @@ export interface Config {
     chapters: Chapter;
     'effect-comments': EffectComment;
     'admin-comments': AdminComment;
+    ratings: Rating;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -96,6 +97,7 @@ export interface Config {
     chapters: ChaptersSelect<false> | ChaptersSelect<true>;
     'effect-comments': EffectCommentsSelect<false> | EffectCommentsSelect<true>;
     'admin-comments': AdminCommentsSelect<false> | AdminCommentsSelect<true>;
+    ratings: RatingsSelect<false> | RatingsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -234,6 +236,10 @@ export interface Mangas {
   slug: string;
   owner: string | User;
   genres: (string | Category)[];
+  rating?: {
+    avg?: number | null;
+    count?: number | null;
+  };
   cover: string | Media;
   author: string | Author;
   status?: ('ongoing' | 'completed' | 'hiatus') | null;
@@ -318,6 +324,18 @@ export interface AdminComment {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ratings".
+ */
+export interface Rating {
+  id: string;
+  user: string | User;
+  manga: string | Mangas;
+  star: number;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
@@ -375,6 +393,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'admin-comments';
         value: string | AdminComment;
+      } | null)
+    | ({
+        relationTo: 'ratings';
+        value: string | Rating;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -507,6 +529,12 @@ export interface MangasSelect<T extends boolean = true> {
   slug?: T;
   owner?: T;
   genres?: T;
+  rating?:
+    | T
+    | {
+        avg?: T;
+        count?: T;
+      };
   cover?: T;
   author?: T;
   status?: T;
@@ -570,6 +598,17 @@ export interface AdminCommentsSelect<T extends boolean = true> {
   content?: T;
   parent?: T;
   isOfficial?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ratings_select".
+ */
+export interface RatingsSelect<T extends boolean = true> {
+  user?: T;
+  manga?: T;
+  star?: T;
   updatedAt?: T;
   createdAt?: T;
 }

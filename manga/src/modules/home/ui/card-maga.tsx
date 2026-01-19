@@ -4,6 +4,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import { Autoplay } from "swiper/modules";
 import { CardMangaItems } from "./card-mangaItems";
+import { Mangas } from "@/payload-types";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useRef, useState } from "react";
@@ -11,7 +12,11 @@ import type { Swiper as SwiperType } from "swiper";
 
 
 
-export const CardManga = () => {
+interface CardMangaProps {
+  mangas?: Mangas[];
+}
+
+export const CardManga = ({ mangas }: CardMangaProps) => {
   const swiperRef = useRef<SwiperType | null>(null);
   const [isBeginning, setIsBeginning] = useState(false);
   const handleNext = () => {
@@ -56,9 +61,9 @@ export const CardManga = () => {
         autoplay={{ delay: 5000 }}
         className="h-70 "
       >
-        {[1, 2, 3, 4, 5, 6, 7, 8,9,10,11,12,13,14,15,16,17,18,19,20].map((slide) => (
-          <SwiperSlide key={slide}>
-            <CardMangaItems />
+        {(mangas ?? []).map((manga) => (
+          <SwiperSlide key={manga.id}>
+            <CardMangaItems manga={manga} />
           </SwiperSlide>
         ))}
       </Swiper>

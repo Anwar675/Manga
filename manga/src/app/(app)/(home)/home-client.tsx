@@ -38,12 +38,12 @@ export default function HomeClient() {
       block: "start",
     });
   };
-  console.log(category);
+  console.log(mangas);
   return (
     <div className="relative bg-popular text-text-popular">
       <BackgroundSlider />
       <div ref={popularRef}>
-        <Popular />
+        <Popular mangas={mangas} />
       </div>
 
       <div ref={newUpdateRef}>
@@ -54,7 +54,7 @@ export default function HomeClient() {
         <AdminChat />
       </div>
       <div>
-        <HotManga />
+        <HotManga mangas={mangas} />
       </div>
       <Footer />
       <ScrollTop onScroll={scrollTo} />

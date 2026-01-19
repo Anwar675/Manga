@@ -15,6 +15,10 @@ interface NewUpdateProps {
 
 export const NewUpdate = ({category,mangas}: NewUpdateProps) => {
   console.log(mangas)
+  if (!mangas?.length) {
+    return null;
+  }
+
   return (
     <div className=" 2xl:px-16 md:flex block justify-between  w-full px-4 py-6  2xl:py-8 md:px-12 md:py-6">
       <div className="flex-1">
@@ -24,7 +28,7 @@ export const NewUpdate = ({category,mangas}: NewUpdateProps) => {
         </div>
         <div className="grid md:grid-cols-3 xl:grid-cols-4 grid-cols-2 gap-4">
           {mangas.map((manga) => (
-             <CardMangaItems newCard manga={manga} />
+             <CardMangaItems  key={manga.id} newCard manga={manga} />
           ))}
          
           

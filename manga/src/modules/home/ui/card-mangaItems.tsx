@@ -1,4 +1,4 @@
-import { timeAgo } from "@/lib/formatime";
+import { formatViews, timeAgo } from "@/lib/formatime";
 import { cn } from "@/lib/utils";
 import { Mangas } from "@/payload-types";
 import { Bookmark, Clock, Eye, Star } from "lucide-react";
@@ -12,8 +12,11 @@ interface CardMangaItemsProps {
 }
 
 export const CardMangaItems = ({ newCard, manga }: CardMangaItemsProps) => {
-  
-  const updateAt = manga?.latestChapter?.updatedAt
+  if (!manga) return null; 
+
+  console.log(manga);
+  const ratingAvg = manga.rating?.avg ?? 0;
+  const updateAt = manga?.latestChapter?.updatedAt;
   const coverUrl =
     manga?.cover &&
     typeof manga.cover === "object" &&
@@ -22,7 +25,7 @@ export const CardMangaItems = ({ newCard, manga }: CardMangaItemsProps) => {
       ? manga.cover.url
       : "/img/card1.jpg";
 
-  console.log(coverUrl);
+  
   return (
     <>
       {newCard ? (
@@ -44,7 +47,7 @@ export const CardMangaItems = ({ newCard, manga }: CardMangaItemsProps) => {
           <div className="flex px-2 justify-between items-center">
             <div className="flex items-center text-[#7b8084] dark:text-white text-sm">
               <Eye size={20} className="fill-gray-400" />
-              <p>{manga.views}</p>
+              <p>{formatViews(manga.views)}</p>
             </div>
             <div className="flex gap-0.5 items-center text-sm">
               <Clock size={20} />
@@ -81,15 +84,15 @@ export const CardMangaItems = ({ newCard, manga }: CardMangaItemsProps) => {
                   size={12}
                   className={cn(
                     " text-yellow-500",
-                    index >= 4 ? "fill-white" : " fill-yellow-500",
+                    index <= Math.round(ratingAvg) ? "fill-yellow-500" : " fill-white",
                   )}
                 />
               ))}
-              <p className="text-yellow-600  text-sm">4.5/5</p>
+              <p className="text-yellow-600  text-sm">{ratingAvg.toFixed(1)}/5</p>
             </div>
             <div className="flex items-center text-sm text-view">
               <Eye size={20} className="fill-gray-400" />
-              <p>12.5k</p>
+              <p>{formatViews(manga.views)}</p>
             </div>
           </div>
         </div>

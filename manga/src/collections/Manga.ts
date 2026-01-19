@@ -33,6 +33,26 @@ export const Manga: CollectionConfig = {
         type: { equals: "genre" },
       }),
     },
+    {
+      name: "rating",
+      type: "group",
+      fields: [
+        {
+          name: "avg",
+          type: "number",
+          defaultValue: 0,
+        },
+        {
+          name: "count",
+          type: "number",
+          defaultValue: 0,
+        },
+      ],
+      admin: {
+        readOnly: true,
+        position: "sidebar",
+      },
+    },
 
     {
       name: "cover",
@@ -58,7 +78,7 @@ export const Manga: CollectionConfig = {
         readOnly: true,
         position: "sidebar",
         date: {
-          pickerAppearance: "dayAndTime", // 👈 BẮT BUỘC
+          pickerAppearance: "dayAndTime",
           displayFormat: "dd/MM/yyyy HH:mm",
         },
       },

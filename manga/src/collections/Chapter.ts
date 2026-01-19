@@ -96,9 +96,6 @@ export const Chapters: CollectionConfig = {
   ],
 
   hooks: {
-    /* =========================
-     * BEFORE VALIDATE
-     * ========================= */
     beforeValidate: [
       async ({ data, req, operation }) => {
         if (!data) return data;
@@ -149,9 +146,8 @@ export const Chapters: CollectionConfig = {
       },
     ],
 
-    /* =========================
-     * CHỐNG TRÙNG CHAPTER
-     * ========================= */
+  
+     
     beforeChange: [
       async ({ data, req, originalDoc, operation }) => {
         if (!data?.manga || data.chapterNumber == null) return data;
