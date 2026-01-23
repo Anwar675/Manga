@@ -49,9 +49,15 @@ export const NewUpdate = ({
         <div className="text-center relative my-4">
           {isPaging && page && totalPages ? (
             <div className="flex justify-center items-center gap-2 mt-4">
-              <Button variant="outline" size="sm" disabled={page <= 1} asChild>
-                <Link href={`/pages/${prevPage}`}>‹</Link>
-              </Button>
+              {currentPage <= 1 ? (
+                <Button variant="outline" size="sm" disabled>
+                  ‹
+                </Button>
+              ) : (
+                <Button variant="outline" size="sm" asChild>
+                  <Link href={`/pages/${prevPage}`}>‹</Link>
+                </Button>
+              )}
 
               {/* Page numbers */}
               {Array.from({ length: totalPages }, (_, i) => i + 1)
@@ -69,14 +75,15 @@ export const NewUpdate = ({
                 )}
 
               {/* Next */}
-              <Button
-                variant="outline"
-                size="sm"
-                disabled={currentPage === maxPage}
-                asChild
-              >
-                <Link href={`/pages/${nextPage}`}>›</Link>
-              </Button>
+              {currentPage >= maxPage ? (
+                <Button variant="outline" size="sm" disabled>
+                  ›
+                </Button>
+              ) : (
+                <Button variant="outline" size="sm" asChild>
+                  <Link href={`/pages/${nextPage}`}>›</Link>
+                </Button>
+              )}
             </div>
           ) : (
             <Button>
