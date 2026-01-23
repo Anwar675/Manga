@@ -14,7 +14,7 @@ interface CardMangaItemsProps {
 export const CardMangaItems = ({ newCard, manga }: CardMangaItemsProps) => {
   if (!manga) return null; 
 
-  console.log(manga);
+ 
   const ratingAvg = manga.rating?.avg ?? 0;
   const updateAt = manga?.latestChapter?.updatedAt;
   const coverUrl =

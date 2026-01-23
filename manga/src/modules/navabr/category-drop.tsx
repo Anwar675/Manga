@@ -34,7 +34,7 @@ export const CategoryDropdown = ({ category }: Props) => {
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
     >
-      <div className="2xl:text-xl md:text-[12px] xl:text-[16px]">
+      <div className="2xl:text-[18px] md:text-[12px] xl:text-[16px]">
         <Link href="/">
           {category.name}
         </Link>

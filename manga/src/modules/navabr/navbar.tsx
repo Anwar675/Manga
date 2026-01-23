@@ -40,9 +40,12 @@ export const Navbar = () => {
 }, []);
   return (
     <>
-      <div className="bg-navbar  2xl:px-16  w-full hidden md:flex top-0 2xl:py-8 px-12 py-4 items-center justify-between">
+      <div className="bg-navbar  2xl:px-16 w-full hidden md:flex top-0 2xl:py-6 px-12 py-4 items-center justify-between">
         <div>
-          <Image src="/img/logo.png" alt="logo" width={60} height={60} />
+          <Link href="/">
+            <Image src="/img/logo.png" alt="logo" width={60} height={60} />
+          </Link>
+          
         </div>
         <div className="">
           <NavbarCategory data={data} />

@@ -1,4 +1,5 @@
 
+import { Footer } from "@/modules/home/ui/footer";
 import { Navbar } from "@/modules/navabr/navbar";
 import { getQueryClient, trpc } from "@/trpc/server";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
@@ -22,8 +23,10 @@ const Layout = async ({ children }: Props) => {
     <div className="relative">
       <HydrationBoundary state={dehydrate(queryClient)}>
         <Navbar  />
+          {children}
+        <Footer />
       </HydrationBoundary>
-      {children}
+      
     </div>
   );
 };

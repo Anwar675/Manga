@@ -1,19 +1,15 @@
 import { CollectionConfig } from "payload";
 
-export const AdminComment: CollectionConfig = {
-  slug: "admin-comments",
+export const Comments: CollectionConfig = {
+  slug: "comments",
+
   admin: {
-    defaultColumns: ["content", "user", "announcement", "createdAt"],
+    defaultColumns: ["content", "user", "effectComment", "isOfficial", "createdAt"],
   },
-//   access: {
-//     create: ({ req }) => !!req.user,
-//     read: () => true,
-//     update: ({ req }) => req.user?.role === "admin",
-//     delete: ({ req }) => req.user?.role === "admin",
-//   },
+
   fields: [
     {
-      name: "EffectComment",
+      name: "effectComment",
       type: "relationship",
       relationTo: "effect-comments",
       required: true,
@@ -34,7 +30,7 @@ export const AdminComment: CollectionConfig = {
     {
       name: "parent",
       type: "relationship",
-      relationTo: "admin-comments",
+      relationTo: "comments",
       index: true,
     },
     {
@@ -42,7 +38,7 @@ export const AdminComment: CollectionConfig = {
       type: "checkbox",
       defaultValue: false,
       admin: {
-        description: "Comment từ admin / team dịch",
+        description: "Admin / team dịch",
       },
     },
   ],

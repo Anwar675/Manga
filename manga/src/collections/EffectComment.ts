@@ -1,37 +1,16 @@
 import { CollectionConfig } from "payload";
 
-export const EffecComment: CollectionConfig = {
+export const EffectComment: CollectionConfig = {
   slug: "effect-comments",
-  admin: {
-    useAsTitle: "title",
-    defaultColumns: ["title", "tag", "isPinned", "createdAt"],
+
+  admin: {   
+    defaultColumns: [ "tag", "effect", "isPinned", "createdAt"],
   },
-//   access: {
-//     create: ({ req }) =>
-//       ["admin", "translator"].includes(req.user?.role),
-//     update: ({ req }) =>
-//       ["admin", "translator"].includes(req.user?.role),
-//     delete: ({ req }) => req.user?.role === "admin",
-//     read: () => true,
-//   },
+
   fields: [
-    {
-      name: "title",
-      type: "text",
-      required: true,
-      maxLength: 120,
-    },
-    {
-      name: "content",
-      type: "richText",
-      required: true,
-    },
-    {
-      name: "images",
-      type: "upload",
-      relationTo: "media",
-      hasMany: true,
-    },
+    
+    
+    // 🏷 Tag: frontend quyết định màu / icon
     {
       name: "tag",
       type: "select",
@@ -43,6 +22,8 @@ export const EffecComment: CollectionConfig = {
       defaultValue: "normal",
       index: true,
     },
+
+    // ✨ Effect: frontend tự map animation
     {
       name: "effect",
       type: "select",
@@ -53,15 +34,14 @@ export const EffecComment: CollectionConfig = {
       ],
       defaultValue: "none",
     },
+
     {
       name: "isPinned",
       type: "checkbox",
       defaultValue: false,
-    //   access: {
-    //     update: ({ req }) => req.user?.role === "admin",
-    //   },
       index: true,
     },
+
     {
       name: "author",
       type: "relationship",

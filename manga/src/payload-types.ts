@@ -75,7 +75,7 @@ export interface Config {
     mangas: Mangas;
     chapters: Chapter;
     'effect-comments': EffectComment;
-    'admin-comments': AdminComment;
+    comments: Comment;
     ratings: Rating;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
@@ -96,7 +96,7 @@ export interface Config {
     mangas: MangasSelect<false> | MangasSelect<true>;
     chapters: ChaptersSelect<false> | ChaptersSelect<true>;
     'effect-comments': EffectCommentsSelect<false> | EffectCommentsSelect<true>;
-    'admin-comments': AdminCommentsSelect<false> | AdminCommentsSelect<true>;
+    comments: CommentsSelect<false> | CommentsSelect<true>;
     ratings: RatingsSelect<false> | RatingsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
@@ -281,23 +281,6 @@ export interface Chapter {
  */
 export interface EffectComment {
   id: string;
-  title: string;
-  content: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  };
-  images?: (string | Media)[] | null;
   tag?: ('important' | 'normal' | 'release') | null;
   effect?: ('none' | 'glow' | 'confetti') | null;
   isPinned?: boolean | null;
@@ -307,16 +290,16 @@ export interface EffectComment {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "admin-comments".
+ * via the `definition` "comments".
  */
-export interface AdminComment {
+export interface Comment {
   id: string;
-  EffectComment: string | EffectComment;
+  effectComment: string | EffectComment;
   user: string | User;
   content: string;
-  parent?: (string | null) | AdminComment;
+  parent?: (string | null) | Comment;
   /**
-   * Comment từ admin / team dịch
+   * Admin / team dịch
    */
   isOfficial?: boolean | null;
   updatedAt: string;
@@ -391,8 +374,8 @@ export interface PayloadLockedDocument {
         value: string | EffectComment;
       } | null)
     | ({
-        relationTo: 'admin-comments';
-        value: string | AdminComment;
+        relationTo: 'comments';
+        value: string | Comment;
       } | null)
     | ({
         relationTo: 'ratings';
@@ -578,9 +561,6 @@ export interface ChaptersSelect<T extends boolean = true> {
  * via the `definition` "effect-comments_select".
  */
 export interface EffectCommentsSelect<T extends boolean = true> {
-  title?: T;
-  content?: T;
-  images?: T;
   tag?: T;
   effect?: T;
   isPinned?: T;
@@ -590,10 +570,10 @@ export interface EffectCommentsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "admin-comments_select".
+ * via the `definition` "comments_select".
  */
-export interface AdminCommentsSelect<T extends boolean = true> {
-  EffectComment?: T;
+export interface CommentsSelect<T extends boolean = true> {
+  effectComment?: T;
   user?: T;
   content?: T;
   parent?: T;
