@@ -1,4 +1,4 @@
-import { concatAST } from "graphql";
+
 
 export function timeAgo(date: string | Date) {
   const now = new Date();
@@ -6,12 +6,26 @@ export function timeAgo(date: string | Date) {
   const diff = Math.floor((now.getTime() - past.getTime()) / 1000);
 
   if (diff < 60) return "Vừa xong";
-  if (diff < 3600) return `${Math.floor(diff / 60)} phút trước`;
-  if (diff < 86400) return `${Math.floor(diff / 3600)} giờ trước`;
-  if (diff < 604800) return `${Math.floor(diff / 86400)} ngày trước`;
 
-  return past.toLocaleDateString("vi-VN");
+  const minutes = Math.floor(diff / 60);
+  if (minutes < 60) return `${minutes} phút trước`;
+
+  const hours = Math.floor(diff / 3600);
+  if (hours < 24) return `${hours} giờ trước`;
+
+  const days = Math.floor(diff / 86400);
+  if (days < 7) return `${days} ngày trước`;
+
+  const weeks = Math.floor(days / 7);
+  if (weeks < 4) return weeks === 1 ? "1 tuần trước" : `${weeks} tuần trước`;
+
+  const months = Math.floor(days / 30);
+  if (months < 12) return months === 1 ? "1 tháng trước" : `${months} tháng trước`;
+
+  const years = Math.floor(days / 365);
+  return years === 1 ? "1 năm trước" : `${years} năm trước`;
 }
+
 
 
 export const formatViews = (views?:number | null) => {

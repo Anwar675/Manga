@@ -68,7 +68,7 @@ export const CardMangaItems = ({ newCard, manga }: CardMangaItemsProps) => {
         </div>
       ) : (
         <div className="py-4  cursor-pointer ">
-          <div className="relative h-55 ">
+          <div className="relative h-65 ">
             <Image
               src="/img/card1.jpg"
               alt="card"

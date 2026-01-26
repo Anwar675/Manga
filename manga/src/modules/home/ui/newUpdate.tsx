@@ -30,7 +30,15 @@ export const NewUpdate = ({
   }
   const currentPage = page ?? 1;
   const maxPage = totalPages ?? 1;
+  const MAX_PAGES = 5;
 
+  let startPage = Math.max(1, currentPage - Math.floor(MAX_PAGES / 2));
+  let endPage = startPage + MAX_PAGES - 1;
+
+  if (endPage > maxPage) {
+    endPage = maxPage;
+    startPage = Math.max(1, endPage - MAX_PAGES + 1);
+  }
   const prevPage = Math.max(1, currentPage - 1);
   const nextPage = Math.min(maxPage, currentPage + 1);
 
@@ -60,19 +68,20 @@ export const NewUpdate = ({
               )}
 
               {/* Page numbers */}
-              {Array.from({ length: totalPages }, (_, i) => i + 1)
-                .slice(Math.max(0, page - 3), page + 2)
-                .map((p) =>
-                  p === page ? (
-                    <Button key={p} size="sm" disabled>
-                      {p}
-                    </Button>
-                  ) : (
-                    <Button key={p} size="sm" variant="outline" asChild>
-                      <Link href={`/pages/${p}`}>{p}</Link>
-                    </Button>
-                  ),
-                )}
+              {Array.from(
+                { length: endPage - startPage + 1 },
+                (_, i) => startPage + i,
+              ).map((p) =>
+                p === currentPage ? (
+                  <Button key={p} size="sm" disabled>
+                    {p}
+                  </Button>
+                ) : (
+                  <Button key={p} size="sm" variant="outline" asChild>
+                    <Link href={`/pages/${p}`}>{p}</Link>
+                  </Button>
+                ),
+              )}
 
               {/* Next */}
               {currentPage >= maxPage ? (

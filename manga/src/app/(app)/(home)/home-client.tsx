@@ -39,7 +39,7 @@ export default function HomeClient() {
       block: "start",
     });
   };
-  console.log(comments);
+  
   return (
     <div className="relative bg-popular text-text-popular">
       <BackgroundSlider />
@@ -52,7 +52,7 @@ export default function HomeClient() {
       </div>
 
       <div ref={adminChatRef}>
-        <AdminChat  />
+        <AdminChat comments={comments.docs} />
       </div>
       <div>
         <HotManga mangas={mangas} />

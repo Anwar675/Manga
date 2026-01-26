@@ -26,6 +26,7 @@
     "@trpc/client": "^11.8.1",
     "@trpc/server": "^11.8.1",
     "@trpc/tanstack-react-query": "^11.8.1",
+    "add": "^2.0.6",
     "class-variance-authority": "^0.7.1",
     "client-only": "^0.0.1",
     "clsx": "^2.1.1",
@@ -38,11 +39,13 @@
     "react-hook-form": "^7.69.0",
     "sanitize-html": "^2.17.0",
     "server-only": "^0.0.1",
+    "shadcn": "^3.7.0",
     "slugify": "^1.6.6",
     "sonner": "^2.0.7",
     "superjson": "^2.2.6",
     "swiper": "^12.0.3",
     "tailwind-merge": "^3.4.0",
+    "textarea": "^0.3.0",
     "zod": "^4.2.1"
   },
   "devDependencies": {

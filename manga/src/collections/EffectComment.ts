@@ -46,7 +46,7 @@ export const EffectComment: CollectionConfig = {
       name: "author",
       type: "relationship",
       relationTo: "users",
-      required: true,
+      required: false,
     },
   ],
 };

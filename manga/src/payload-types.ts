@@ -284,7 +284,7 @@ export interface EffectComment {
   tag?: ('important' | 'normal' | 'release') | null;
   effect?: ('none' | 'glow' | 'confetti') | null;
   isPinned?: boolean | null;
-  author: string | User;
+  author?: (string | null) | User;
   updatedAt: string;
   createdAt: string;
 }
