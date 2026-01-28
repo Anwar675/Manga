@@ -1,5 +1,5 @@
 import { CollectionConfig } from "payload";
-
+import slugify from "slugify";
 export const Manga: CollectionConfig = {
   slug: "mangas",
   admin: {
@@ -15,7 +15,18 @@ export const Manga: CollectionConfig = {
       name: "slug",
       type: "text",
       unique: true,
-      required: true,
+      admin: { readOnly: true },
+      hooks: {
+        beforeChange: [
+          ({ siblingData }) => {
+            if (!siblingData?.title) return;
+            return slugify(siblingData.title, {
+              lower: true,
+              strict: true,
+            });
+          },
+        ],
+      },
     },
     {
       name: "owner",
@@ -53,7 +64,7 @@ export const Manga: CollectionConfig = {
         position: "sidebar",
       },
     },
-
+    // TO DO: update ảnh riêng theo mỗi admin cũng như translatranslate
     {
       name: "cover",
       type: "upload",

@@ -26,7 +26,7 @@ export const AdminChat = ({comments}: AdminChatProps) => {
     top: el.scrollHeight,
     behavior: "smooth",
   });
-}, [comments.length]);
+}, [comments?.length]);
 
   const queryClient = useQueryClient()
   const [more, setMore] = useState(false);
@@ -41,6 +41,7 @@ export const AdminChat = ({comments}: AdminChatProps) => {
   const orderedComments = [...comments].reverse();
   const handle = () => {
     if (!content.trim()) return;
+    setContent("")
     commentGener.mutate({
       content,
       effectComment: "glow", 
@@ -72,7 +73,7 @@ export const AdminChat = ({comments}: AdminChatProps) => {
           value={content}
           onChange={(e) => {
             setContent(e.target.value);
-
+            
             e.target.style.height = "auto";
             e.target.style.height = `${e.target.scrollHeight}px`;
           }}

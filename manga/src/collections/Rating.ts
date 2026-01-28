@@ -23,17 +23,17 @@ export const Rating: CollectionConfig = {
       type: "number",
       required: true,
       min: 1,
-      max:5 
+      max: 5
     },
 
   ],
   indexes: [
     {
-        fields: ["manga", "user"],
-        unique: true
+      fields: ["manga", "user"],
+      unique: true
     }
   ],
   hooks: {
-  afterChange: [updateMangaRating],
-},
+    afterChange: [updateMangaRating],
+  },
 };

@@ -1,10 +1,8 @@
 import { formatViews, timeAgo } from "@/lib/formatime";
 import { cn } from "@/lib/utils";
 import { Mangas } from "@/payload-types";
-import { Bookmark, Clock, Eye, Star } from "lucide-react";
+import { Bookmark, Clock, Eye, Star, StarHalf } from "lucide-react";
 import Image from "next/image";
-
-
 
 interface CardMangaItemsProps {
   newCard?: boolean;
@@ -12,10 +10,10 @@ interface CardMangaItemsProps {
 }
 
 export const CardMangaItems = ({ newCard, manga }: CardMangaItemsProps) => {
-  if (!manga) return null; 
+  if (!manga) return null;
 
- 
   const ratingAvg = manga.rating?.avg ?? 0;
+  console.log(ratingAvg);
   const updateAt = manga?.latestChapter?.updatedAt;
   const coverUrl =
     manga?.cover &&
@@ -25,7 +23,6 @@ export const CardMangaItems = ({ newCard, manga }: CardMangaItemsProps) => {
       ? manga.cover.url
       : "/img/card1.jpg";
 
-  
   return (
     <>
       {newCard ? (
@@ -51,7 +48,7 @@ export const CardMangaItems = ({ newCard, manga }: CardMangaItemsProps) => {
             </div>
             <div className="flex gap-0.5 items-center text-sm">
               <Clock size={20} />
-              <p>{updateAt ? timeAgo(updateAt): "Chưa cập nhập"}</p>
+              <p>{updateAt ? timeAgo(updateAt) : "Chưa cập nhập"}</p>
             </div>
           </div>
           <div className="flex px-2 justify-between items-center ">
@@ -79,16 +76,39 @@ export const CardMangaItems = ({ newCard, manga }: CardMangaItemsProps) => {
           <p className="truncate font-normal px-2">Natra ma đồng náo hải 2</p>
           <div className="flex px-2 justify-between items-center">
             <div className="flex gap-0.5 items-center">
-              {[1, 2, 3, 4, 5].map((index) => (
-                <Star
-                  size={12}
-                  className={cn(
-                    " text-yellow-500",
-                    index <= Math.round(ratingAvg) ? "fill-yellow-500" : " fill-white",
-                  )}
-                />
-              ))}
-              <p className="text-yellow-600  text-sm">{ratingAvg.toFixed(1)}/5</p>
+              {[1, 2, 3, 4, 5].map((i) => {
+                const full = Math.floor(ratingAvg);
+                const hasHalf = ratingAvg % 1 >= 0.5;
+
+                if (i <= full) {
+                  return (
+                    <Star
+                      key={i}
+                      size={12}
+                      className="fill-yellow-500 text-yellow-500"
+                    />
+                  );
+                }
+
+                if (i === full + 1 && hasHalf) {
+                  return (
+                    <div key={i} className="relative w-3 h-3">
+                      <Star size={12} className="absolute text-yellow-500" />
+                      <Star
+                        size={12}
+                        className="absolute fill-yellow-500 text-yellow-500"
+                        style={{ clipPath: "inset(0 50% 0 0)" }}
+                      />
+                    </div>
+                  );
+                }
+
+                return <Star key={i} size={12} className="text-yellow-500" />;
+              })}
+
+              <p className="text-yellow-600  text-sm">
+                {ratingAvg.toFixed(1)}/5
+              </p>
             </div>
             <div className="flex items-center text-sm text-view">
               <Eye size={20} className="fill-gray-400" />

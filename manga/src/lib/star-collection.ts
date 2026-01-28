@@ -5,33 +5,38 @@ export const updateMangaRating: CollectionAfterChangeHook = async ({
   req,
   operation,
 }) => {
-
   if (operation !== "create" && operation !== "update") return;
 
+  if (!doc?.manga) return;
 
+  const mangaId = typeof doc.manga === "string" ? doc.manga : doc.manga.id;
+
+  // Chạy async trong background để không block việc save rating
   setImmediate(async () => {
     try {
       const ratings = await req.payload.find({
         collection: "ratings",
         where: {
-          manga: { equals: doc.manga },
+          manga: { equals: mangaId },
         },
+        pagination: false,
         depth: 0,
-        pagination: false, // lấy tất cả mà không cần limit cực lớn
       });
 
-      const count = ratings.totalDocs ?? ratings.docs.length;
-      const avg =
-        ratings.docs.reduce((sum, r) => sum + r.star, 0) / (count || 1);
+      const count = ratings.docs.length;
+      const sum = ratings.docs.reduce((s, r) => s + r.star, 0);
+      const avgRaw = sum / count;
+
+      // half-star chuẩn
+      const avg = Math.round(avgRaw * 2) / 2;
 
       await req.payload.update({
         collection: "mangas",
-        id: doc.manga,
-        depth: 0,
+        id: mangaId,
         overrideAccess: true,
         data: {
           rating: {
-            avg: Number(avg.toFixed(1)),
+            avg,
             count,
           },
         },

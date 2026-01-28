@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useRef, useState } from "react";
 import type { Swiper as SwiperType } from "swiper";
+import Link from "next/link";
 
 
 
@@ -63,7 +64,10 @@ export const CardManga = ({ mangas }: CardMangaProps) => {
       >
         {(mangas ?? []).map((manga) => (
           <SwiperSlide key={manga.id}>
-            <CardMangaItems manga={manga} />
+            <Link href={`/manga/${manga.slug}`}>
+              <CardMangaItems manga={manga} />
+            </Link>
+           
           </SwiperSlide>
         ))}
       </Swiper>

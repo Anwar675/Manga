@@ -131,6 +131,14 @@
   display: none;
 }
 
+
+.navbar-title:hover > p {
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+
+
 .no-scrollbar {
   -ms-overflow-style: none; /* IE */
   scrollbar-width: none; /* Firefox */

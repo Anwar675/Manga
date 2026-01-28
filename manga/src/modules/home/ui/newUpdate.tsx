@@ -51,7 +51,10 @@ export const NewUpdate = ({
         </div>
         <div className="grid md:grid-cols-3 xl:grid-cols-4 grid-cols-2 gap-4">
           {mangas.map((manga) => (
-            <CardMangaItems key={manga.id} newCard manga={manga} />
+            <Link key={manga.id} href={`/manga/${manga.slug}`}>
+              <CardMangaItems key={manga.id} newCard manga={manga} />
+            </Link>
+            
           ))}
         </div>
         <div className="text-center relative my-4">
@@ -111,7 +114,7 @@ export const NewUpdate = ({
             {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((manga, index) => {
               const rank = index + 1;
               const rankColor = rankcolor[rank] ?? "text-blue-400";
-              return <RankCard rank={rank} rankColor={rankColor} />;
+            return <RankCard key={index} rank={rank} rankColor={rankColor} />;
             })}
           </div>
         </div>

@@ -233,7 +233,7 @@ export interface Author {
 export interface Mangas {
   id: string;
   title: string;
-  slug: string;
+  slug?: string | null;
   owner: string | User;
   genres: (string | Category)[];
   rating?: {
