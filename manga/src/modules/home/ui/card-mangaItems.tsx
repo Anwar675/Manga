@@ -13,7 +13,7 @@ export const CardMangaItems = ({ newCard, manga }: CardMangaItemsProps) => {
   if (!manga) return null;
 
   const ratingAvg = manga.rating?.avg ?? 0;
-  console.log(ratingAvg);
+  
   const updateAt = manga?.latestChapter?.updatedAt;
   const coverUrl =
     manga?.cover &&

@@ -234,15 +234,31 @@ export interface Mangas {
   id: string;
   title: string;
   slug?: string | null;
+  description?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
   owner: string | User;
   genres: (string | Category)[];
   rating?: {
     avg?: number | null;
     count?: number | null;
   };
+  ageRating: 'all' | '13+' | '16+' | '18+';
   cover: string | Media;
   author: string | Author;
-  status?: ('ongoing' | 'completed' | 'hiatus') | null;
+  status?: ('Đang cập nhập' | 'Đã hoàn thành' | 'hiatus') | null;
   publishedAt?: string | null;
   views?: number | null;
   followers?: number | null;
@@ -510,6 +526,7 @@ export interface AuthorsSelect<T extends boolean = true> {
 export interface MangasSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
+  description?: T;
   owner?: T;
   genres?: T;
   rating?:
@@ -518,6 +535,7 @@ export interface MangasSelect<T extends boolean = true> {
         avg?: T;
         count?: T;
       };
+  ageRating?: T;
   cover?: T;
   author?: T;
   status?: T;

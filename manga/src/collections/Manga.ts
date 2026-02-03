@@ -29,6 +29,12 @@ export const Manga: CollectionConfig = {
       },
     },
     {
+      name: "description",
+      label: "Giới thiệu",
+      type: "richText",
+      required: false,
+    },
+    {
       name: "owner",
       type: "relationship",
       relationTo: "users",
@@ -64,7 +70,21 @@ export const Manga: CollectionConfig = {
         position: "sidebar",
       },
     },
-    // TO DO: update ảnh riêng theo mỗi admin cũng như translatranslate
+    {
+      name: "ageRating",
+      label: "Độ tuổi",
+      type: "select",
+      required: true,
+      options: [
+        { label: "Mọi lứa tuổi", value: "all" },
+        { label: "13+", value: "13+" },
+        { label: "16+", value: "16+" },
+        { label: "18+", value: "18+" },
+      ],
+      defaultValue: "13+",
+    },
+
+    
     {
       name: "cover",
       type: "upload",
@@ -80,7 +100,7 @@ export const Manga: CollectionConfig = {
     {
       name: "status",
       type: "select",
-      options: ["ongoing", "completed", "hiatus"],
+      options: ["Đang cập nhập", "Đã hoàn thành", "hiatus"],
     },
     {
       name: "publishedAt",

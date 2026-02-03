@@ -30,7 +30,7 @@ export default buildConfig({
     },
   },
   collections: [Users, Media, Categories, Banners, Authors, Manga, Chapters, EffectComment,Comments,Rating],
-  editor: lexicalEditor(),
+  editor: lexicalEditor({}),
   secret: process.env.PAYLOAD_SECRET || "",
   typescript: {
     outputFile: path.resolve(dirname, "payload-types.ts"),

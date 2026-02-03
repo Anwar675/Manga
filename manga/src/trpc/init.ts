@@ -1,8 +1,9 @@
-import { initTRPC, TRPCError } from '@trpc/server';
+import { inferRouterOutputs, initTRPC, TRPCError } from '@trpc/server';
 import { getPayload } from 'payload';
 import config from "@payload-config"
 import { cache } from 'react';
 import { headers as getHeaders } from 'next/headers';
+import { AppRouter } from './routers/_app';
 export const createTRPCContext = cache(async () => {
   /**
    * @see: https://trpc.io/docs/server/context
@@ -20,6 +21,8 @@ const t = initTRPC.create({
   // transformer: superjson,
 });
 // Base router and procedure helpers
+export type RouterOutputs = inferRouterOutputs<AppRouter>;
+
 export const createTRPCRouter = t.router;
 export const createCallerFactory = t.createCallerFactory;
 export const baseProcedure = t.procedure.use(async ({next}) => {
