@@ -77,6 +77,7 @@ export interface Config {
     'effect-comments': EffectComment;
     comments: Comment;
     ratings: Rating;
+    follows: Follow;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -98,6 +99,7 @@ export interface Config {
     'effect-comments': EffectCommentsSelect<false> | EffectCommentsSelect<true>;
     comments: CommentsSelect<false> | CommentsSelect<true>;
     ratings: RatingsSelect<false> | RatingsSelect<true>;
+    follows: FollowsSelect<false> | FollowsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -335,6 +337,17 @@ export interface Rating {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "follows".
+ */
+export interface Follow {
+  id: string;
+  user: string | User;
+  manga: string | Mangas;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
@@ -396,6 +409,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'ratings';
         value: string | Rating;
+      } | null)
+    | ({
+        relationTo: 'follows';
+        value: string | Follow;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -607,6 +624,16 @@ export interface RatingsSelect<T extends boolean = true> {
   user?: T;
   manga?: T;
   star?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "follows_select".
+ */
+export interface FollowsSelect<T extends boolean = true> {
+  user?: T;
+  manga?: T;
   updatedAt?: T;
   createdAt?: T;
 }

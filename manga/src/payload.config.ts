@@ -18,6 +18,7 @@ import { Chapters } from "./collections/Chapter";
 import { Rating } from "./collections/Rating";
 import { Comments } from "./collections/Comments";
 import { EffectComment } from "./collections/EffectComment";
+import { Follows } from "./collections/Followes";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -29,7 +30,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Media, Categories, Banners, Authors, Manga, Chapters, EffectComment,Comments,Rating],
+  collections: [Users, Media, Categories, Banners, Authors, Manga, Chapters, EffectComment,Comments,Rating,Follows],
   editor: lexicalEditor({}),
   secret: process.env.PAYLOAD_SECRET || "",
   typescript: {
