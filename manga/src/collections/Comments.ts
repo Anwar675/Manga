@@ -16,6 +16,26 @@ export const Comments: CollectionConfig = {
       index: true,
     },
     {
+      name: "type",
+      type: "select",
+      defaultValue: "user",
+      options: [
+        { label: "User Comment", value: "user" },
+        { label: "Admin Note", value: "admin" },
+        { label: "Translator Note", value: "translator" },
+        { label: "Super Admin Note", value: "superadmin" },
+      ],
+      index: true,
+    },
+    {
+      name: "target",
+      type: "relationship",
+      relationTo: ["mangas", "chapters"],
+      required: false,
+      index: true,
+    },
+    
+    {
       name: "user",
       type: "relationship",
       relationTo: "users",

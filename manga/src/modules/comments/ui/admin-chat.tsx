@@ -5,46 +5,56 @@ import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ChefHat } from "lucide-react";
 import { useTRPC } from "@/trpc/client";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseQuery,
+} from "@tanstack/react-query";
 import { Textarea } from "@/components/ui/textarea";
 import { Comment } from "@/payload-types";
 
 interface AdminChatProps {
-  comments: Comment[]
+  comments: Comment[];
 }
 
-
-
-export const AdminChat = ({comments}: AdminChatProps) => {
-  const messageRef = useRef<HTMLDivElement>(null)
+export const AdminChat = ({ comments }: AdminChatProps) => {
+  const messageRef = useRef<HTMLDivElement>(null);
   const trpc = useTRPC();
+  const { data: auth } = useSuspenseQuery(trpc.auth.session.queryOptions());
   useEffect(() => {
-  const el = messageRef.current;
-  if (!el) return;
+    const el = messageRef.current;
+    if (!el) return;
 
-  el.scrollTo({
-    top: el.scrollHeight,
-    behavior: "smooth",
-  });
-}, [comments?.length]);
+    el.scrollTo({
+      top: el.scrollHeight,
+      behavior: "smooth",
+    });
+  }, [comments?.length]);
 
-  const queryClient = useQueryClient()
+  const isAdmin =
+    auth?.user?.role === "admin" ||
+    auth?.user?.role === "superadmin" ||
+    auth?.user?.role === "translator";
+
+  const queryClient = useQueryClient();
   const [more, setMore] = useState(false);
   const [content, setContent] = useState("");
-  const commentGener = useMutation(trpc.comments.generMessage.mutationOptions({
-    onSuccess: async () => {
-       await queryClient.invalidateQueries(
-        trpc.comments.getMany.queryFilter()
-      );
-    }
-  }));
+  const commentGener = useMutation(
+    trpc.comments.adminMessage.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(
+          trpc.comments.getMany.queryFilter(),
+        );
+      },
+    }),
+  );
   const orderedComments = [...comments].reverse();
   const handle = () => {
     if (!content.trim()) return;
-    setContent("")
+    setContent("");
     commentGener.mutate({
       content,
-      effectComment: "glow", 
+      effectComment: "glow",
     });
   };
 
@@ -61,31 +71,33 @@ export const AdminChat = ({comments}: AdminChatProps) => {
       </div>
 
       <div
-        ref={messageRef} className={`${more ? "h-77 md:h-120" : "h-52 md:h-77"} overflow-auto relative rounded-md mx-4 bg-kind my-6 pb-10 md:my-8  `}
+        ref={messageRef}
+        className={`${more ? "h-77 md:h-120" : "h-52 md:h-77"} overflow-auto relative rounded-md mx-4 bg-kind my-6 pb-10 md:my-8  `}
       >
         {orderedComments.map((comment) => (
-          <ChatMessageItem key={comment.id} comment={comment}/>
+          <ChatMessageItem key={comment.id} comment={comment} />
         ))}
-        
       </div>
-      <div className="w-full absolute md:bottom-0 -bottom-1  z-50 ">
-        <Textarea
-          value={content}
-          onChange={(e) => {
-            setContent(e.target.value);
-            
-            e.target.style.height = "auto";
-            e.target.style.height = `${e.target.scrollHeight}px`;
-          }}
-          onKeyDown={(e) => {
-            if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) {
-              e.preventDefault();
-              handle();
-            }
-          }}
-          placeholder="Nhập tin nhắn ở đây..."
-          rows={1}
-          className="
+      {isAdmin && (
+        <div>
+          <div className="w-full absolute md:bottom-0 -bottom-1  z-50 ">
+            <Textarea
+              value={content}
+              onChange={(e) => {
+                setContent(e.target.value);
+
+                e.target.style.height = "auto";
+                e.target.style.height = `${e.target.scrollHeight}px`;
+              }}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) {
+                  e.preventDefault();
+                  handle();
+                }
+              }}
+              placeholder="Nhập tin nhắn ở đây..."
+              rows={1}
+              className="
     resize-none
     overflow-hidden
     bg-[#fdd39e]
@@ -96,21 +108,22 @@ export const AdminChat = ({comments}: AdminChatProps) => {
     py-2
     w-full
   "
-        />
-      </div>
-      <Button
-        onClick={handle}
-        className=" right-0 absolute md:bottom-0 -bottom-1 z-50 px-4  md:py-4 py-6"
-      >
-        Gửi
-      </Button>
-      <Button
-        variant="friend"
-        className=" right-15 md:py-0 p-6 absolute md:bottom-0 -bottom-1  z-50 "
-      >
-        <ChefHat className="size-6" />
-      </Button>
-
+            />
+          </div>
+          <Button
+            onClick={handle}
+            className=" right-0 absolute md:bottom-0 -bottom-1 z-50 px-4  md:py-4 py-6"
+          >
+            Gửi
+          </Button>
+          <Button
+            variant="friend"
+            className=" right-15 md:py-0 p-6 absolute md:bottom-0 -bottom-1  z-50 "
+          >
+            <ChefHat className="size-6" />
+          </Button>
+        </div>
+      )}
       <Button onClick={() => setMore((pre) => !pre)}>
         {more ? "Rút Gọn" : "Xem Thêm"}
       </Button>

@@ -145,6 +145,7 @@ export interface UserAuthOperations {
 export interface User {
   id: string;
   username: string;
+  role: 'user' | 'translator' | 'admin' | 'superadmin';
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -313,6 +314,16 @@ export interface EffectComment {
 export interface Comment {
   id: string;
   effectComment: string | EffectComment;
+  type?: ('user' | 'admin' | 'translator' | 'superadmin') | null;
+  target?:
+    | ({
+        relationTo: 'mangas';
+        value: string | Mangas;
+      } | null)
+    | ({
+        relationTo: 'chapters';
+        value: string | Chapter;
+      } | null);
   user: string | User;
   content: string;
   parent?: (string | null) | Comment;
@@ -462,6 +473,7 @@ export interface PayloadMigration {
  */
 export interface UsersSelect<T extends boolean = true> {
   username?: T;
+  role?: T;
   updatedAt?: T;
   createdAt?: T;
   email?: T;
@@ -609,6 +621,8 @@ export interface EffectCommentsSelect<T extends boolean = true> {
  */
 export interface CommentsSelect<T extends boolean = true> {
   effectComment?: T;
+  type?: T;
+  target?: T;
   user?: T;
   content?: T;
   parent?: T;

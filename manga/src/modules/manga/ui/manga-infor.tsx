@@ -1,5 +1,5 @@
 "use client";
-import { Category } from "@/payload-types";
+import { Category, Chapter } from "@/payload-types";
 import Image from "next/image";
 import { RankKind } from "./rank-kind";
 import { Badge, Bookmark, Star } from "lucide-react";
@@ -13,16 +13,18 @@ import type { SerializedEditorState, SerializedLexicalNode } from "lexical";
 
 import type { RouterOutputs } from "@/trpc/init";
 import { formatDate, formatViews } from "@/lib/formatime";
-import { Chapter } from "./chapter";
+import { Chapters } from "./chapter";
+import { CommentsUser } from "@/modules/comments/ui/user-comment";
 
 type MangaDetail = RouterOutputs["magas"]["getOne"];
 
 interface MangaInforProps {
   category: Category[];
   manga: MangaDetail;
+  chapters: Chapter[]
 }
 
-export const MangaInfor = ({ category, manga }: MangaInforProps) => {
+export const MangaInfor = ({ category, manga, chapters }: MangaInforProps) => {
   const trpc = useTRPC();
   const queryClient = useQueryClient();
 
@@ -38,6 +40,8 @@ export const MangaInfor = ({ category, manga }: MangaInforProps) => {
       },
     }),
   );
+
+
 
   const ratingAvg = manga.rating?.avg ?? 0;
   const [expanded, setExpanded] = useState(false);
@@ -273,7 +277,8 @@ export const MangaInfor = ({ category, manga }: MangaInforProps) => {
             </button>
           </div>
         </div>
-        <Chapter />
+        <Chapters chapters={chapters} />
+        <CommentsUser />
       </div>
 
       <RankKind category={category} />

@@ -201,4 +201,14 @@ export const mangasRouter = createTRPCRouter({
         isFollowed: existed.docs.length > 0,
       };
     }),
+
+    getPopular: baseProcedure
+    .query(async ({ ctx }) => {
+      const data = await ctx.payload.find({
+        collection: "mangas",
+        sort: "-views",
+        limit:20,
+      })
+      return data.docs
+    })
 });

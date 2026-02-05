@@ -1,6 +1,7 @@
 "use client";
 import { BreadCrumb } from "@/modules/manga/ui/breadcrum";
 import { MangaInfor } from "@/modules/manga/ui/manga-infor";
+import { Chapter } from "@/payload-types";
 import { useTRPC } from "@/trpc/client";
 import { useMutation, useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
@@ -17,6 +18,7 @@ const Page = () => {
   const { data: mangaData } = useSuspenseQuery(
     trpc.magas.getOne.queryOptions({ slug: manga }),
   );
+  const {data: chapters} = useSuspenseQuery(trpc.chapter.getMany.queryOptions({mangaId: mangaData.id}))
   const increaseView = useMutation(
   trpc.magas.increateView.mutationOptions({
     onSuccess: () => {
@@ -45,12 +47,12 @@ const Page = () => {
       mangaid: mangaData.id,
     });
   }, [mangaData?.id]);
-
+ 
   return (
     <div className="2xl:px-16  bg-popular text-text-popular  w-full px-4 py-6 flex flex-col gap-8 2xl:py-8 md:px-12 md:py-6">
       <BreadCrumb />
 
-      <MangaInfor manga={mangaData} category={category} />
+      <MangaInfor manga={mangaData}  category={category} chapters={chapters as Chapter[]} />
     </div>
   );
 };

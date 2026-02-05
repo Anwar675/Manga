@@ -6,6 +6,7 @@ import { BackgroundSlider } from "@/modules/home/background-slide";
 import { HotManga } from "@/modules/home/ui/hot-maga";
 import { NewUpdate } from "@/modules/home/ui/newUpdate";
 import { Popular } from "@/modules/home/ui/popular";
+import { Comment, Mangas } from "@/payload-types";
 import { useTRPC } from "@/trpc/client";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useRef } from "react";
@@ -19,6 +20,7 @@ export default function HomeClient() {
   );
   const {data: comments} = useSuspenseQuery(trpc.comments.getMany.queryOptions())
   const {data: mangas} = useSuspenseQuery(trpc.magas.getMany.queryOptions())
+  const {data: popularMangas} = useSuspenseQuery(trpc.magas.getPopular.queryOptions())
   const popularRef = useRef<HTMLDivElement>(null);
   const newUpdateRef = useRef<HTMLDivElement>(null);
   const adminChatRef = useRef<HTMLDivElement>(null);
@@ -44,18 +46,18 @@ export default function HomeClient() {
     <div className="relative bg-popular text-text-popular">
       <BackgroundSlider />
       <div ref={popularRef}>
-        <Popular mangas={mangas} />
+        <Popular mangas={popularMangas as Mangas[]} />
       </div>
 
       <div ref={newUpdateRef}>
-        <NewUpdate category={category} mangas={mangas} />
+        <NewUpdate category={category} mangas={mangas as Mangas[]} />
       </div>
 
       <div ref={adminChatRef}>
-        <AdminChat comments={comments.docs} />
+        <AdminChat comments={comments.docs as Comment[]} />
       </div>
       <div>
-        <HotManga mangas={mangas} />
+        <HotManga mangas={mangas as Mangas[]} />
       </div>
       
       <ScrollTop onScroll={scrollTo} />

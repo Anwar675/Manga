@@ -66,14 +66,9 @@ export const CardMangaItems = ({ newCard, manga }: CardMangaItemsProps) => {
       ) : (
         <div className="py-4  cursor-pointer ">
           <div className="relative h-65 ">
-            <Image
-              src="/img/card1.jpg"
-              alt="card"
-              fill
-              className="rounded-t-xl"
-            />
+            <Image src={coverUrl} alt="card" fill className="rounded-t-xl" />
           </div>
-          <p className="truncate font-normal px-2">Natra ma đồng náo hải 2</p>
+          <p className="truncate font-normal px-2">{manga.title}</p>
           <div className="flex px-2 justify-between items-center">
             <div className="flex gap-0.5 items-center">
               {[1, 2, 3, 4, 5].map((i) => {

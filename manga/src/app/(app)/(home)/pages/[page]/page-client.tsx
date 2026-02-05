@@ -1,6 +1,7 @@
 "use client"
 
 import { NewUpdate } from "@/modules/home/ui/newUpdate"
+import { Mangas } from "@/payload-types"
 import { useTRPC } from "@/trpc/client"
 import { useSuspenseQuery } from "@tanstack/react-query"
 
@@ -14,7 +15,7 @@ export const PageClient = ({page}: {page:number}) => {
   );
     return (
         <div>
-            <NewUpdate mangas={manga.docs} category={category} page={manga.page} totalPages={manga.totalPages} />
+            <NewUpdate mangas={manga.docs as Mangas[]} category={category} page={manga.page} totalPages={manga.totalPages} />
         </div>
     )
 }
