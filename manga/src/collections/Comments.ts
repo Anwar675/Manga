@@ -4,7 +4,13 @@ export const Comments: CollectionConfig = {
   slug: "comments",
 
   admin: {
-    defaultColumns: ["content", "user", "effectComment", "isOfficial", "createdAt"],
+    defaultColumns: [
+      "content",
+      "user",
+      "effectComment",
+      "isOfficial",
+      "createdAt",
+    ],
   },
 
   fields: [
@@ -34,7 +40,7 @@ export const Comments: CollectionConfig = {
       required: false,
       index: true,
     },
-    
+
     {
       name: "user",
       type: "relationship",

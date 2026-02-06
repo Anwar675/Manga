@@ -31,5 +31,10 @@ export const Users: CollectionConfig = {
         position: "sidebar",
       },
     },
+    {
+      name: "avatar",
+      type: "upload",
+      relationTo: "media",
+    },
   ],
 };

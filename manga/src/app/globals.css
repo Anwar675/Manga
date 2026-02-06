@@ -152,3 +152,15 @@
     @apply bg-background text-foreground;
   }
 }
+
+.vip-gradient {
+  background: linear-gradient(
+    270deg,
+    #ff4d4d,
+    #ffd93d,
+    #4dff88,
+    #4da6ff
+  );
+  background-size: 300% 300%;
+  animation: var(--animate-hot);
+}

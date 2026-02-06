@@ -1,16 +1,16 @@
 import type { Metadata } from "next";
 
 import "./globals.css";
-import { Kanit } from "next/font/google"
-import {  TRPCReactProvider } from "@/trpc/client";
-
+import { Kanit } from "next/font/google";
+import { TRPCReactProvider } from "@/trpc/client";
+import { ThemeProvider } from "./providers/theme-provider";
 
 const kanit = Kanit({
   subsets: ["latin", "thai", "vietnamese"],
   weight: ["300", "400", "500", "600", "700"],
   variable: "--font-kanit",
-})
- export const metadata: Metadata = {
+});
+export const metadata: Metadata = {
   metadataBase: new URL("https://alga.vn"),
 
   title: {
@@ -18,14 +18,9 @@ const kanit = Kanit({
     template: "%s | Alga",
   },
 
-  description:
-    "Web đọc manga miễn phí, cập nhật nhanh, hỗ trợ dark mode.",
+  description: "Web đọc manga miễn phí, cập nhật nhanh, hỗ trợ dark mode.",
 
-  keywords: [
-    "đọc manga",
-    "truyện tranh online",
-    "manga tiếng việt",
-  ],
+  keywords: ["đọc manga", "truyện tranh online", "manga tiếng việt"],
 
   themeColor: "#0f172a",
 
@@ -67,15 +62,14 @@ export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
-  }>) {
-    return (
-      <html lang="vi" >
-        <body className={kanit.className}>
-          <TRPCReactProvider>
-            {children}
-           
-          </TRPCReactProvider>
-        </body>
-      </html>
-    );
+}>) {
+  return (
+    <html lang="vi">
+      <body className={kanit.className}>
+        <ThemeProvider>
+          <TRPCReactProvider>{children}</TRPCReactProvider>
+        </ThemeProvider>
+      </body>
+    </html>
+  );
 }

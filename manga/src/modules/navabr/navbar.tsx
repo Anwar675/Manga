@@ -64,7 +64,7 @@ export const Navbar = () => {
                 className="rounded-full cursor-pointer overflow-hidden"
               />
               {isActive && (
-                <div className="absolute top-12 z-10 right-0  ">
+                <div className="absolute top-12 z-20 right-0  ">
                   <NavbarAccount />
                 </div>
               )}

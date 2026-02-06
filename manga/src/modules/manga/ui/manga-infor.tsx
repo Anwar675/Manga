@@ -278,7 +278,7 @@ export const MangaInfor = ({ category, manga, chapters }: MangaInforProps) => {
           </div>
         </div>
         <Chapters chapters={chapters} />
-        <CommentsUser />
+        <CommentsUser mangaId={manga.id} />
       </div>
 
       <RankKind category={category} />

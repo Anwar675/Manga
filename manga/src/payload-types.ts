@@ -146,6 +146,7 @@ export interface User {
   id: string;
   username: string;
   role: 'user' | 'translator' | 'admin' | 'superadmin';
+  avatar?: (string | null) | Media;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -474,6 +475,7 @@ export interface PayloadMigration {
 export interface UsersSelect<T extends boolean = true> {
   username?: T;
   role?: T;
+  avatar?: T;
   updatedAt?: T;
   createdAt?: T;
   email?: T;

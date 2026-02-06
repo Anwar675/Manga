@@ -61,6 +61,5 @@ export default function HomeClient() {
       </div>
       
       <ScrollTop onScroll={scrollTo} />
-    </div>
-  );
+    </div>  );
 }
