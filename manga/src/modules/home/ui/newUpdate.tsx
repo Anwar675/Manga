@@ -53,7 +53,7 @@ export const NewUpdate = ({
         <div className="grid md:grid-cols-3 xl:grid-cols-4 grid-cols-2 gap-4">
           {mangas.map((manga) => (
             <Link key={manga.id} href={`/manga/${manga.slug}`}>
-              <CardMangaItems key={manga.id} newCard manga={manga} />
+              <CardMangaItems  newCard manga={manga} />
             </Link>
             
           ))}

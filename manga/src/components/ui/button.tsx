@@ -20,11 +20,12 @@ const buttonVariants = cva(
         ghost:
           "bg-[#7599f3]  text-white dark:hover:bg-accent/50",
         link: "text-primary underline-offset-4 hover:underline",
+        chapterActive: "px-8 py-2 bg-rank rounded-2xl cursor-pointer "
       },
       size: {
         default: "h-9 2xl:h-12 px-2 py-2 has-[>svg]:px-3",
         sm: "h-8 rounded-md gap-1.5 px-3 has-[>svg]:px-2.5",
-        lg: "h-10 rounded-md px-6 has-[>svg]:px-4",
+        lg: "h-10 rounded-2xl px-6 has-[>svg]:px-4",
         icon: "size-9",
         "icon-sm": "size-8",
         "icon-lg": "size-10",

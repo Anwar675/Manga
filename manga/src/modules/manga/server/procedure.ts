@@ -74,7 +74,7 @@ export const mangasRouter = createTRPCRouter({
       };
     }),
 
-  increateView: protectedProcedure
+  increateView: baseProcedure
     .input(
       z.object({
         mangaid: z.string(),
@@ -202,13 +202,12 @@ export const mangasRouter = createTRPCRouter({
       };
     }),
 
-    getPopular: baseProcedure
-    .query(async ({ ctx }) => {
-      const data = await ctx.payload.find({
-        collection: "mangas",
-        sort: "-views",
-        limit:20,
-      })
-      return data.docs
-    })
+  getPopular: baseProcedure.query(async ({ ctx }) => {
+    const data = await ctx.payload.find({
+      collection: "mangas",
+      sort: "-views",
+      limit: 20,
+    });
+    return data.docs;
+  }),
 });

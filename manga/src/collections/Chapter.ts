@@ -35,7 +35,7 @@ export const Chapters: CollectionConfig = {
     {
       name: "slug",
       type: "text",
-      unique: true,
+      index:true,
       admin: {
         readOnly: true,
         position: "sidebar",
@@ -111,9 +111,7 @@ export const Chapters: CollectionConfig = {
           data.chapterNumber == null
         ) {
           const mangaId =
-            typeof data.manga === "string"
-              ? data.manga
-              : data.manga.id;
+            typeof data.manga === "string" ? data.manga : data.manga.id;
 
           const last = await req.payload.find({
             collection: "chapters",
@@ -123,22 +121,16 @@ export const Chapters: CollectionConfig = {
             depth: 0,
           });
 
-          data.chapterNumber =
-            last.docs[0]?.chapterNumber
-              ? Number(last.docs[0].chapterNumber) + 1
-              : 1;
+          data.chapterNumber = last.docs[0]?.chapterNumber
+            ? Number(last.docs[0].chapterNumber) + 1
+            : 1;
         }
 
         if (!data.slug && data.manga && data.chapterNumber != null) {
-          const mangaId =
-            typeof data.manga === "string"
-              ? data.manga
-              : data.manga.id;
-
-          data.slug = slugify(
-            `${mangaId}-chapter-${data.chapterNumber}`,
-            { lower: true, strict: true }
-          );
+          data.slug = slugify(`chapter-${data.chapterNumber}`, {
+            lower: true,
+            strict: true,
+          });
         }
 
         data.publishedAt = new Date();
@@ -146,16 +138,12 @@ export const Chapters: CollectionConfig = {
       },
     ],
 
-  
-     
     beforeChange: [
       async ({ data, req, originalDoc, operation }) => {
         if (!data?.manga || data.chapterNumber == null) return data;
 
         const mangaId =
-          typeof data.manga === "string"
-            ? data.manga
-            : data.manga.id;
+          typeof data.manga === "string" ? data.manga : data.manga.id;
 
         const exists = await req.payload.find({
           collection: "chapters",
@@ -171,19 +159,15 @@ export const Chapters: CollectionConfig = {
         });
 
         if (exists.docs.length) {
-          throw new Error(
-            `Chapter ${data.chapterNumber} đã tồn tại`
-          );
+          throw new Error(`Chapter ${data.chapterNumber} đã tồn tại`);
         }
 
         return data;
       },
     ],
 
-    
     afterChange: [
       async ({ doc, req, operation }) => {
-       
         setImmediate(async () => {
           try {
             if (operation !== "create" && operation !== "update") return;
@@ -191,15 +175,15 @@ export const Chapters: CollectionConfig = {
             if (doc.status !== "published") return;
 
             const mangaId =
-              typeof doc.manga === "string"
-                ? doc.manga
-                : doc.manga?.id;
+              typeof doc.manga === "string" ? doc.manga : doc.manga?.id;
 
             if (!mangaId) return;
 
             // Đảm bảo slug và chapterNumber tồn tại
             if (!doc.slug || doc.chapterNumber == null) {
-              console.warn("Chapter slug or chapterNumber is missing, skipping latestChapter update");
+              console.warn(
+                "Chapter slug or chapterNumber is missing, skipping latestChapter update",
+              );
               return;
             }
 
@@ -218,11 +202,9 @@ export const Chapters: CollectionConfig = {
             });
           } catch (error) {
             console.error("Error updating latestChapter in manga:", error);
-            
           }
         });
       },
     ],
-
   },
 };

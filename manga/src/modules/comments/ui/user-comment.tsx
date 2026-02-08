@@ -9,7 +9,8 @@ import {
 import { MessageCircle } from "lucide-react";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { ReplyList } from "./reply";
 
 interface CommentsUserProps {
   mangaId: string;
@@ -17,10 +18,31 @@ interface CommentsUserProps {
 
 export const CommentsUser = ({ mangaId }: CommentsUserProps) => {
   const trpc = useTRPC();
+  const inputRef = useRef<HTMLDivElement | null>(null);
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        inputRef.current &&
+        !inputRef.current.contains(event.target as Node)
+      ) {
+        setReplyInputOpen(null);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   const queryClient = useQueryClient();
-  const [hidden, setHidden] = useState<string | null>(null);
-;
-  const [content, setContent] = useState("");
+  const [replyInputOpen, setReplyInputOpen] = useState<string | null>(null);
+  const [replyListOpen, setReplyListOpen] = useState<string | null>(null);
+
+  const [mainContent, setMainContent] = useState("");
+  const [replyContent, setReplyContent] = useState<Record<string, string>>({});
+
   const { data: userComment } = useSuspenseQuery(
     trpc.comments.getUserMessage.queryOptions({
       mangaId: mangaId,
@@ -33,27 +55,80 @@ export const CommentsUser = ({ mangaId }: CommentsUserProps) => {
         await queryClient.invalidateQueries(
           trpc.comments.getUserMessage.queryFilter(),
         );
+        await queryClient.invalidateQueries(
+          trpc.comments.getReplies.queryFilter(),
+        );
       },
     }),
   );
+  const handleReply = (parentId: string) => {
+    const text = replyContent[parentId];
+    if (!text?.trim()) return;
 
-  const handleGenerComment = () => {
-    if (!content.trim()) return;
-    setContent("");
     userCommentGener.mutate({
       mangaId,
-      content,
+      content: text,
+      effectComment: "glow",
+      parentId,
+    });
+
+    setReplyContent((prev) => ({
+      ...prev,
+      [parentId]: "",
+    }));
+  };
+
+  const handleGenerComment = () => {
+    if (!mainContent.trim()) return;
+    setMainContent("");
+    userCommentGener.mutate({
+      mangaId,
+      content: mainContent,
       effectComment: "glow",
     });
   };
 
   return (
-    <div className="bg-rank rounded-xl">
+    <div className=" rounded-xl ">
+      <div className="relative my-4">
+        <div className="w-full  ">
+          <Input
+            value={mainContent}
+            onChange={(e) => setMainContent(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                handleGenerComment();
+              }
+            }}
+            placeholder="Nhập tin nhắn ở đây..."
+            className="
+    px-2 
+    resize-none
+    overflow-hidden
+    bg-[#fdd39e]
+    dark:bg-[#4c4c4c]
+    text-[16px]
+    border border-yellow-700
+    min-h-12
+    
+    py-4
+    w-full
+  "
+          />
+        </div>
+        <Button
+          onClick={handleGenerComment}
+          className=" right-0 absolute md:bottom-0 -bottom-1 z-50 px-4  md:py-4 py-6"
+        >
+          Gửi
+        </Button>
+      </div>
       <div className="flex gap-2 items-center p-4 text-xl bg-kind rounded-t-xl border-b-2 border-b-amber-700 font-bold">
         <h2>Bình luận</h2>
-        <p>({userComment?.docs.length ?? 0})</p>
+        <p>({userComment?.totalDocs ?? 0})</p>
       </div>
-      <div className="flex flex-col gap-1">
+      <div className="flex bg-rank flex-col gap-1">
         {userComment?.docs.length === 0 ? (
           <p className="text-center py-4">Chưa có bình luận nào</p>
         ) : (
@@ -66,8 +141,8 @@ export const CommentsUser = ({ mangaId }: CommentsUserProps) => {
                 : null;
 
             return (
-              <div>
-                <div className="flex items-center  gap-4 px-4 py-2">
+              <div key={comment.id}>
+                <div className="flex   gap-4 px-4 py-2">
                   <div className="w-12 h-12 relative ">
                     <Image
                       src={avatarUrl ?? "/img/background.png"}
@@ -104,91 +179,75 @@ export const CommentsUser = ({ mangaId }: CommentsUserProps) => {
                         {comment.content}
                       </p>
                     </div>
-                    <button
-                      onClick={() => setHidden((prev) => prev === comment.id ? null : comment.id)}
-                      className="flex items-center gap-1 font-light px-4 py-2 cursor-pointer"
-                    >
-                      <MessageCircle size={15} />
-                      <p>Trả lời</p>
-                    </button>
+                    <div className="flex">
+                      <button
+                        onClick={() =>
+                          setReplyInputOpen((prev) =>
+                            prev === comment.id ? null : comment.id,
+                          )
+                        }
+                        className="flex items-center gap-1 font-light px-4 py-2 cursor-pointer"
+                      >
+                        <MessageCircle size={15} />
+                        <p>Trả lời</p>
+                      </button>
+                      {comment.replyCount > 0 && (
+                        <button
+                          onClick={() =>
+                            setReplyListOpen((prev) =>
+                              prev === comment.id ? null : comment.id,
+                            )
+                          }
+                          className="flex font-bold items-center gap-1 px-4 py-2 cursor-pointer"
+                        >
+                          <p>{comment.replyCount}</p>
+                          <p>Phản hồi</p>
+                        </button>
+                      )}
+                    </div>
                   </div>
                 </div>
-                {hidden === comment.id && (
-                  <div className="relative">
-          <div className="w-[90%] ml-auto ">
-            <Input
-              value={content}
-              onChange={(e) => {
-                setContent(e.target.value);
-              }}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  e.preventDefault();
-                  handleGenerComment();
-                }
-              }}
-              placeholder="Nhập tin nhắn ở đây..."
-              className="
-    resize-none
-    overflow-hidden
-    bg-[#fdd39e]
-    dark:bg-[#4c4c4c]
-    text-[16px]
-    border border-yellow-700
-    min-h-12
-    max-h-44
-    py-2
-    w-full
-  "
-            />
-          </div>
-          <Button
-            onClick={handleGenerComment}
-            className=" right-0 absolute md:bottom-0 -bottom-1 z-50 px-4  md:py-4 py-6"
-          >
-            Gửi
-          </Button>
-        </div>
+                {replyListOpen === comment.id && (
+                  <div className="pl-10">
+                    <ReplyList
+                      mangaId={mangaId}
+                      parentId={comment.id}
+                      depth={0}
+                    />
+                  </div>
+                )}
+                {replyInputOpen === comment.id && (
+                  <div ref={inputRef} className="relative w-full mt-2">
+                    <Input
+                      value={replyContent[comment.id] || ""}
+                      onChange={(e) =>
+                        setReplyContent((prev) => ({
+                          ...prev,
+                          [comment.id]: e.target.value,
+                        }))
+                      }
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                          e.preventDefault();
+                          handleReply(comment.id);
+                        }
+                      }}
+                      className="w-full"
+                      placeholder="Viết phản hồi..."
+                    />
+
+                    <Button
+                      onClick={() => handleReply(comment.id)}
+                      className="absolute right-0 bottom-0 px-3 py-2"
+                    >
+                      Gửi
+                    </Button>
+                  </div>
                 )}
               </div>
             );
           })
         )}
-        <div className="relative">
-          <div className="w-full  ">
-            <Input
-              value={content}
-              onChange={(e) => {
-                setContent(e.target.value);
-              }}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  e.preventDefault();
-                  handleGenerComment();
-                }
-              }}
-              placeholder="Nhập tin nhắn ở đây..."
-              className="
-    resize-none
-    overflow-hidden
-    bg-[#fdd39e]
-    dark:bg-[#4c4c4c]
-    text-[16px]
-    border border-yellow-700
-    min-h-12
-    max-h-44
-    py-2
-    w-full
-  "
-            />
-          </div>
-          <Button
-            onClick={handleGenerComment}
-            className=" right-0 absolute md:bottom-0 -bottom-1 z-50 px-4  md:py-4 py-6"
-          >
-            Gửi
-          </Button>
-        </div>
       </div>
     </div>
   );

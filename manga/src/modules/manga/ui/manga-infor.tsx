@@ -15,18 +15,32 @@ import type { RouterOutputs } from "@/trpc/init";
 import { formatDate, formatViews } from "@/lib/formatime";
 import { Chapters } from "./chapter";
 import { CommentsUser } from "@/modules/comments/ui/user-comment";
+import { useRouter } from "next/navigation";
 
 type MangaDetail = RouterOutputs["magas"]["getOne"];
 
 interface MangaInforProps {
   category: Category[];
   manga: MangaDetail;
-  chapters: Chapter[]
+  chapters: Chapter[];
 }
 
 export const MangaInfor = ({ category, manga, chapters }: MangaInforProps) => {
   const trpc = useTRPC();
+  const router = useRouter();
   const queryClient = useQueryClient();
+  const { data: session, isLoading } = useQuery(
+    trpc.auth.session.queryOptions(),
+  );
+  console.log(session)
+  const requireAuth = () => {
+    if (isLoading) return false;
+    if (!session?.user) {
+      router.push("/sign-in");
+      return false;
+    }
+    return true;
+  };
 
   const ratingManga = useMutation(
     trpc.magas.ratingManga.mutationOptions({
@@ -40,8 +54,6 @@ export const MangaInfor = ({ category, manga, chapters }: MangaInforProps) => {
       },
     }),
   );
-
-
 
   const ratingAvg = manga.rating?.avg ?? 0;
   const [expanded, setExpanded] = useState(false);
@@ -90,6 +102,7 @@ export const MangaInfor = ({ category, manga, chapters }: MangaInforProps) => {
   );
 
   const handleToggleFollow = () => {
+    if (!requireAuth()) return;
     if (isFollow) {
       unfollowMutation.mutate({ mangaId: manga.id });
     } else {
