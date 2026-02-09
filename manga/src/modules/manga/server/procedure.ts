@@ -11,7 +11,7 @@ export const mangasRouter = createTRPCRouter({
       collection: "mangas",
       depth: 1,
       limit: 8,
-      sort: "-createdAt",
+      sort: "-latestChapter.updatedAt",
     });
     return data.docs;
   }),

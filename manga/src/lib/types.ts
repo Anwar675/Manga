@@ -1,5 +1,12 @@
-import { Bookmark, LogOut, MessageCircle, History, Moon, Settings } from "lucide-react"
-import {  Carrot, FacebookIcon, Trophy, Users, LucideIcon } from "lucide-react";
+import {
+  Bookmark,
+  LogOut,
+  MessageCircle,
+  History,
+  Moon,
+  Settings,
+} from "lucide-react";
+import { Carrot, FacebookIcon, Trophy, Users, LucideIcon } from "lucide-react";
 type NavItem =
   | {
       type: "item";
@@ -17,10 +24,9 @@ type NavItem =
       type: "divider";
     };
 
-
 export const navAccount: NavItem[] = [
   {
-    type: "divider"
+    type: "divider",
   },
   {
     type: "item",
@@ -41,26 +47,25 @@ export const navAccount: NavItem[] = [
     icon: MessageCircle,
   },
 
- 
   {
     type: "divider",
   },
   {
-    type:"action",
+    type: "action",
     label: "Giao diện",
     action: "toggle-theme",
-    icon: Moon
+    icon: Moon,
   },
   {
-    type:"item",
+    type: "item",
     label: "Cài đặt",
-    href: '/settings',
-    icon: Settings
+    href: "/settings",
+    icon: Settings,
   },
   {
     type: "divider",
   },
-  
+
   {
     type: "action",
     label: "Đăng xuất",
@@ -70,40 +75,42 @@ export const navAccount: NavItem[] = [
 ];
 
 export const NavbarItem = [
-    {
-        label: "Lịch sử",
-        href: '/history',
-        icon: History
-    },
-    {
-        label: "Theo dõi",
-        href: "/follow",
-        icon: Bookmark
-    },
-    {
-        label: "FanPage",
-        href: "/facebook.com",
-        icon: FacebookIcon
-    }, 
-    {
-        label: "Thể loại",
-        href: '/',
-        icon: Carrot
-    },
-    
-    {
-        label: "Nhóm dịch",
-        href: "/team",
-        icon: Users
-    },
-    {
-        label: "BXH truyện tranh",
-        href: '/rank',
-        icon: Trophy
-    },
-    {
-        label: "Đăng xuất",
-        href: "/logout",
-        icon: LogOut
-    }
-]
+  {
+    label: "Lịch sử",
+    href: "/history",
+    icon: History,
+  },
+  {
+    label: "Theo dõi",
+    href: "/follow",
+    icon: Bookmark,
+  },
+  {
+    label: "FanPage",
+    href: "/facebook.com",
+    icon: FacebookIcon,
+  },
+  {
+    label: "Thể loại",
+    href: "/",
+    icon: Carrot,
+  },
+
+  {
+    label: "Nhóm dịch",
+    href: "/team",
+    icon: Users,
+  },
+  {
+    label: "BXH truyện tranh",
+    href: "/rank",
+    icon: Trophy,
+  },
+  {
+    label: "Đăng xuất",
+    href: "/logout",
+    icon: LogOut,
+  },
+];
+
+export type TargetType = "mangas" | "chapters";

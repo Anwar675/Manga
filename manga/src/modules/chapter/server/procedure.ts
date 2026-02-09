@@ -19,4 +19,22 @@ export const ChapterRouter = createTRPCRouter({
     });
     return data.docs;
   }),
+
+  getOne: baseProcedure
+  .input(z.object({
+    slug: z.string(),
+  }))
+  .query(async({ctx,input}) => {
+    const data = await ctx.payload.find({
+      collection: "chapters",
+      depth: 1,
+      where: {
+        slug: {
+          equals: input.slug,
+        },
+      },
+    });
+    return data.docs[0];
+  })
+
 });

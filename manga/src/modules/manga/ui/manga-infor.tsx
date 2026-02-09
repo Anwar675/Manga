@@ -214,13 +214,13 @@ export const MangaInfor = ({ category, manga, chapters }: MangaInforProps) => {
                 </div>
                 <div className="flex gap-1">
                   <p className="font-medium">Nhóm dịch:</p>
-                  <p>
+                  <div>
                     <p>
                       {typeof manga.owner === "string"
                         ? manga.owner
                         : manga.owner.username}
                     </p>
-                  </p>
+                  </div>
                 </div>
                 <div className="flex gap-1">
                   <p className="font-medium">Tổng số chap:</p>
@@ -291,7 +291,7 @@ export const MangaInfor = ({ category, manga, chapters }: MangaInforProps) => {
           </div>
         </div>
         <Chapters chapters={chapters} />
-        <CommentsUser mangaId={manga.id} />
+        <CommentsUser targetId={manga.id} targetType="mangas" />
       </div>
 
       <RankKind category={category} />

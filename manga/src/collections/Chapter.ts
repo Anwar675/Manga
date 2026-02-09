@@ -35,19 +35,32 @@ export const Chapters: CollectionConfig = {
     {
       name: "slug",
       type: "text",
-      index:true,
+      index: true,
       admin: {
         readOnly: true,
         position: "sidebar",
       },
     },
-
+    {
+      name: "bulkUpload",
+      type: "upload",
+      relationTo: "media",
+      hasMany: true,
+      admin: {
+        description: "Upload nhiều ảnh để tự tạo pages",
+      },
+    },
     {
       name: "pages",
       type: "array",
       required: true,
       minRows: 1,
       fields: [
+        {
+          name: "order",
+          type: "number",
+          required: true,
+        },
         {
           name: "image",
           type: "upload",
@@ -102,6 +115,38 @@ export const Chapters: CollectionConfig = {
 
         if (operation === "create" && req.user) {
           data.createdBy = req.user.id;
+        }
+        if (operation === "create" && data.bulkUpload?.length) {
+          // fetch media info để lấy filename
+          const mediaDocs = await req.payload.find({
+            collection: "media",
+            where: {
+              id: {
+                in: data.bulkUpload.map((img: any) =>
+                  typeof img === "string" ? img : img.id,
+                ),
+              },
+            },
+            limit: 1000,
+          });
+
+          // sort theo filename
+          const getName = (doc: any): string =>
+            doc.filename ?? doc.originalFilename ?? doc.url ?? doc.id ?? "";
+
+          const sorted = mediaDocs.docs.sort((a, b) =>
+            getName(a).localeCompare(getName(b), undefined, {
+              numeric: true,
+              sensitivity: "base",
+            }),
+          );
+
+          data.pages = sorted.map((img, i) => ({
+            order: i + 1,
+            image: img.id,
+          }));
+
+          delete data.bulkUpload;
         }
 
         // auto tăng chapter nếu chưa nhập

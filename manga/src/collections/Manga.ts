@@ -125,7 +125,7 @@ export const Manga: CollectionConfig = {
       fields: [
         { name: "number", type: "text" },
         { name: "slug", type: "text" },
-        { name: "updatedAt", type: "date" },
+        { name: "updatedAt", type: "date" , index: true},
       ],
     },
   ],

@@ -1,5 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { timeAgo } from "@/lib/formatime";
+import { TargetType } from "@/lib/types";
 import { useTRPC } from "@/trpc/client";
 import type { RouterOutputs } from "@/trpc/init";
 import {
@@ -15,11 +17,13 @@ type Reply = RouterOutputs["comments"]["getReplies"]["docs"][number];
 
 export const ReplyList = ({
   parentId,
-  mangaId,
+  targetId,
+  targetType,
   depth = 0,
 }: {
   parentId: string;
-  mangaId: string;
+  targetId: string;
+  targetType: TargetType;
   depth?: number;
 }) => {
   const trpc = useTRPC();
@@ -66,7 +70,9 @@ export const ReplyList = ({
     if (!text?.trim()) return;
 
     replyMutation.mutate({
-      mangaId,
+      targetId,
+      targetType,
+
       content: text,
       effectComment: "glow",
       parentId: id,
@@ -129,20 +135,21 @@ export const ReplyList = ({
                     </p>
                   </div>
                 </div>
+                <div className="flex items-center">
+                  <button
+                    onClick={() =>
+                      setReplyInputOpen((prev) =>
+                        prev === reply.id ? null : reply.id,
+                      )
+                    }
+                    className="flex items-center gap-1 px-2 py-1 text-sm"
+                  >
+                    <MessageCircle size={14} />
+                    Trả lời
+                  </button>
+                  <p className="text-end flex-1">{timeAgo(reply.createdAt)}</p>
+                </div>
 
-                <button
-                  onClick={() =>
-                    setReplyInputOpen((prev) =>
-                      prev === reply.id ? null : reply.id,
-                    )
-                  }
-                  className="flex items-center gap-1 px-2 py-1 text-sm"
-                >
-                  <MessageCircle size={14} />
-                  Trả lời
-                </button>
-
-                {/* Reply input */}
                 {replyInputOpen === reply.id && (
                   <div ref={inputRef} className="relative w-full mt-2">
                     <Input
@@ -174,7 +181,8 @@ export const ReplyList = ({
 
                 <ReplyList
                   parentId={reply.id}
-                  mangaId={mangaId}
+                  targetId={targetId}
+                  targetType={targetType}
                   depth={depth + 1}
                 />
               </div>

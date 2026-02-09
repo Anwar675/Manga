@@ -11,12 +11,17 @@ import { MessageCircle } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { ReplyList } from "./reply";
+import { timeAgo } from "@/lib/formatime";
+import { TargetType } from "@/lib/types";
 
 interface CommentsUserProps {
-  mangaId: string;
+  targetId: string;
+  targetType: TargetType;
 }
 
-export const CommentsUser = ({ mangaId }: CommentsUserProps) => {
+export const CommentsUser = ({ targetId, targetType }: CommentsUserProps) => {
+  const [page, setPage] = useState(1);
+
   const trpc = useTRPC();
   const inputRef = useRef<HTMLDivElement | null>(null);
   useEffect(() => {
@@ -45,8 +50,9 @@ export const CommentsUser = ({ mangaId }: CommentsUserProps) => {
 
   const { data: userComment } = useSuspenseQuery(
     trpc.comments.getUserMessage.queryOptions({
-      mangaId: mangaId,
-      page: 1,
+      targetId,
+      targetType,
+      page,
     }),
   );
   const userCommentGener = useMutation(
@@ -66,7 +72,8 @@ export const CommentsUser = ({ mangaId }: CommentsUserProps) => {
     if (!text?.trim()) return;
 
     userCommentGener.mutate({
-      mangaId,
+      targetId,
+      targetType,
       content: text,
       effectComment: "glow",
       parentId,
@@ -82,14 +89,19 @@ export const CommentsUser = ({ mangaId }: CommentsUserProps) => {
     if (!mainContent.trim()) return;
     setMainContent("");
     userCommentGener.mutate({
-      mangaId,
+      targetId,
+      targetType,
       content: mainContent,
       effectComment: "glow",
     });
   };
 
   return (
-    <div className=" rounded-xl ">
+    <div className=" rounded-xl bg-rank ">
+      <div className="flex gap-2 items-center p-4 text-xl bg-kind rounded-t-xl border-b-2 border-b-amber-700 font-bold">
+        <h2>Bình luận</h2>
+        <p>({userComment?.totalDocs ?? 0})</p>
+      </div>
       <div className="relative my-4">
         <div className="w-full  ">
           <Input
@@ -106,7 +118,7 @@ export const CommentsUser = ({ mangaId }: CommentsUserProps) => {
     px-2 
     resize-none
     overflow-hidden
-    bg-[#fdd39e]
+    
     dark:bg-[#4c4c4c]
     text-[16px]
     border border-yellow-700
@@ -123,10 +135,6 @@ export const CommentsUser = ({ mangaId }: CommentsUserProps) => {
         >
           Gửi
         </Button>
-      </div>
-      <div className="flex gap-2 items-center p-4 text-xl bg-kind rounded-t-xl border-b-2 border-b-amber-700 font-bold">
-        <h2>Bình luận</h2>
-        <p>({userComment?.totalDocs ?? 0})</p>
       </div>
       <div className="flex bg-rank flex-col gap-1">
         {userComment?.docs.length === 0 ? (
@@ -179,7 +187,7 @@ export const CommentsUser = ({ mangaId }: CommentsUserProps) => {
                         {comment.content}
                       </p>
                     </div>
-                    <div className="flex">
+                    <div className="flex items-center ">
                       <button
                         onClick={() =>
                           setReplyInputOpen((prev) =>
@@ -191,6 +199,7 @@ export const CommentsUser = ({ mangaId }: CommentsUserProps) => {
                         <MessageCircle size={15} />
                         <p>Trả lời</p>
                       </button>
+
                       {comment.replyCount > 0 && (
                         <button
                           onClick={() =>
@@ -204,13 +213,17 @@ export const CommentsUser = ({ mangaId }: CommentsUserProps) => {
                           <p>Phản hồi</p>
                         </button>
                       )}
+                      <p className="flex-1 text-end">
+                        {timeAgo(comment.createdAt)}
+                      </p>
                     </div>
                   </div>
                 </div>
                 {replyListOpen === comment.id && (
                   <div className="pl-10">
                     <ReplyList
-                      mangaId={mangaId}
+                      targetId={targetId}
+                      targetType={targetType}
                       parentId={comment.id}
                       depth={0}
                     />
@@ -249,6 +262,22 @@ export const CommentsUser = ({ mangaId }: CommentsUserProps) => {
           })
         )}
       </div>
+      {userComment && userComment.totalPages > 1 && (
+        <div className="flex justify-center gap-2 py-4">
+          {Array.from({ length: userComment.totalPages }, (_, i) => i + 1).map(
+            (p) => (
+              <Button
+                key={p}
+                variant={p === page ? "default" : "outline"}
+                size="sm"
+                onClick={() => setPage(p)}
+              >
+                {p}
+              </Button>
+            ),
+          )}
+        </div>
+      )}
     </div>
   );
 };

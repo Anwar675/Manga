@@ -284,7 +284,12 @@ export interface Chapter {
   title: string;
   chapterNumber: number;
   slug?: string | null;
+  /**
+   * Upload nhiều ảnh để tự tạo pages
+   */
+  bulkUpload?: (string | Media)[] | null;
   pages: {
+    order: number;
     image: string | Media;
     id?: string | null;
   }[];
@@ -592,9 +597,11 @@ export interface ChaptersSelect<T extends boolean = true> {
   title?: T;
   chapterNumber?: T;
   slug?: T;
+  bulkUpload?: T;
   pages?:
     | T
     | {
+        order?: T;
         image?: T;
         id?: T;
       };

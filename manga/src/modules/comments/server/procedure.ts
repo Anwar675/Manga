@@ -22,49 +22,57 @@ export const commentRouter = createTRPCRouter({
   }),
 
   getUserMessage: baseProcedure
-  .input(
-    z.object({
-      mangaId: z.string(),
-      page: z.number().min(1),
-    }),
-  )
-  .query(async ({ ctx, input }) => {
-    const comments = await ctx.payload.find({
-      collection: "comments",
-      where: {
-        and: [
-          { "target.relationTo": { equals: "mangas" } },
-          { "target.value": { equals: input.mangaId } },
-          { parent: { exists: false } }, // chỉ comment gốc
-        ],
-      },
-      depth: 2,
-      sort: "-createdAt",
-      page: input.page,
-      limit: 10,
-    });
-
-    const withReplyCount = await Promise.all(
-      comments.docs.map(async (comment) => {
-        const count = await ctx.payload.count({
-          collection: "comments",
-          where: {
-            parent: { equals: comment.id },
-          },
-        });
-
-        return {
-          ...comment,
-          replyCount: count.totalDocs,
-        };
+    .input(
+      z.object({
+        targetId: z.string(),
+        targetType: z.enum(["mangas", "chapters"]),
+        page: z.number().min(1),
       }),
-    );
+    )
+    .query(async ({ ctx, input }) => {
+      const comments = await ctx.payload.find({
+        collection: "comments",
+        where: {
+          and: [
+            { "target.relationTo": { equals: input.targetType } },
+            { "target.value": { equals: input.targetId } },
+            { parent: { exists: false } },
+          ],
+        },
+        depth: 2,
+        sort: "-createdAt",
+        page: input.page,
+        limit: 10,
+      });
 
-    return {
-      ...comments,
-      docs: withReplyCount,
-    };
-  }),
+      const parentIds = comments.docs.map((c) => c.id);
+
+      const replies = await ctx.payload.find({
+        collection: "comments",
+        where: {
+          parent: { in: parentIds },
+        },
+        limit: 1000,
+      });
+
+      const replyMap = replies.docs.reduce(
+        (acc, r) => {
+          const pid = typeof r.parent === "string" ? r.parent : r.parent?.id;
+
+          if (pid) acc[pid] = (acc[pid] || 0) + 1;
+          return acc;
+        },
+        {} as Record<string, number>,
+      );
+
+      return {
+        ...comments,
+        docs: comments.docs.map((c) => ({
+          ...c,
+          replyCount: replyMap[c.id] || 0,
+        })),
+      };
+    }),
 
   getReplies: baseProcedure
     .input(z.object({ parentId: z.string() }))
@@ -123,14 +131,14 @@ export const commentRouter = createTRPCRouter({
         },
       });
     }),
-  
 
   UserMessage: protectedProcedure
     .input(
       z.object({
         content: z.string().min(1).max(500),
         effectComment: z.string(),
-        mangaId: z.string(),
+        targetId: z.string(),
+        targetType: z.enum(["mangas", "chapters"]),
         parentId: z.string().optional(),
       }),
     )
@@ -159,8 +167,8 @@ export const commentRouter = createTRPCRouter({
           effectComment: effect.docs[0].id,
           user: user.id,
           target: {
-            relationTo: "mangas",
-            value: input.mangaId,
+            relationTo: input.targetType,
+            value: input.targetId,
           },
           parent: input.parentId || undefined,
           type: "user",
