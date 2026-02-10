@@ -24,6 +24,8 @@ Frontend dùng **TailwindCSS 4**, **Swiper**, **shadcn/ui**, **TRPC + React Quer
   - Hook `updateMangaRating` tự động tính `avg` và `count` và lưu vào field `rating` của `Manga`.
 - **Comment & hiệu ứng**
   - Hệ thống `comments` + `effect-comments` để hiển thị admin chat / thông báo.
+- **Rank**
+  -Bảng xếp hạng bao gồm top ngày, tháng ,năm dùng `redis` để tối ưu query đối với mỗi viewer
 
 ## Công nghệ sử dụng
 
@@ -78,7 +80,7 @@ Tùy môi trường triển khai, có thể cần thêm biến cho hosting, URL 
 ### 1. Cài dependency
 
 ```bash
-pnpm install
+bun install
 # hoặc
 npm install
 ```
@@ -86,9 +88,9 @@ npm install
 ### 2. Chạy migrate & seed database (Postgres)
 
 ```bash
-pnpm generate:types      # sinh lại file `payload-types.ts`
-pnpm db:fresh           # migrate fresh (xóa & tạo lại schema Payload)
-pnpm db:seed            # chạy script seed dữ liệu mẫu
+bun generate:types      # sinh lại file `payload-types.ts`
+bun db:fresh           # migrate fresh (xóa & tạo lại schema Payload)
+bun db:seed            # chạy script seed dữ liệu mẫu
 ```
 
 > Lưu ý: `db:fresh` sẽ **xoá dữ liệu cũ**, chỉ dùng ở môi trường dev.
@@ -96,7 +98,7 @@ pnpm db:seed            # chạy script seed dữ liệu mẫu
 ### 3. Chạy server dev
 
 ```bash
-pnpm dev
+bun dev
 ```
 
 Ứng dụng frontend & Payload sẽ chạy tại `http://localhost:3000`.
@@ -107,19 +109,19 @@ pnpm dev
 ### 4. Build & chạy production
 
 ```bash
-pnpm build
-pnpm start
+bun build
+bun start
 ```
 
 ## Scripts có sẵn
 
-- `pnpm dev` – chạy Next dev server.
-- `pnpm build` – build production.
-- `pnpm start` – chạy app đã build.
-- `pnpm lint` – chạy ESLint.
-- `pnpm generate:types` – sinh `payload-types.ts` từ cấu hình Payload.
-- `pnpm db:fresh` – reset database theo schema Payload.
-- `pnpm db:seed` – seed dữ liệu mẫu.
+- `bun dev` – chạy Next dev server.
+- `bun build` – build production.
+- `bun start` – chạy app đã build.
+- `bun lint` – chạy ESLint.
+- `bun generate:types` – sinh `payload-types.ts` từ cấu hình Payload.
+- `bun db:fresh` – reset database theo schema Payload.
+- `bun db:seed` – seed dữ liệu mẫu.
 
 ## Ghi chú triển khai
 

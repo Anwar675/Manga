@@ -49,17 +49,16 @@ export const Search = () => {
               href={`/manga/${manga.slug}`}
             >
               <div className="flex cursor-pointer hover:bg-gray-600/10 p-2 gap-4 ">
-                <div className="relative h-20 w-15  ">
-                  <Image
+                <div className="relative h-15 w-15  ">
+                  <img
                     src={
                       typeof manga.cover === "string"
                         ? manga.cover
                         : (manga.cover?.url ?? "/images/manga-placeholder.jpg")
                     }
-                    className="object-cover"
+                    className="object-cover h-15 w-15"
                     alt={manga.title}
-                    width={65}
-                    height={80}
+                    
                   />
                 </div>
                 <div>

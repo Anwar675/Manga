@@ -4,6 +4,32 @@ import {
   protectedProcedure,
 } from "@/trpc/init";
 import z from "zod";
+import { redis } from "@/lib/redis";
+import { getDayKey, getYearKey, getWeekKey, getMonthKey } from "@/lib/formatime";
+async function getRankFromRedis(ctx: any, key: string) {
+  const ids = await redis.zrevrange(key, 0, 9);
+
+  if (ids.length === 0) {
+    const fallback = await ctx.payload.find({
+      collection: "mangas",
+      sort: "-views",
+      limit: 10,
+    });
+    return fallback.docs;
+  }
+
+  const mangas = await ctx.payload.find({
+    collection: "mangas",
+    where: {
+      id: { in: ids },
+    },
+    limit: 10,
+  });
+
+  const map = new Map(mangas.docs.map((m: any) => [m.id, m]));
+
+  return ids.map((id) => map.get(id)).filter(Boolean);
+}
 
 export const mangasRouter = createTRPCRouter({
   getMany: baseProcedure.query(async ({ ctx }) => {
@@ -93,7 +119,24 @@ export const mangasRouter = createTRPCRouter({
           views: (manga.views ?? 0) + 1,
         },
       });
+      await redis.zincrby(getDayKey(), 1, input.mangaid);
+      await redis.zincrby(getWeekKey(), 1, input.mangaid);
+      await redis.zincrby(getMonthKey(), 1, input.mangaid);
+      await redis.zincrby(getYearKey(), 1, input.mangaid);
     }),
+  getRankDay: baseProcedure.query(async ({ ctx }) => {
+    return getRankFromRedis(ctx, getDayKey());
+  }),
+  getRankWeek: baseProcedure.query(async ({ ctx }) => {
+    return getRankFromRedis(ctx, getWeekKey());
+  }),
+  getRankMonth: baseProcedure.query(async ({ ctx }) => {
+    return getRankFromRedis(ctx, getMonthKey());
+  }),
+  getRankYear: baseProcedure.query(async ({ ctx }) => {
+    return getRankFromRedis(ctx, getYearKey());
+  }),
+
   followManga: protectedProcedure
     .input(
       z.object({
@@ -164,6 +207,15 @@ export const mangasRouter = createTRPCRouter({
 
       return { success: true, followed: false };
     }),
+
+  getRank: baseProcedure.query(async ({ ctx }) => {
+    const data = await ctx.payload.find({
+      collection: "mangas",
+      sort: "-views",
+      limit: 10,
+    });
+    return data.docs;
+  }),
   search: baseProcedure
     .input(
       z.object({
@@ -177,7 +229,7 @@ export const mangasRouter = createTRPCRouter({
         collection: "mangas",
         where: {
           title: {
-            like: input.query, 
+            like: input.query,
           },
         },
         limit: 5,
@@ -222,13 +274,4 @@ export const mangasRouter = createTRPCRouter({
         isFollowed: existed.docs.length > 0,
       };
     }),
-
-  getPopular: baseProcedure.query(async ({ ctx }) => {
-    const data = await ctx.payload.find({
-      collection: "mangas",
-      sort: "-views",
-      limit: 20,
-    });
-    return data.docs;
-  }),
 });

@@ -64,3 +64,32 @@ export function formatDateTime(date: string | Date) {
 
   return `${hours}:${minutes} ${day}/${month}/${year}`;
 }
+
+
+export function getDayKey() {
+  return `rank:day:${new Date().toISOString().slice(0, 10)}`;
+}
+
+export function getWeekKey() {
+  const now = new Date();
+  const year = now.getFullYear();
+  const week = Math.ceil(
+    ((now.getTime() - new Date(year, 0, 1).getTime()) /
+      86400000 +
+      new Date(year, 0, 1).getDay() +
+      1) /
+      7
+  );
+  return `rank:week:${year}-W${week}`;
+}
+
+export function getMonthKey() {
+  const now = new Date();
+  return `rank:month:${now.getFullYear()}-${String(
+    now.getMonth() + 1
+  ).padStart(2, "0")}`;
+}
+
+export function getYearKey() {
+  return `rank:year:${new Date().getFullYear()}`;
+}

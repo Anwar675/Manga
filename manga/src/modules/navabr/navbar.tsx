@@ -44,7 +44,7 @@ export const Navbar = () => {
         <div>
           <Link href="/">
           
-            <Image src="/img/logo.png" alt="logo" width={60} height={60} />
+            <Image src="/img/logo.png"  alt="logo" width={120} height={100} />
           </Link>
           
         </div>
