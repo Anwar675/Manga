@@ -1,36 +1,135 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## Giới thiệu
 
-## Getting Started
+Đây là mã nguồn cho **website đọc Manga** được xây dựng bằng **Next.js 15 (App Router)** kết hợp **Payload CMS** làm hệ thống quản trị nội dung (manga, chapter, media, rating, comment...).  
+Frontend dùng **TailwindCSS 4**, **Swiper**, **shadcn/ui**, **TRPC + React Query** để tối ưu UX và data fetching.
 
-First, run the development server:
+## Tính năng chính
+
+- **Trang chủ**
+  - Slider banner, danh sách truyện phổ biến, mới cập nhật, truyện hot.
+  - Pagination cho danh sách manga (`/pages/[page]`).
+- **Trang chi tiết manga**
+  - Thông tin manga, cover, thể loại, tác giả, trạng thái, lượt xem, follower.
+  - Rating trung bình (sao) được tính từ collection `ratings`.
+  - Danh sách chapter, truy cập chapter qua slug `/manga/[mangaSlug]/[chapter]`.
+- **Đọc chapter**
+  - Hiển thị danh sách `pages` (ảnh) của chapter.
+- **Auth**
+  - Đăng ký / đăng nhập (Next App Router + Payload user collection).
+- **Admin / CMS**
+  - Giao diện Payload admin tại `/admin` (dưới `src/app/(payload)/admin`).
+  - Quản lý collections: `Users`, `Media`, `Categories`, `Banners`, `Authors`, `Manga`, `Chapters`, `EffectComment`, `Comments`, `Rating`.
+- **Rating**
+  - Collection `ratings` lưu rating của từng user cho từng manga.
+  - Hook `updateMangaRating` tự động tính `avg` và `count` và lưu vào field `rating` của `Manga`.
+- **Comment & hiệu ứng**
+  - Hệ thống `comments` + `effect-comments` để hiển thị admin chat / thông báo.
+
+## Công nghệ sử dụng
+
+- **Frontend**
+  - `next`, `react`, `react-dom`
+  - `tailwindcss`, `tw-animate-css`, `tailwind-scrollbar-hide`
+  - `lucide-react`, `swiper`
+  - `react-hook-form`, `@hookform/resolvers`, `zod`
+  - `shadcn/ui`, `sonner`
+- **Backend / CMS**
+  - `payload` với adapter `@payloadcms/db-postgres`
+  - `@payloadcms/next` để tích hợp vào Next App Router
+- **Data fetching**
+  - `@trpc/server`, `@trpc/client`, `@trpc/tanstack-react-query`
+  - `@tanstack/react-query`
+
+## Cấu trúc thư mục chính
+
+- `src/app`
+  - `(app)/(home)` – trang home, chi tiết manga, danh sách phân trang, settings.
+  - `(auth)` – trang `sign-in`, `sign-up`.
+  - `(payload)` – admin Payload (`admin`, `api`, `graphql`, ...).
+  - `api/trpc/[trpc]` – handler cho TRPC router.
+- `src/collections`
+  - Định nghĩa collections của Payload CMS: `Manga`, `Chapters`, `Rating`, `Comments`, `EffectComment`, `Users`, `Media`, ...
+- `src/modules`
+  - `home/ui` – component UI cho trang home (card manga, slider, popular, new update,...).
+  - `auth` – logic & UI auth.
+  - `comments` – server + UI comment / admin chat.
+- `src/lib`
+  - `star-collection.ts` – hook tính rating manga.
+  - `seed.ts` – script seed dữ liệu.
+  - `formatime.ts`, `utils.ts`, ...
+- `src/trpc`
+  - TRPC client, server, router (`routers/_app.ts`, v.v.).
+
+## Chuẩn bị môi trường
+
+### Biến môi trường bắt buộc
+
+Tạo file `.env` (hoặc `.env.local`) với các biến tối thiểu:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+DATABASE_URL=postgres://USER:PASSWORD@HOST:PORT/DB_NAME
+PAYLOAD_SECRET=chuoi_bi_mat_bat_ky
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Tùy môi trường triển khai, có thể cần thêm biến cho hosting, URL public, v.v.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Cài đặt & chạy dự án
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 1. Cài dependency
 
-## Learn More
+```bash
+pnpm install
+# hoặc
+npm install
+```
 
-To learn more about Next.js, take a look at the following resources:
+### 2. Chạy migrate & seed database (Postgres)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+pnpm generate:types      # sinh lại file `payload-types.ts`
+pnpm db:fresh           # migrate fresh (xóa & tạo lại schema Payload)
+pnpm db:seed            # chạy script seed dữ liệu mẫu
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+> Lưu ý: `db:fresh` sẽ **xoá dữ liệu cũ**, chỉ dùng ở môi trường dev.
 
-## Deploy on Vercel
+### 3. Chạy server dev
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```bash
+pnpm dev
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Ứng dụng frontend & Payload sẽ chạy tại `http://localhost:3000`.
+
+- Admin Payload: `http://localhost:3000/admin`
+- API TRPC: `http://localhost:3000/api/trpc`
+
+### 4. Build & chạy production
+
+```bash
+pnpm build
+pnpm start
+```
+
+## Scripts có sẵn
+
+- `pnpm dev` – chạy Next dev server.
+- `pnpm build` – build production.
+- `pnpm start` – chạy app đã build.
+- `pnpm lint` – chạy ESLint.
+- `pnpm generate:types` – sinh `payload-types.ts` từ cấu hình Payload.
+- `pnpm db:fresh` – reset database theo schema Payload.
+- `pnpm db:seed` – seed dữ liệu mẫu.
+
+## Ghi chú triển khai
+
+- Ứng dụng dựa trên **Next App Router** nên khi deploy (Vercel / Node server riêng) cần bật hỗ trợ **Edge/Node runtime** phù hợp.
+- Payload dùng Postgres, cần đảm bảo kết nối ra ngoài được (database cloud hoặc container cùng network).
+- Một số dependency như `sharp` được đánh dấu trong `trustedDependencies`, cần cho phép cài đặt trên môi trường build.
+
+## Phát triển tiếp
+
+- Thêm tính năng tìm kiếm manga, filter theo thể loại.
+- Tối ưu SEO (metadata cho trang manga, chapter).
+- Bổ sung middleware auth cho các route cần bảo vệ (đăng truyện, quản lý manga).
+- Viết test (unit / integration) cho hooks quan trọng như rating, chapter.

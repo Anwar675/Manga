@@ -164,6 +164,27 @@ export const mangasRouter = createTRPCRouter({
 
       return { success: true, followed: false };
     }),
+  search: baseProcedure
+    .input(
+      z.object({
+        query: z.string(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      if (!input.query.trim()) return [];
+
+      const data = await ctx.payload.find({
+        collection: "mangas",
+        where: {
+          title: {
+            like: input.query, 
+          },
+        },
+        limit: 5,
+      });
+
+      return data.docs;
+    }),
 
   getOne: baseProcedure
     .input(
