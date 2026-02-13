@@ -6,6 +6,7 @@ import {
 import z from "zod";
 import { redis } from "@/lib/redis";
 import { getDayKey, getYearKey, getWeekKey, getMonthKey } from "@/lib/formatime";
+import { get } from "node:https";
 async function getRankFromRedis(ctx: any, key: string) {
   const ids = await redis.zrevrange(key, 0, 9);
 
@@ -274,4 +275,37 @@ export const mangasRouter = createTRPCRouter({
         isFollowed: existed.docs.length > 0,
       };
     }),
+
+  getGenner: baseProcedure
+  .input(z.object({ slug: z.string() }))
+  .query(async ({ ctx, input }) => {
+    // 1. tìm category theo slug
+    const category = await ctx.payload.find({
+      collection: "categories",
+      where: {
+        slug: { equals: input.slug },
+      },
+      limit: 1,
+    });
+
+    if (!category.docs[0]) return [];
+
+    const genreId = category.docs[0].id;
+
+    // 2. tìm manga theo id
+    const mangas = await ctx.payload.find({
+      collection: "mangas",
+      depth: 1,
+      where: {
+        genres: {
+          contains: genreId,
+        },
+      },
+      sort: "-createdAt",
+    });
+
+    return mangas.docs;
+  }),
+
+
 });

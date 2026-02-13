@@ -4,12 +4,13 @@ import path from "path";
 import { buildConfig } from "payload";
 import { fileURLToPath } from "url";
 import sharp from "sharp";
-
+import { s3Storage } from '@payloadcms/storage-s3'
 import { Users } from "./collections/Users";
 import { Media } from "./collections/Media";
 import { Categories } from "./collections/Category";
 import { Banners } from "./collections/Banner";
 import { Authors } from "./collections/Author";
+
 import { Manga
   
  } from "./collections/Manga";
@@ -43,5 +44,20 @@ export default buildConfig({
     idType: "uuid"
   }),
   sharp,
-  plugins: [],
+  plugins: [
+  s3Storage({
+    collections: {
+      media: true,
+    },
+    bucket: "manga-media",
+    config: {
+      endpoint: process.env.R2_ENDPOINT,
+      credentials: {
+        accessKeyId: process.env.R2_ACCESS_KEY!,
+        secretAccessKey: process.env.R2_SECRET!,
+      },
+      region: "auto",
+    },
+  }),
+  ]
 });

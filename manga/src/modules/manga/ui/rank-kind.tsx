@@ -45,12 +45,14 @@ export const RankKind = ({ category }: RankKindProps) => {
         </div>
         <div className="relative gap-2 h-78 overflow-auto no-scrollbar  p-4 flex flex-wrap ">
           {category.map((subcategory: Category) => (
-            <p
-              key={subcategory.id}
-              className="px-2 cursor-pointer py-1 rounded-md whitespace-nowrap bg-kind"
-            >
-              {subcategory.name}
-            </p>
+            <Link href={`/genres/${subcategory.slug}`} key={subcategory.id}>
+              <p
+                key={subcategory.id}
+                className="px-2 cursor-pointer py-1 rounded-md whitespace-nowrap bg-kind"
+              >
+                {subcategory.name}
+              </p>
+            </Link>
           ))}
         </div>
       </div>

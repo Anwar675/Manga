@@ -27,7 +27,7 @@ export const CardMangaItems = ({ newCard, manga }: CardMangaItemsProps) => {
     <>
       {newCard ? (
         <div className="pb-2 mt-4  rounded-md bg-[#fde9d3] dark:bg-[#242526] shadow-sm  cursor-pointer ">
-          <div className="relative h-70 ">
+          <div className="relative h-65 ">
             <Image src={coverUrl} alt="card" fill className="rounded-t-xl" />
             <p
               className="px-2 py-0.5 m-2 rounded-md text-center text-white text-sm font-light absolute  bg-[linear-gradient(149deg,#d9534f,#ff9400,#ffd800,#ffd800,#ff9400,#d9534f)]

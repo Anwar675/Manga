@@ -1,16 +1,20 @@
-"use client"
+"use client";
+import { Button } from "@/components/ui/button";
+import { ScrollTop } from "@/modules/advend_UI/scroll-top";
 import { ChapterInfor } from "@/modules/chapter/ui/chapter-infor";
 import { BreadCrumb } from "@/modules/manga/ui/breadcrum";
 import { useTRPC } from "@/trpc/client";
 import { useSuspenseQuery } from "@tanstack/react-query";
+import { HelpingHandIcon } from "lucide-react";
+import Link from "next/link";
 import { useParams } from "next/navigation";
 
 const Page = () => {
   const { manga, chapter } = useParams<{ manga: string; chapter: string }>();
-  const trpc = useTRPC()
+  const trpc = useTRPC();
   const { data: mangaData } = useSuspenseQuery(
-      trpc.magas.getOne.queryOptions({ slug: manga }),
-    );
+    trpc.magas.getOne.queryOptions({ slug: manga }),
+  );
   const chapterNumber = chapter
     ? parseInt(chapter.replace(/\D/g, ""), 10)
     : undefined;
@@ -22,6 +26,13 @@ const Page = () => {
         chapter={chapterNumber}
       />
       <ChapterInfor />
+      <div className="fixed bottom-10 right-6 z-50 flex flex-col items-end gap-2">
+        <Link href="/">
+          <Button size="icon" className="rounded-full">
+            <HelpingHandIcon size={30} />
+          </Button>
+        </Link>
+      </div>
     </div>
   );
 };

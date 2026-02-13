@@ -70,6 +70,7 @@ export const Search = () => {
               </div>
             </Link>
           ))}
+          
         </div>
       )}
     </div>

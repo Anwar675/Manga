@@ -16,6 +16,7 @@ import { formatDate, formatViews } from "@/lib/formatime";
 import { Chapters } from "./chapter";
 import { CommentsUser } from "@/modules/comments/ui/user-comment";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 type MangaDetail = RouterOutputs["magas"]["getOne"];
 
@@ -32,7 +33,7 @@ export const MangaInfor = ({ category, manga, chapters }: MangaInforProps) => {
   const { data: session, isLoading } = useQuery(
     trpc.auth.session.queryOptions(),
   );
-  console.log(session)
+  console.log(session);
   const requireAuth = () => {
     if (isLoading) return false;
     if (!session?.user) {
@@ -250,14 +251,17 @@ export const MangaInfor = ({ category, manga, chapters }: MangaInforProps) => {
             </div>
             <p className="font-medium text-xl">Thể loại</p>
             <div className="relative gap-2 flex flex-wrap ">
-              {manga.genres.map((genre) => (
-                <p
-                  key={typeof genre === "string" ? genre : genre.id}
-                  className="px-2 cursor-pointer py-1 rounded-md whitespace-nowrap bg-kind"
-                >
-                  {typeof genre === "string" ? genre : genre.name}
-                </p>
-              ))}
+              {manga.genres.map((genre) => {
+                if (typeof genre === "string") return null;
+
+                return (
+                  <Link key={genre.id} href={`/genres/${genre.slug}`}>
+                    <p className="px-2 cursor-pointer py-1 rounded-md whitespace-nowrap bg-kind">
+                      {genre.name}
+                    </p>
+                  </Link>
+                );
+              })}
             </div>
             <div className="flex text-[16px] items-center font-bold">
               <Badge />

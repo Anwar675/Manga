@@ -112,6 +112,7 @@ export const ChapterInfor = () => {
                   src={imageUrl}
                   width={1000}
                   height={1200}
+                  priority={index < 2} // preload 2 ảnh đầu
                   className="w-full h-auto object-contain"
                   alt={`Page ${index + 1}`}
                 />
@@ -159,7 +160,10 @@ export const ChapterInfor = () => {
           <Button
             size="lg"
             variant="chapterActive"
-            className="bg-amber-500 text-[#6d3c27]"
+            onClick={() =>
+              nextChapter && router.push(`/manga/${manga}/${nextChapter.slug}`)
+            }
+            className={`${!nextChapter ? "" : " bg-amber-500 text-[#6d3c27]"}`}
           >
             <p>Chap sau</p>
             <ArrowRight />
