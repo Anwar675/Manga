@@ -22,31 +22,29 @@ export const Navbar = () => {
   const { data } = useSuspenseQuery(trpc.category.getMany.queryOptions());
   const session = useQuery(trpc.auth.session.queryOptions());
   useEffect(() => {
-  const handleClickOutside = (e: MouseEvent) => {
-    const target = e.target as Node;
+    const handleClickOutside = (e: MouseEvent) => {
+      const target = e.target as Node;
 
-    if (
-      DeskaccountRef.current?.contains(target) ||
-      accountRef.current?.contains(target)
-    ) {
-      return;
-    }
+      if (
+        DeskaccountRef.current?.contains(target) ||
+        accountRef.current?.contains(target)
+      ) {
+        return;
+      }
 
-    setIsActive(false);
-  };
+      setIsActive(false);
+    };
 
-  document.addEventListener("click", handleClickOutside);
-  return () => document.removeEventListener("click", handleClickOutside);
-}, []);
+    document.addEventListener("click", handleClickOutside);
+    return () => document.removeEventListener("click", handleClickOutside);
+  }, []);
   return (
     <>
       <div className="bg-navbar  2xl:px-16 w-full hidden md:flex top-0 2xl:py-6 px-12 py-4 items-center justify-between">
         <div>
           <Link href="/">
-          
-            <Image src="/img/logo.png"  alt="logo" width={120} height={100} />
+            <Image src="/img/logo.png" alt="logo" width={120} height={100} />
           </Link>
-          
         </div>
         <div className="">
           <NavbarCategory data={data} />
@@ -55,10 +53,14 @@ export const Navbar = () => {
           <Search />
 
           {session.data?.user ? (
-            <div ref={DeskaccountRef}  className="h-10 w-12  relative">
+            <div ref={DeskaccountRef} className="h-10 w-12  relative">
               <Image
                 onClick={() => setIsActive((prev) => !prev)}
-                src="/img/background.png"
+                src={
+                  typeof session.data?.user?.avatar === "string"
+                    ? session.data.user.avatar
+                    : session.data?.user?.avatar?.url || "/img/background.png"
+                }
                 fill
                 alt="avata"
                 className="rounded-full cursor-pointer overflow-hidden"
@@ -83,7 +85,16 @@ export const Navbar = () => {
       </div>
       <div className="md:hidden bg-[#837b54] px-4 py-3">
         <div className="flex items-center justify-between">
-          <Image src="/img/logo.png" alt="logo" width={48} height={48} />
+          <Image
+            src={
+              typeof session.data?.user?.avatar === "string"
+                ? session.data.user.avatar
+                : session.data?.user?.avatar?.url || "/img/background.png"
+            }
+            alt="logo"
+            width={48}
+            height={48}
+          />
           <div className="flex items-center gap-4">
             {session.data?.user ? (
               <div ref={accountRef} className="h-9 w-9 cursor-pointer relative">

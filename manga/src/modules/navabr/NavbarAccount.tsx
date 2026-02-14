@@ -22,6 +22,7 @@ export const NavbarAccount = () => {
       },
     }),
   );
+  console.log(username.data?.user?.avatar);
   return (
     <div
       onMouseDown={(e) => e.stopPropagation()}
@@ -30,7 +31,11 @@ export const NavbarAccount = () => {
       <div className=" flex items-center text-[#4f4c40]  text-md  2xl:text-[16px] font-light gap-4 p-4">
         <div className="w-11 relative h-11">
           <Image
-            src="/img/background.png"
+            src={
+              typeof username.data?.user?.avatar === "string"
+                ? username.data.user.avatar
+                : username.data?.user?.avatar?.url || "/img/background.png"
+            }
             fill
             alt="avata"
             className="rounded-full cursor-pointer overflow-hidden"

@@ -1,53 +1,77 @@
-"use client";
+import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
+import { getQueryClient, trpc } from "@/trpc/server";
+import GennerClient from "./gener-client";
+import type { Metadata } from "next";
 
-import { CardMangaItems } from "@/modules/home/ui/card-mangaItems";
-import { RankKind } from "@/modules/manga/ui/rank-kind";
-import { Mangas } from "@/payload-types";
-import { useTRPC } from "@/trpc/client";
-import { useSuspenseQuery } from "@tanstack/react-query";
-import Link from "next/link";
-import { useParams } from "next/navigation";
+type PageProps = {
+  params: Promise<{ genner: string }>;
+};
 
-const Page = () => {
-  const trpc = useTRPC();
-  const { genner } = useParams<{ genner: string }>();
-  const { data: category } = useSuspenseQuery(
-    trpc.category.getSubMany.queryOptions(),
-  );
-  const { data } = useSuspenseQuery(
-    trpc.magas.getGenner.queryOptions({
-      slug: genner,
-    }),
-  );
-  console.log(data);
+const SITE_URL = "https://your-domain.com";
+
+const formatSlug = (slug: string) =>
+  decodeURIComponent(slug).replace(/-/g, " ");
+
+export async function generateMetadata({
+  params,
+}: PageProps): Promise<Metadata> {
+  const { genner } = await params;
+  const name = formatSlug(genner);
+  const url = `${SITE_URL}/genres/${encodeURIComponent(genner)}`;
+
+  return {
+    metadataBase: new URL(SITE_URL),
+
+    title: `Truyện ${name} hay nhất | Đọc manga ${name}`,
+    description: `Khám phá danh sách manga thể loại ${name}. Cập nhật truyện mới nhất, đọc miễn phí và nhanh nhất.`,
+
+    alternates: {
+      canonical: url,
+    },
+
+    openGraph: {
+      title: `Manga thể loại ${name}`,
+      description: `Danh sách truyện tranh thể loại ${name}`,
+      url,
+      type: "website",
+      locale: "vi_VN",
+    },
+  };
+}
+
+const Page = async ({ params }: PageProps) => {
+  const { genner } = await params;
+  const name = formatSlug(genner);
+
+  const queryClient = getQueryClient();
+
+  await Promise.all([
+    queryClient.prefetchQuery(
+      trpc.category.getSubMany.queryOptions()
+    ),
+    queryClient.prefetchQuery(
+      trpc.magas.getGenner.queryOptions({
+        slug: genner,
+      })
+    ),
+  ]);
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: `Thể loại ${name}`,
+    description: `Danh sách manga thể loại ${name}`,
+    url: `${SITE_URL}/genres/${encodeURIComponent(genner)}`,
+  };
 
   return (
-    <div className="2xl:px-16 md:flex block justify-between bg-popular w-full px-4 py-6  2xl:py-8 md:px-12 md:py-6 ">
-      <div className="flex-1">
-        <div className="flex items-center gap-2 bg-kind text-xl font-bold px-6 py-4 rounded-xl">
-          <h1 >{genner}</h1>
-          <p>({data?.length ?? 0})</p>
-        </div>
-
-        {data.map((manga) => (
-          <div
-            key={manga.id}
-            className="grid md:grid-cols-3 xl:grid-cols-4 grid-cols-2 gap-4 "
-          >
-            <Link key={manga.id} href={`/manga/${manga.slug}`}>
-              <CardMangaItems newCard manga={manga as Mangas} />
-            </Link>
-          </div>
-        ))}
-        {data.length === 0 && (
-          <div className="text-center text-text-popular mt-8">
-            Không có truyện nào trong thể loại này.
-          </div>
-        )}
-      </div>
-
-      <RankKind category={category} />
-    </div>
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <GennerClient genner={genner} />
+    </HydrationBoundary>
   );
 };
 

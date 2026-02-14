@@ -92,7 +92,7 @@ export const NavbarItem = [
   },
   {
     label: "Thể loại",
-    href: "/",
+    href: "/ranking/top-all-time",
     icon: Carrot,
   },
 

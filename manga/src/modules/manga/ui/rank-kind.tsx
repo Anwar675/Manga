@@ -1,3 +1,4 @@
+"use client"
 import { rankcolor } from "@/lib/rankColor";
 import { RankCard } from "@/modules/home/ui/rank-card";
 import { Category } from "@/payload-types";

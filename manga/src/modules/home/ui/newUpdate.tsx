@@ -1,9 +1,8 @@
 "use client";
-import { BookMarked } from "lucide-react";
+
 import { CardMangaItems } from "./card-mangaItems";
 
-import { rankcolor } from "@/lib/rankColor";
-import { RankCard } from "./rank-card";
+
 import { Category, Mangas } from "@/payload-types";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
@@ -25,7 +24,16 @@ export const NewUpdate = ({
 }: NewUpdateProps) => {
   const pathname = usePathname();
   const isPaging = pathname.startsWith("/pages/");
+  const titleMap: Record<string, string> = {
+    "/ranking/top-daily": "TOP TRUYỆN NGÀY",
+    "/ranking/top-week": "TOP TRUYỆN TUẦN",
+    "/ranking/top-month": "TOP TRUYỆN THÁNG",
+    "/ranking/top-all-time": "TOP MỌI THỜI ĐẠI "
+  };
 
+  const title =
+    Object.entries(titleMap).find(([path]) => pathname.startsWith(path))?.[1] ??
+    "TRUYỆN MỚI CẬP NHẬP";
   if (!mangas?.length) {
     return null;
   }
@@ -47,15 +55,15 @@ export const NewUpdate = ({
     <div className=" 2xl:px-16 md:flex block justify-between  w-full px-4 py-6  2xl:py-8 md:px-12 md:py-6">
       <div className="flex-1">
         <div className="flex items-center">
-          <h1 className="font-bold pr-7">TRUYỆN MỚI CẬP NHẬP</h1>
+           <h1 className="font-bold pr-7">{title}</h1>
+
           <div className="flex-1 h-px bg-text-popular" />
         </div>
         <div className="grid md:grid-cols-3 xl:grid-cols-4 grid-cols-2 gap-4">
           {mangas.map((manga) => (
             <Link key={manga.id} href={`/manga/${manga.slug}`}>
-              <CardMangaItems  newCard manga={manga} />
+              <CardMangaItems newCard manga={manga} />
             </Link>
-            
           ))}
         </div>
         <div className="text-center relative my-4">

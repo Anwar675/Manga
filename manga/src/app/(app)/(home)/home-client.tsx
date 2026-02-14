@@ -20,8 +20,14 @@ export default function HomeClient() {
   );
   const {data: comments} = useSuspenseQuery(trpc.comments.getMany.queryOptions())
   const {data: mangas} = useSuspenseQuery(trpc.magas.getMany.queryOptions())
-  const {data: rankMonth} = useSuspenseQuery(trpc.magas.getRankMonth.queryOptions())
-  const {data: mangaRank} = useSuspenseQuery(trpc.magas.getRankWeek.queryOptions())
+  const {data: rankMonth} = useSuspenseQuery(trpc.magas.getRankMonth.queryOptions(
+    {
+      page:1
+    }
+  ))
+  const {data: mangaRank} = useSuspenseQuery(trpc.magas.getRankWeek.queryOptions({
+    page: 1
+  }))
   const popularRef = useRef<HTMLDivElement>(null);
   const newUpdateRef = useRef<HTMLDivElement>(null);
   const adminChatRef = useRef<HTMLDivElement>(null);
@@ -47,7 +53,7 @@ export default function HomeClient() {
     <div className="relative bg-popular text-text-popular">
       <BackgroundSlider />
       <div ref={popularRef}>
-        <Popular mangas={mangaRank as Mangas[]} />
+        <Popular mangas={mangaRank.docs} />
       </div>
 
       <div ref={newUpdateRef}>
@@ -58,7 +64,7 @@ export default function HomeClient() {
         <AdminChat comments={comments.docs as Comment[]} />
       </div>
       <div>
-        <HotManga mangas={rankMonth as Mangas[]} />
+        <HotManga mangas={rankMonth.docs} />
       </div>
       
       <ScrollTop onScroll={scrollTo} />

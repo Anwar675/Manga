@@ -45,7 +45,7 @@ export const ChapterInfor = () => {
       : null;
 
   const { data: chapterId } = useSuspenseQuery(
-    trpc.chapter.getOne.queryOptions({ slug: chapter }),
+    trpc.chapter.getOne.queryOptions({ slug: chapter , mangaId: mangaData.id }),
   );
   const chapterNumber = chapter
     ? parseInt(chapter.replace(/\D/g, ""), 10)
