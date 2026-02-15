@@ -11,6 +11,7 @@ import {
   getWeekKey,
   getMonthKey,
 } from "@/lib/formatime";
+import { Mangas } from "@/payload-types";
 
 async function getRankFromRedisPaginated(
   ctx: any,
@@ -153,57 +154,69 @@ export const mangasRouter = createTRPCRouter({
       await redis.zincrby(getYearKey(), 1, input.mangaid);
     }),
   getRankDay: baseProcedure
-  .input(
-    z.object({
-      page: z.number().min(1).default(1),
-    })
-  )
-  .query(async ({ ctx, input }) => {
-    return getRankFromRedisPaginated(
-      ctx,
-      getDayKey(),
-      input.page
-    );
-  }),
+    .input(
+      z.object({
+        page: z.number().min(1).default(1),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      return getRankFromRedisPaginated(ctx, getDayKey(), input.page);
+    }),
   getRankWeek: baseProcedure
-  .input(
-    z.object({
-      page: z.number().min(1).default(1),
-    })
-  )
-  .query(async ({ ctx, input }) => {
-    return getRankFromRedisPaginated(
-      ctx,
-      getWeekKey(),
-      input.page
-    );
-  }),
+    .input(
+      z.object({
+        page: z.number().min(1).default(1),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      return getRankFromRedisPaginated(ctx, getWeekKey(), input.page);
+    }),
   getRankMonth: baseProcedure
-  .input(
-    z.object({
-      page: z.number().min(1).default(1),
-    })
-  )
-  .query(async ({ ctx, input }) => {
-    return getRankFromRedisPaginated(
-      ctx,
-      getMonthKey(),
-      input.page
-    );
-  }),
+    .input(
+      z.object({
+        page: z.number().min(1).default(1),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      return getRankFromRedisPaginated(ctx, getMonthKey(), input.page);
+    }),
   getRankYear: baseProcedure
-  .input(
-    z.object({
-      page: z.number().min(1).default(1),
-    })
-  )
-  .query(async ({ ctx, input }) => {
-    return getRankFromRedisPaginated(
-      ctx,
-      getYearKey(),
-      input.page
-    );
-  }),
+    .input(
+      z.object({
+        page: z.number().min(1).default(1),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      return getRankFromRedisPaginated(ctx, getYearKey(), input.page);
+    }),
+
+  getFollowedMangas: protectedProcedure
+    .input(
+      z.object({
+        page: z.number().default(1),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const follows = await ctx.payload.find({
+        collection: "follows",
+        where: {
+          user: { equals: ctx.session.user.id },
+        },
+        depth: 2,
+        page: input.page,
+        limit: 28,
+      });
+
+      return {
+        docs: follows.docs
+          .map((f) => f.manga)
+          .filter((m): m is Mangas => typeof m !== "string"),
+
+        page: follows.page,
+        totalPages: follows.totalPages,
+      };
+    }),
+
   followManga: protectedProcedure
     .input(
       z.object({
@@ -216,6 +229,18 @@ export const mangasRouter = createTRPCRouter({
         collection: "mangas",
         id: input.mangaId,
       });
+      const existed = await ctx.payload.find({
+        collection: "follows",
+        where: {
+          manga: { equals: input.mangaId },
+          user: { equals: userId },
+        },
+        limit: 1,
+      });
+
+      if (existed.docs.length > 0) {
+        return { success: true }; // đã follow rồi
+      }
 
       await ctx.payload.create({
         collection: "follows",
@@ -240,7 +265,6 @@ export const mangasRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       const userId = ctx.session.user.id;
 
-      // 1️⃣ tìm follow record
       const existed = await ctx.payload.find({
         collection: "follows",
         where: {

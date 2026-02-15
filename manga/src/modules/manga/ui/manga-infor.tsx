@@ -276,7 +276,7 @@ export const MangaInfor = ({ category, manga, chapters }: MangaInforProps) => {
           ${expanded ? "max-h-full" : "max-h-32"}
         `}
             >
-              Phiêu lưu
+              
               {manga.description && (
                 <RichText
                   data={

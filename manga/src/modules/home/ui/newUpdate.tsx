@@ -28,7 +28,8 @@ export const NewUpdate = ({
     "/ranking/top-daily": "TOP TRUYỆN NGÀY",
     "/ranking/top-week": "TOP TRUYỆN TUẦN",
     "/ranking/top-month": "TOP TRUYỆN THÁNG",
-    "/ranking/top-all-time": "TOP MỌI THỜI ĐẠI "
+    "/ranking/top-all-time": "TOP MỌI THỜI ĐẠI ",
+    "/follow": "TRUYỆN BẠN THEO DÕI",
   };
 
   const title =
@@ -50,7 +51,7 @@ export const NewUpdate = ({
   }
   const prevPage = Math.max(1, currentPage - 1);
   const nextPage = Math.min(maxPage, currentPage + 1);
-
+ 
   return (
     <div className=" 2xl:px-16 md:flex block justify-between  w-full px-4 py-6  2xl:py-8 md:px-12 md:py-6">
       <div className="flex-1">
