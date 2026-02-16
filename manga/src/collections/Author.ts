@@ -5,6 +5,24 @@ export const Authors: CollectionConfig = {
   admin: {
     useAsTitle: "name",
   },
+   access: {
+    read: ({ req: { user } }) => {
+      if (!user) return false;
+
+    
+      if (user.role === "superadmin" || user.role === "admin" || user.role === "translator") {
+        return true;
+      }
+
+      
+      
+
+      return false;
+    },
+
+    create: ({ req: { user } }) =>
+      !!user && ["translator", "admin", "superadmin"].includes(user.role),
+  },
   fields: [
     {
       name: "name",

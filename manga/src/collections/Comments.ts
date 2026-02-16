@@ -2,6 +2,30 @@ import { CollectionConfig } from "payload";
 
 export const Comments: CollectionConfig = {
   slug: "comments",
+   access: {
+    read: ({ req: { user } }) => {
+      if (!user) return false;
+
+      
+      if (user.role === "superadmin" || user.role === "admin") {
+        return true;
+      }
+
+      
+      if (user.role === "translator") {
+        return {
+          uploadedBy: {
+            equals: user.id,
+          },
+        };
+      }
+
+      return false;
+    },
+
+    create: ({ req: { user } }) =>
+      !!user && ["translator", "admin", "superadmin"].includes(user.role),
+  },
 
   admin: {
     defaultColumns: [

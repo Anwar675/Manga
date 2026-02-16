@@ -86,11 +86,7 @@ export const Navbar = () => {
       <div className="md:hidden bg-[#837b54] px-4 py-3">
         <div className="flex items-center justify-between">
           <Image
-            src={
-              typeof session.data?.user?.avatar === "string"
-                ? session.data.user.avatar
-                : session.data?.user?.avatar?.url || "/img/background.png"
-            }
+            src="/img/logo.png"
             alt="logo"
             width={48}
             height={48}
@@ -100,7 +96,9 @@ export const Navbar = () => {
               <div ref={accountRef} className="h-9 w-9 cursor-pointer relative">
                 <Image
                   onClick={() => setIsActive((prev) => !prev)}
-                  src="/img/background.png"
+                  src={typeof session.data?.user?.avatar === "string"
+                    ? session.data.user.avatar
+                    : session.data?.user?.avatar?.url || "/img/background.png"}
                   fill
                   alt="avata"
                   className="rounded-full overflow-hidden"

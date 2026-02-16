@@ -3,7 +3,27 @@ import slugify from "slugify";
 
 export const Chapters: CollectionConfig = {
   slug: "chapters",
+  access: {
+    read: ({ req: { user } }) => {
+      if (!user) return false;
+  
+      if (user.role === "superadmin" || user.role === "admin") {
+        return true;
+      }
+      if (user.role === "translator") {
+        return {
+          uploadedBy: {
+            equals: user.id,
+          },
+        };
+      }
 
+      return false;
+    },
+
+    create: ({ req: { user } }) =>
+      !!user && ["translator", "admin", "superadmin"].includes(user.role),
+  },
   admin: {
     useAsTitle: "title",
     defaultColumns: ["title", "manga", "chapterNumber"],

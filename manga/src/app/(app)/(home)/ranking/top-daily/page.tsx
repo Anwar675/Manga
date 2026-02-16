@@ -1,4 +1,4 @@
-
+"use client"
 import { NewUpdate } from "@/modules/home/ui/newUpdate"
 
 import { useTRPC } from "@/trpc/client"

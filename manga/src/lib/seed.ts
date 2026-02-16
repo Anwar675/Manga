@@ -53,6 +53,8 @@ const categories: SeedCategory[] = [
       { name: "Shounen", slug: "shounen" },
       { name: "Shoujo", slug: "shoujo" },
       { name: "Josei", slug: "josei" },
+      {name:"18+", slug: "18-plus"},
+      {name: "Adult", slug: "adult"}
     ],
   },
   {

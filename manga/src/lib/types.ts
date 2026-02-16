@@ -87,13 +87,8 @@ export const NavbarItem = [
   },
   {
     label: "FanPage",
-    href: "/facebook.com",
+    href: "https://www.facebook.com/oanthienan.928219",
     icon: FacebookIcon,
-  },
-  {
-    label: "Thể loại",
-    href: "/ranking/top-all-time",
-    icon: Carrot,
   },
 
   {
@@ -103,7 +98,7 @@ export const NavbarItem = [
   },
   {
     label: "BXH truyện tranh",
-    href: "/rank",
+    href: "/ranking/top-all-time",
     icon: Trophy,
   },
   {

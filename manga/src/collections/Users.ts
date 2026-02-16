@@ -6,6 +6,17 @@ export const Users: CollectionConfig = {
     useAsTitle: "username",
   },
   auth: true,
+   access: {
+    read: ({ req: { user } }) =>
+      user?.role === "superadmin" || user?.role === "admin",
+
+    update: ({ req: { user } }) =>
+      user?.role === "superadmin" || user?.role === "admin",
+
+    delete: ({ req: { user } }) =>
+      user?.role === "superadmin",
+  },
+
 
   fields: [
     {
@@ -27,6 +38,14 @@ export const Users: CollectionConfig = {
         { label: "Admin", value: "admin" },
         { label: "Super Admin", value: "superadmin" },
       ],
+      access: {
+        read: ({ req: { user } }) =>
+          user?.role === "admin" || user?.role === "superadmin",
+
+        update: ({ req: { user } }) =>
+          user?.role === "superadmin", 
+      },
+
       admin: {
         position: "sidebar",
       },

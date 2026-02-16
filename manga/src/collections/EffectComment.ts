@@ -2,7 +2,22 @@ import { CollectionConfig } from "payload";
 
 export const EffectComment: CollectionConfig = {
   slug: "effect-comments",
+   access: {
+    read: ({ req: { user } }) => {
+      if (!user) return false;
 
+      
+      if (user.role === "superadmin") {
+        return true;
+      }
+
+    
+      return false;
+    },
+
+    create: ({ req: { user } }) =>
+      !!user && ["translator", "admin", "superadmin"].includes(user.role),
+  },
   admin: {   
     defaultColumns: [ "tag", "effect", "isPinned", "createdAt"],
   },
