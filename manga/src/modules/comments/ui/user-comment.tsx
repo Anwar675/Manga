@@ -21,6 +21,11 @@ interface CommentsUserProps {
 
 export const CommentsUser = ({ targetId, targetType }: CommentsUserProps) => {
   const [page, setPage] = useState(1);
+   const [replyInputOpen, setReplyInputOpen] = useState<string | null>(null);
+  const [replyListOpen, setReplyListOpen] = useState<string | null>(null);
+
+  const [mainContent, setMainContent] = useState("");
+  const [replyContent, setReplyContent] = useState<Record<string, string>>({});
 
   const trpc = useTRPC();
   const inputRef = useRef<HTMLDivElement | null>(null);
@@ -42,12 +47,7 @@ export const CommentsUser = ({ targetId, targetType }: CommentsUserProps) => {
   }, []);
 
   const queryClient = useQueryClient();
-  const [replyInputOpen, setReplyInputOpen] = useState<string | null>(null);
-  const [replyListOpen, setReplyListOpen] = useState<string | null>(null);
-
-  const [mainContent, setMainContent] = useState("");
-  const [replyContent, setReplyContent] = useState<Record<string, string>>({});
-
+ 
   const { data: userComment } = useSuspenseQuery(
     trpc.comments.getUserMessage.queryOptions({
       targetId,

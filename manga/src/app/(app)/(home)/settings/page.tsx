@@ -1,4 +1,5 @@
-"use client";
+"use client"
+export const dynamic = "force-dynamic";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useTRPC } from "@/trpc/client";
@@ -7,6 +8,7 @@ import {
   useQueryClient,
   useSuspenseQuery,
 } from "@tanstack/react-query";
+import Image from "next/image";
 import { useState } from "react";
 
 const Page = () => {
@@ -43,12 +45,14 @@ const Page = () => {
       <div className="bg-rank flex flex-col gap-4 p-4 mx-auto w-200 items-center ">
         <h1 className="text-2xl font-bold">Profile Details</h1>
         <div className="flex flex-col items-center">
-          <img
+          <Image
             src={
               typeof session.user?.avatar === "string"
                 ? session.user.avatar
                 : session.user?.avatar?.url || "/img/background.png"
             }
+            width={64}
+            height={64}
             className="h-16 w-16 rounded-full"
             alt="Settings Icon"
           />

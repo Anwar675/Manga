@@ -14,6 +14,7 @@ import { Input } from "@/components/ui/input";
 
 import { RegisterFormValues } from "@/modules/auth/registerSchema";
 import Link from "next/link";
+import Image from "next/image";
 
 interface LoginProps {
   form: UseFormReturn<RegisterFormValues>;
@@ -136,9 +137,10 @@ export function SignUpForm({ form, onSubmit, isLoading }: LoginProps) {
             </FieldGroup>
           </form>
           <div className="bg-muted relative hidden md:block">
-            <img
+            <Image
               src="/img/login.jpg"
               alt="Image"
+              fill
               className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
             />
           </div>

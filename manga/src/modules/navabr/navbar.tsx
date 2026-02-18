@@ -12,6 +12,7 @@ import Link from "next/link";
 import { NavbarAccount } from "./NavbarAccount";
 import { MenuIcon } from "lucide-react";
 import { NavbarItem } from "@/lib/types";
+import { Category } from "@/payload-types";
 
 export const Navbar = () => {
   const [isSidebar, setIsSidebar] = useState(false);
@@ -47,7 +48,7 @@ export const Navbar = () => {
           </Link>
         </div>
         <div className="">
-          <NavbarCategory data={data} />
+          <NavbarCategory data={data as Category[]} />
         </div>
         <div className="flex items-center gap-2">
           <Search />

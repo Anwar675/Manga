@@ -2,8 +2,8 @@
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { toast } from "sonner";
-import { LoginFormValue, loginSchema, RegisterFormValues, registerSchema } from "../registerSchema";
+
+import { LoginFormValue, loginSchema} from "../registerSchema";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTRPC } from "@/trpc/client";
 import { useRouter } from "next/navigation";

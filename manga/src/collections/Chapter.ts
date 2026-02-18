@@ -1,3 +1,4 @@
+import { Media } from "@/payload-types";
 import type { CollectionConfig } from "payload";
 import slugify from "slugify";
 
@@ -142,7 +143,7 @@ export const Chapters: CollectionConfig = {
             collection: "media",
             where: {
               id: {
-                in: data.bulkUpload.map((img: any) =>
+                in: data.bulkUpload.map((img: string | Media) =>
                   typeof img === "string" ? img : img.id,
                 ),
               },
@@ -151,7 +152,7 @@ export const Chapters: CollectionConfig = {
           });
 
           // sort theo filename
-          const getName = (doc: any): string =>
+          const getName = (doc: Media): string =>
             doc.filename ?? doc.originalFilename ?? doc.url ?? doc.id ?? "";
 
           const sorted = mediaDocs.docs.sort((a, b) =>

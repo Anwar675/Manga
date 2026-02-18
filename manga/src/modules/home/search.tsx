@@ -50,12 +50,14 @@ export const Search = () => {
             >
               <div className="flex cursor-pointer hover:bg-gray-600/10 p-2 gap-4 ">
                 <div className="relative h-15 w-15  ">
-                  <img
+                  <Image
                     src={
                       typeof manga.cover === "string"
                         ? manga.cover
                         : (manga.cover?.url ?? "/images/manga-placeholder.jpg")
                     }
+                    width={60}
+                    height={60}
                     className="object-cover h-15 w-15"
                     alt={manga.title}
                     

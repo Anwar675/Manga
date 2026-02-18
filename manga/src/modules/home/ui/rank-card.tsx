@@ -27,12 +27,14 @@ export const RankCard = ({ rankColor, rank, manga }: RankCardProps) => {
       <p className={`text-5xl ${rankColor} p-1 w-12 italic font-bold`}>
         {rank}
       </p>
-      <img
+      <Image
         src={
           typeof manga.cover === "string"
             ? manga.cover
             : (manga.cover?.url ?? "/images/manga-placeholder.jpg")
         }
+        width={48}
+        height={48}
         alt="rank"
         className="w-12 h-12 object-cover"
       />

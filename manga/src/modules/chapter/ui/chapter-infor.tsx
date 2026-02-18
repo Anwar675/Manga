@@ -4,7 +4,7 @@ import { CommentsUser } from "@/modules/comments/ui/user-comment";
 import { useTRPC } from "@/trpc/client";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import {
-  ArrowDown,
+  
   ArrowLeft,
   ArrowRight,
   Bug,
@@ -15,7 +15,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 
-import { use, useState } from "react";
+import {  useState } from "react";
 
 export const ChapterInfor = () => {
   const { chapter, manga } = useParams<{ manga: string; chapter: string }>();
@@ -105,7 +105,7 @@ export const ChapterInfor = () => {
               typeof page.image === "string"
                 ? page.image
                 : page.image?.url || "/img/error.webp";
-            console.log(imageUrl);
+          
             return (
               <div key={index} className="md:w-225 w-full relative mx-auto ">
                 <Image
@@ -147,7 +147,7 @@ export const ChapterInfor = () => {
                 >
                   {ChapterMany.length > 1 &&
                     ChapterMany.map((chap) => (
-                      <Link href={`/manga/${manga}/${chap.slug}`}>
+                      <Link key={chap.id} href={`/manga/${manga}/${chap.slug}`}>
                         <p className="hover:bg-gray-200 md:px-2  border-b border-b-amber-800 px-4 py-2">
                           Chap {chap.chapterNumber}
                         </p>

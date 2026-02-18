@@ -53,7 +53,7 @@ export default function HomeClient() {
     <div className="relative bg-popular text-text-popular">
       <BackgroundSlider />
       <div ref={popularRef}>
-        <Popular mangas={mangaRank.docs} />
+        <Popular mangas={mangaRank.docs as Mangas[]} />
       </div>
 
       <div ref={newUpdateRef}>
@@ -64,7 +64,7 @@ export default function HomeClient() {
         <AdminChat comments={comments.docs as Comment[]} />
       </div>
       <div>
-        <HotManga mangas={rankMonth.docs} />
+        <HotManga mangas={rankMonth.docs as Mangas[]} />
       </div>
       
       <ScrollTop onScroll={scrollTo} />

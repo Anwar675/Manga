@@ -1,25 +1,35 @@
-"use client"
-import { NewUpdate } from "@/modules/home/ui/newUpdate"
+"use client";
 
-import { useTRPC } from "@/trpc/client"
-import { useSuspenseQuery } from "@tanstack/react-query"
-
-
+import { NewUpdate } from "@/modules/home/ui/newUpdate";
+import { Mangas } from "@/payload-types";
+import { useTRPC } from "@/trpc/client";
+import { useQuery } from "@tanstack/react-query";
 
 const Page = () => {
-    const trpc = useTRPC()
-   
-    const {data: manga} = useSuspenseQuery(trpc.magas.getRankDay.queryOptions({
-        page: 1
-    }))
-    const { data: category } = useSuspenseQuery(
+  const trpc = useTRPC();
+
+  const { data: manga, isLoading } = useQuery(
+    trpc.magas.getRankDay.queryOptions({ page: 1 })
+  );
+
+  const { data: category } = useQuery(
     trpc.category.getSubMany.queryOptions()
   );
-    return (
-        <div className="bg-popular">
-            <NewUpdate mangas={manga.docs} category={category} page={manga.page} totalPages={manga.totalPages} />
-        </div>
-    )
-}
 
-export default Page
+  if (isLoading || !manga || !category) {
+    return <div>Loading...</div>;
+  }
+
+  return (
+    <div className="bg-popular">
+      <NewUpdate
+        mangas={manga.docs as Mangas[]}
+        category={category}
+        page={manga.page}
+        totalPages={manga.totalPages}
+      />
+    </div>
+  );
+};
+
+export default Page;

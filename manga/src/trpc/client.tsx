@@ -23,12 +23,13 @@ function getQueryClient() {
   return browserQueryClient;
 }
 function getUrl() {
-  const base = (() => {
-    if (typeof window !== 'undefined') return '';
-    return process.env.NEXT_PUBLIC_APP_URL
-  })();
-  return `${base}/api/trpc`;
+  if (typeof window !== "undefined") return "/api/trpc";
+
+  return process.env.NEXT_PUBLIC_APP_URL
+    ? `${process.env.NEXT_PUBLIC_APP_URL}/api/trpc`
+    : "http://localhost:3000/api/trpc";
 }
+
 export function TRPCReactProvider(
   props: Readonly<{
     children: React.ReactNode;

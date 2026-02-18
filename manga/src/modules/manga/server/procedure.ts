@@ -1,10 +1,12 @@
 import {
   baseProcedure,
+  Context,
   createTRPCRouter,
   protectedProcedure,
 } from "@/trpc/init";
 import z from "zod";
 import { redis } from "@/lib/redis";
+
 import {
   getDayKey,
   getYearKey,
@@ -14,7 +16,7 @@ import {
 import { Mangas } from "@/payload-types";
 
 async function getRankFromRedisPaginated(
-  ctx: any,
+  ctx: Context,
   key: string,
   page: number,
   limit: number = 10,
@@ -49,7 +51,7 @@ async function getRankFromRedisPaginated(
     limit,
   });
 
-  const map = new Map(mangas.docs.map((m: any) => [m.id, m]));
+  const map = new Map(mangas.docs.map((m: Mangas) => [m.id, m]));
 
   const ordered = ids.map((id) => map.get(id)).filter(Boolean);
 

@@ -1,7 +1,7 @@
 import { formatViews, timeAgo } from "@/lib/formatime";
 
 import { Mangas } from "@/payload-types";
-import { Bookmark, Clock, Eye, Star, StarHalf } from "lucide-react";
+import { Bookmark, Clock, Eye, Star } from "lucide-react";
 import Image from "next/image";
 
 interface CardMangaItemsProps {
@@ -22,7 +22,7 @@ export const CardMangaItems = ({ newCard, manga }: CardMangaItemsProps) => {
     typeof manga.cover.url === "string"
       ? manga.cover.url
       : "/img/card1.jpg";
-  console.log(manga.cover)
+ 
   return (
     <>
       {newCard ? (

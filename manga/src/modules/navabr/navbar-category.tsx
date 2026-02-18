@@ -2,7 +2,7 @@ import { Category } from "@/payload-types"
 import { CategoryDropdown } from "./category-drop"
 
 interface NavbarCategoryProps {
-    data: any
+    data: Category[]
 }
 export const NavbarCategory = ({data}: NavbarCategoryProps) => {
     

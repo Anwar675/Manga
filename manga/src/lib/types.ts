@@ -6,7 +6,7 @@ import {
   Moon,
   Settings,
 } from "lucide-react";
-import { Carrot, FacebookIcon, Trophy, Users, LucideIcon } from "lucide-react";
+import {  FacebookIcon, Trophy, Users, LucideIcon } from "lucide-react";
 type NavItem =
   | {
       type: "item";

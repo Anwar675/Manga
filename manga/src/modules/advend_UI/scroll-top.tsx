@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { ArrowUp, Bell, Flame, HelpingHandIcon, MessageCircleIcon, Star } from "lucide-react";
+import { ArrowUp, Bell, Flame, HelpingHandIcon, Star } from "lucide-react";
 import { useState } from "react";
 
 

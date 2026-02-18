@@ -1,5 +1,7 @@
+export const runtime = "nodejs";
 import { NextRequest, NextResponse } from "next/server";
-import { getPayload } from "payload";
+const { getPayload } = await import("payload");
+
 import config from "@/payload.config";
 import { cookies } from "next/headers";
 import { AUTH_COOKIE } from "@/modules/auth/constant";

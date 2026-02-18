@@ -1,4 +1,5 @@
 import { Home } from "lucide-react";
+import Link from "next/link";
 
 interface Props {
   manga: {
@@ -13,22 +14,22 @@ export const BreadCrumb = ({ manga, chapter }: Props) => {
     <div className="flex md:gap-4 gap-1 px-4 py-2 text-sm md:text-[16px] bg-rank rounded-2xl navbar-title items-center">
       <div className="flex md:gap-2 gap-0 items-center">
         <Home className="" size={16} />
-        <a href="/" className="hover:underline">
+        <Link href="/" className="hover:underline">
           Trang chủ
-        </a>
+        </Link>
       </div>
       <span>/</span>
-      <a href="/pages/2" className="hover:underline">
+      <Link href="/pages/2" className="hover:underline">
         Truyện Tranh
-      </a>
+      </Link>
       <span>/</span>
-      <a
+      <Link 
         href={`/manga/${manga.slug}`}
         className="hover:underline truncate max-w-40 md:max-w-full"
         title={manga.title}
       >
         {manga.title}
-      </a>
+      </Link>
       {chapter !== undefined && (
         <>
           <span>/</span>

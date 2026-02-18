@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 
 import "./globals.css";
 import { Kanit } from "next/font/google";
@@ -10,6 +10,9 @@ const kanit = Kanit({
   weight: ["300", "400", "500", "600", "700"],
   variable: "--font-kanit",
 });
+export const viewport: Viewport = {
+  themeColor: "#0f172a",
+};
 export const metadata: Metadata = {
   metadataBase: new URL("https://alga.vn"),
 
@@ -22,7 +25,7 @@ export const metadata: Metadata = {
 
   keywords: ["đọc manga", "truyện tranh online", "manga tiếng việt"],
 
-  themeColor: "#0f172a",
+  
 
   openGraph: {
     title: "Alga – Đọc truyện tranh online",

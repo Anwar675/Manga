@@ -29,6 +29,8 @@ export const ReplyList = ({
   const trpc = useTRPC();
   const queryClient = useQueryClient();
   const inputRef = useRef<HTMLDivElement | null>(null);
+   const [replyInputOpen, setReplyInputOpen] = useState<string | null>(null);
+  const [replyContent, setReplyContent] = useState<Record<string, string>>({});
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -45,8 +47,7 @@ export const ReplyList = ({
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
-  const [replyInputOpen, setReplyInputOpen] = useState<string | null>(null);
-  const [replyContent, setReplyContent] = useState<Record<string, string>>({});
+ 
 
   const { data } = useSuspenseQuery(
     trpc.comments.getReplies.queryOptions({ parentId }),

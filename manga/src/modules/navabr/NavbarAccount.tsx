@@ -22,7 +22,7 @@ export const NavbarAccount = () => {
       },
     }),
   );
-  console.log(username.data?.user?.avatar);
+
   return (
     <div
       onMouseDown={(e) => e.stopPropagation()}

@@ -33,7 +33,7 @@ export const MangaInfor = ({ category, manga, chapters }: MangaInforProps) => {
   const { data: session, isLoading } = useQuery(
     trpc.auth.session.queryOptions(),
   );
-  console.log(session);
+ 
   const requireAuth = () => {
     if (isLoading) return false;
     if (!session?.user) {
