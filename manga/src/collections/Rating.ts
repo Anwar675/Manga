@@ -37,7 +37,7 @@ export const Rating: CollectionConfig = {
     },
     {
       name: "manga",
-      type: "relationship",
+   type: "relationship",
       relationTo: "mangas",
       required: true,
       index: true,

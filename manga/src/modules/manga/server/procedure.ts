@@ -132,29 +132,22 @@ export const mangasRouter = createTRPCRouter({
     }),
 
   increateView: baseProcedure
-    .input(
-      z.object({
-        mangaid: z.string(),
-      }),
-    )
-    .mutation(async ({ ctx, input }) => {
-      const manga = await ctx.payload.findByID({
-        collection: "mangas",
-        id: input.mangaid,
-      });
-      if (!manga) return;
-      await ctx.payload.update({
-        collection: "mangas",
-        id: input.mangaid,
-        data: {
-          views: (manga.views ?? 0) + 1,
-        },
-      });
-      await redis.zincrby(getDayKey(), 1, input.mangaid);
-      await redis.zincrby(getWeekKey(), 1, input.mangaid);
-      await redis.zincrby(getMonthKey(), 1, input.mangaid);
-      await redis.zincrby(getYearKey(), 1, input.mangaid);
+    .input(z.object({ mangaid: z.string() }))
+    .mutation(async ({ input }) => {
+      const id = input.mangaid;
+
+      // tổng view realtime
+      await redis.hincrby("manga:views", id, 1);
+
+      // ranking
+      await redis.zincrby(getDayKey(), 1, id);
+      await redis.zincrby(getWeekKey(), 1, id);
+      await redis.zincrby(getMonthKey(), 1, id);
+      await redis.zincrby(getYearKey(), 1, id);
+
+      return { success: true };
     }),
+
   getRankDay: baseProcedure
     .input(
       z.object({
@@ -340,7 +333,7 @@ export const mangasRouter = createTRPCRouter({
     .query(async ({ ctx, input }) => {
       const data = await ctx.payload.find({
         collection: "mangas",
-        depth: 2,
+        depth: 1,
         limit: 1,
         where: {
           slug: {

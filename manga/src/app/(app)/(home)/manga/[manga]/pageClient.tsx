@@ -19,33 +19,42 @@ export default function PageClient({
   const trpc = useTRPC();
   const queryClient = useQueryClient();
 
-  
   const { data: mangaData } = useSuspenseQuery(
-    trpc.magas.getOne.queryOptions({ slug: params.manga })
+    trpc.magas.getOne.queryOptions(
+      { slug: params.manga },
+      { staleTime: 60_000 },
+    ),
   );
 
   const { data: category } = useSuspenseQuery(
-    trpc.category.getSubMany.queryOptions()
+    trpc.category.getSubMany.queryOptions(undefined, {
+      staleTime: 5 * 60_000,
+    }),
   );
 
   const { data: chapters } = useSuspenseQuery(
-    trpc.chapter.getMany.queryOptions({ mangaId: mangaData.id })
+    trpc.chapter.getMany.queryOptions(
+      { mangaId: mangaData.id },
+      {
+        staleTime: 60_000,
+        enabled: !!mangaData?.id,
+      },
+    ),
   );
 
   const chapterNumber = params.chapter
     ? parseInt(params.chapter.replace(/\D/g, ""), 10)
     : undefined;
 
-  const increaseView = useMutation(
+  const { mutate: increaseView } = useMutation(
     trpc.magas.increateView.mutationOptions({
       onSuccess: () => {
         queryClient.setQueryData(
           trpc.magas.getOne.queryKey({ slug: params.manga }),
-          (old) =>
-            old ? { ...old, views: (old.views ?? 0) + 1 } : old
+          (old) => (old ? { ...old, views: (old.views ?? 0) + 1 } : old),
         );
       },
-    })
+    }),
   );
 
   useEffect(() => {
@@ -55,8 +64,8 @@ export default function PageClient({
     if (sessionStorage.getItem(key)) return;
 
     sessionStorage.setItem(key, "1");
-    increaseView.mutate({ mangaid: mangaData.id });
-  }, [mangaData?.id,increaseView]);
+    increaseView({ mangaid: mangaData.id });
+  }, [mangaData?.id, increaseView]);
 
   return (
     <div className="xl:px-16  bg-popular text-text-popular  w-full px-4 py-6 flex flex-col gap-8 2xl:py-8 md:px-12 md:py-6">

@@ -13,7 +13,7 @@ const Page = () => {
   const { manga, chapter } = useParams<{ manga: string; chapter: string }>();
   const trpc = useTRPC();
   const { data: mangaData } = useSuspenseQuery(
-    trpc.magas.getOne.queryOptions({ slug: manga }),
+    trpc.magas.getOne.queryOptions({ slug: manga }, {staleTime:5 * 60_000}),
   );
   const chapterNumber = chapter
     ? parseInt(chapter.replace(/\D/g, ""), 10)

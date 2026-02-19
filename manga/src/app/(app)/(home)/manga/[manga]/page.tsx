@@ -1,27 +1,36 @@
+import { cache } from "react";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { getQueryClient, trpc } from "@/trpc/server";
 import PageClient from "./pageClient";
-import type { Metadata } from "next";
+
 import { getImageUrl, richTextToPlainText } from "@/lib/seo";
 
 const SITE_URL = "https://your-domain.com";
 
-/* --------------------------
-   SEO Metadata
--------------------------- */
+export const revalidate = 60;
+
+/* ---------- cached fetch ---------- */
+
+const getMangaCached = cache(async (slug: string) => {
+  const qc = getQueryClient();
+
+  return qc.fetchQuery(
+    trpc.magas.getOne.queryOptions({
+      slug,
+    })
+  );
+});
+
+/* ---------- metadata ---------- */
 
 export async function generateMetadata({
   params,
 }: {
   params: Promise<{ manga: string }>;
-}): Promise<Metadata> {
+}) {
   const { manga: slug } = await params;
 
-  const queryClient = getQueryClient();
-
-  const manga = await queryClient.fetchQuery(
-    trpc.magas.getOne.queryOptions({ slug })
-  );
+  const manga = await getMangaCached(slug);
 
   if (!manga) {
     return {
@@ -36,15 +45,11 @@ export async function generateMetadata({
 
   return {
     metadataBase: new URL(SITE_URL),
-
     title: `${manga.title} | Đọc truyện tranh online`,
     description:
       descriptionText.slice(0, 160) ||
       `Đọc ${manga.title} online miễn phí`,
-
-    alternates: {
-      canonical: url,
-    },
+    alternates: { canonical: url },
 
     openGraph: {
       title: manga.title,
@@ -53,14 +58,7 @@ export async function generateMetadata({
       type: "article",
       locale: "vi_VN",
       images: imageUrl
-        ? [
-            {
-              url: imageUrl,
-              width: 1200,
-              height: 630,
-              alt: manga.title,
-            },
-          ]
+        ? [{ url: imageUrl, width: 1200, height: 630, alt: manga.title }]
         : [],
     },
 
@@ -73,36 +71,32 @@ export async function generateMetadata({
   };
 }
 
-/* --------------------------
-   Page
--------------------------- */
+/* ---------- page ---------- */
 
-const Page = async ({
-  params,
-}: {
+type PageProps = {
   params: Promise<{ manga: string }>;
-}) => {
+};
+
+export default async function Page({ params }: PageProps) {
   const { manga: slug } = await params;
 
   const queryClient = getQueryClient();
 
-  const manga = await queryClient.fetchQuery(
-    trpc.magas.getOne.queryOptions({ slug })
-  );
+  const manga = await getMangaCached(slug);
 
-  const categoryPromise = queryClient.prefetchQuery(
-    trpc.category.getSubMany.queryOptions()
-  );
+  await Promise.all([
+    queryClient.prefetchQuery(
+      trpc.category.getSubMany.queryOptions()
+    ),
 
-  const chapterPromise = manga?.id
-    ? queryClient.prefetchQuery(
-        trpc.chapter.getMany.queryOptions({
-          mangaId: manga.id,
-        })
-      )
-    : Promise.resolve();
-
-  await Promise.all([categoryPromise, chapterPromise]);
+    manga?.id
+      ? queryClient.prefetchQuery(
+          trpc.chapter.getMany.queryOptions({
+            mangaId: manga.id,
+          })
+        )
+      : Promise.resolve(),
+  ]);
 
   const descriptionText = richTextToPlainText(manga?.description);
   const imageUrl = getImageUrl(manga?.cover);
@@ -115,13 +109,6 @@ const Page = async ({
       description: descriptionText,
       image: imageUrl,
       url: `${SITE_URL}/manga/${slug}`,
-      author: {
-        "@type": "Person",
-        name:
-          typeof manga.author === "string"
-            ? manga.author
-            : manga.author?.name ?? "Unknown",
-      },
     };
 
   return (
@@ -138,6 +125,4 @@ const Page = async ({
       <PageClient params={{ manga: slug }} />
     </HydrationBoundary>
   );
-};
-
-export default Page;
+}

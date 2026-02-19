@@ -5,7 +5,7 @@ import { NewUpdate } from "@/modules/home/ui/newUpdate"
 import { Mangas } from "@/payload-types"
 
 import { useTRPC } from "@/trpc/client"
-import { useQuery, useSuspenseQuery } from "@tanstack/react-query"
+import { useQuery } from "@tanstack/react-query"
 import Link from "next/link"
 
 
