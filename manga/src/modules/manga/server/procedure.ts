@@ -26,7 +26,9 @@ async function getRankFromRedisPaginated(
   const start = (page - 1) * limit;
   const end = start + limit - 1;
 
-  const ids = await redis.zrevrange(key, start, end);
+  const ids = await redis.zrange<string[]>(key, start, end, {
+    rev: true,
+  });
 
   if (ids.length === 0) {
     const fallback = await ctx.payload.find({

@@ -6,6 +6,10 @@ async function syncViews() {
   const payload = await getPayload({ config });
 
   const views = await redis.hgetall("manga:views");
+  if (!views) {
+  console.log("No views to sync");
+  return;
+}
 
   for (const [id, count] of Object.entries(views)) {
     const increment = Number(count);

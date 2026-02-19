@@ -5,7 +5,8 @@ import { NewUpdate } from "@/modules/home/ui/newUpdate"
 import { Mangas } from "@/payload-types"
 
 import { useTRPC } from "@/trpc/client"
-import { useQuery } from "@tanstack/react-query"
+import { useSuspenseQuery } from "@tanstack/react-query"
+
 import Link from "next/link"
 
 
@@ -13,15 +14,13 @@ import Link from "next/link"
 const Page = () => {
     const trpc = useTRPC()
    
-    const {data: manga, isLoading} = useQuery(trpc.magas.getRankYear.queryOptions({
+    
+    const {data: manga} = useSuspenseQuery(trpc.magas.getRankDay.queryOptions({
         page: 1
     }))
-    const { data: category } = useQuery(
+    const { data: category } = useSuspenseQuery(
     trpc.category.getSubMany.queryOptions()
-  );
-    if (isLoading || !manga || !category) {
-      return <div>Loading...</div>;
-    }
+    )
     return (
         <div className="bg-popular">
             <div className="flex pt-10 justify-around">
