@@ -5,7 +5,7 @@ import PageClient from "./pageClient";
 
 import { getImageUrl, richTextToPlainText } from "@/lib/seo";
 
-const SITE_URL = "https://your-domain.com";
+const SITE_URL = "https://alga.site";
 
 export const revalidate = 60;
 
