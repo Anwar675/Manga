@@ -48,7 +48,12 @@ export default buildConfig({
   plugins: [
   s3Storage({
     collections: {
-      media: true,
+      media: {
+        prefix: '',
+      generateFileURL: ({ filename }) => {
+        return `https://pub-b8eab88321ad47c1acf3905063d94661.r2.dev/${filename}`
+      }
+      },
     },
     bucket: "manga-media",
     config: {
