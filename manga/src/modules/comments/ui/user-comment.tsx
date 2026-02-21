@@ -131,7 +131,7 @@ export const CommentsUser = ({ targetId, targetType }: CommentsUserProps) => {
         </div>
         <Button
           onClick={handleGenerComment}
-          className=" right-0 absolute md:bottom-0 -bottom-1 z-50 px-4  md:py-4 py-6"
+          className=" right-0 absolute md:bottom-0 bottom-0 z-50 px-4  md:py-4 py-6"
         >
           Gửi
         </Button>

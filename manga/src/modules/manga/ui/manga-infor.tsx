@@ -124,8 +124,8 @@ export const MangaInfor = ({ category, manga, chapters }: MangaInforProps) => {
     <div className="flex md:flex-row flex-col gap-4 justify-between">
       <div className="flex flex-col gap-6 flex-1">
         <div className="bg-rank flex md:flex-row flex-col md:gap-2 gap-4 rounded-xl w-full p-4">
-          <div className="text-center">
-            <div className="md:w-92.5 w-full h-120 relative md:h-125">
+          <div className="text-center flex flex-col gap-4 md:gap-0">
+            <div className="md:w-92.5 w-full h-100 relative md:h-125">
               <Image
                 src={
                   typeof manga.cover === "string"
@@ -137,7 +137,7 @@ export const MangaInfor = ({ category, manga, chapters }: MangaInforProps) => {
                 className="rounded-xl object-cover"
               />
             </div>
-            <div className="p-4 flex gap-4 justify-around items-center">
+            <div className="md:p-4  p-0 flex gap-4 md:text-xl text-sm justify-around items-center">
               <Button
                 className="flex-1 gap-2"
                 variant={isFollow ? "secondary" : "default"}
@@ -150,7 +150,7 @@ export const MangaInfor = ({ category, manga, chapters }: MangaInforProps) => {
                 <h2>{isFollow ? "ĐANG THEO DÕI" : "THEO DÕI TRUYỆN"}</h2>
               </Button>
 
-              <p className="text-xl">{manga.followers} theo dõi</p>
+              <p className="">{manga.followers} theo dõi</p>
             </div>
           </div>
 

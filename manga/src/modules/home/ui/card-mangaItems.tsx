@@ -27,7 +27,7 @@ export const CardMangaItems = ({ newCard, manga }: CardMangaItemsProps) => {
     <>
       {newCard ? (
         <div className="pb-2 mt-4  rounded-md bg-[#fde9d3] dark:bg-[#242526] shadow-sm  cursor-pointer ">
-          <div className="relative h-65 ">
+          <div className="relative md:h-65 h-50 ">
             <Image src={coverUrl} alt="card" fill className="rounded-t-xl" />
             <p
               className="px-2 py-0.5 m-2 rounded-md text-center text-white text-sm font-light absolute  bg-[linear-gradient(149deg,#d9534f,#ff9400,#ffd800,#ffd800,#ff9400,#d9534f)]
@@ -41,12 +41,12 @@ export const CardMangaItems = ({ newCard, manga }: CardMangaItemsProps) => {
             </p>
           </div>
           <p className="truncate font-normal p-2">{manga.title}</p>
-          <div className="flex px-2 justify-between items-center">
+          <div className="flex px-2 md:justify-between gap-4 md:gap-0 items-center">
             <div className="flex items-center text-[#7b8084] dark:text-white text-sm">
               <Eye size={20} className="fill-gray-400" />
               <p>{formatViews(manga.views)}</p>
             </div>
-            <div className="flex gap-0.5 items-center text-sm">
+            <div className="flex gap-0.5 truncate items-center text-sm">
               <Clock size={20} />
               <p>{updateAt ? timeAgo(updateAt) : "Chưa cập nhập"}</p>
             </div>
@@ -65,7 +65,7 @@ export const CardMangaItems = ({ newCard, manga }: CardMangaItemsProps) => {
         </div>
       ) : (
         <div className="py-4  cursor-pointer ">
-          <div className="relative h-65 ">
+          <div className="relative  md:h-65 h-50 ">
             <Image src={coverUrl} alt="card" fill className="rounded-t-xl" />
           </div>
           <p className="truncate font-normal px-2">{manga.title}</p>
