@@ -13,3 +13,8 @@ export const trpc = createTRPCOptionsProxy({
 });
 
 export const caller = appRouter.createCaller(createTRPCContext)
+
+export const createCaller = cache(async () => {
+  const ctx = await createTRPCContext();
+  return appRouter.createCaller(ctx);
+});

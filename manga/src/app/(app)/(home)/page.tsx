@@ -1,29 +1,26 @@
-export const dynamic = "force-dynamic";
+export const revalidate = 60;
 
-import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
+
 import HomeClient from "./home-client";
-import { getQueryClient, trpc } from "@/trpc/server";
+import {  createCaller } from "@/trpc/server";
+
+
 
 const Page = async () => {
-  const queryClient = getQueryClient();
+  const caller = await createCaller();
 
-  await Promise.all([
-    queryClient.prefetchQuery(trpc.category.getSubMany.queryOptions()),
-    queryClient.prefetchQuery(trpc.comments.getMany.queryOptions()),
-    queryClient.prefetchQuery(trpc.magas.getMany.queryOptions()),
-    queryClient.prefetchQuery(
-      trpc.magas.getRankMonth.queryOptions({ page: 1 })
-    ),
-    queryClient.prefetchQuery(
-      trpc.magas.getRankWeek.queryOptions({ page: 1 })
-    ),
+  const [category, comments, mangas] = await Promise.all([
+    caller.category.getSubMany(),
+    caller.comments.getMany(),
+    caller.magas.getMany(),
   ]);
 
   return (
-    <HydrationBoundary state={dehydrate(queryClient)}>
-      <HomeClient />
-    </HydrationBoundary>
+    <HomeClient
+      category={category}
+      comments={comments}
+      mangas={mangas}
+    />
   );
 };
-
-export default Page;
+export default Page
