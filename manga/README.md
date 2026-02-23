@@ -7,27 +7,20 @@ Dự án tập trung vào hiệu năng, SEO cho trang manga, và hệ thống qu
 
 ---
 
-## Tính năng chính
+## ✨ Tính năng nổi bật
 
-### Trang chủ
-
-* Slider banner, danh sách truyện phổ biến, mới cập nhật, truyện hot.
-* Pagination cho danh sách manga (`/pages/[page]`).
-* Ranking theo ngày / tuần / tháng / năm bằng Redis.
-
-### Trang chi tiết manga
-
-* Thông tin manga: cover, thể loại, tác giả, trạng thái, lượt xem, follower.
-* SEO tự động cho từng manga (meta title, description, Open Graph).
-* Rating trung bình (sao) được tính từ collection `ratings`.
-* Danh sách chapter, truy cập qua slug `/manga/[mangaSlug]/[chapter]`.
-
-### Đọc chapter
-
-* Hiển thị danh sách ảnh của chapter.
-* Tự động ghi lịch sử đọc cho user.
-* Điều hướng chapter trước / sau.
-
+- Trang chủ đẹp mắt: Banner slider, Truyện phổ biến, Mới cập nhật, Top ranking (ngày/tuần/tháng/năm)
+- Trang chi tiết manga + SEO động (meta title, description, Open Graph, canonical)
+- Chapter reader tối ưu: Swiper vertical, lazy-load ảnh, next/prev chapter, lịch sử đọc tự động
+- Tìm kiếm realtime + filter nâng cao (thể loại, trạng thái, follow, ranking)
+- Hệ thống follow manga + thư viện cá nhân
+- Lịch sử đọc chi tiết (chapter gần nhất, thời gian)
+- Đánh giá sao + tính trung bình tự động
+- Hệ thống comment (manga & chapter)
+- Auth + phân quyền (User / Translator / Admin / Super Admin)
+- Admin dashboard đầy đủ tại `/admin` (quản lý manga, chapter, media, user, comment, rating...)
+- Ranking realtime bằng **Redis** (không load database nặng)
+- Dark mode + responsive hoàn hảo
 ### SEO manga
 
 * Sinh dynamic metadata cho mỗi trang manga:
@@ -110,32 +103,22 @@ Dự án tập trung vào hiệu năng, SEO cho trang manga, và hệ thống qu
 
 ---
 
-## Công nghệ sử dụng
+## 🛠 Công nghệ sử dụng
 
-### Frontend
+| Layer          | Công nghệ                              |
+|----------------|----------------------------------------|
+| Framework      | Next.js 15 (App Router)                |
+| CMS            | Payload CMS + PostgreSQL               |
+| Styling        | Tailwind CSS 4 + shadcn/ui             |
+| Data Fetching  | tRPC + React Query                     |
+| Cache/Ranking  | Redis                                  |
+| Icons          | lucide-react                           |
+| Form           | react-hook-form + zod                  |
+| Slider         | Swiper                                 |
+| Auth           | Payload built-in auth                  |
 
-* next, react, react-dom
-* tailwindcss, tw-animate-css
-* lucide-react, swiper
-* react-hook-form, zod
-* shadcn/ui
-* @tanstack/react-query
 
-### Backend / CMS
 
-* payload + postgres adapter
-* tích hợp Payload vào Next App Router
-
-### Data fetching
-
-* trpc server/client
-* react query
-
-### Cache & ranking
-
-* redis
-
----
 
 ## Cấu trúc thư mục chính
 
