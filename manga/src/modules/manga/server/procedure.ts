@@ -80,70 +80,70 @@ export const mangasRouter = createTRPCRouter({
   }),
 
   ratingManga: protectedProcedure
-  .input(
-    z.object({
-      mangaId: z.string(),
-      star: z.number().min(1).max(5),
-    }),
-  )
-  .mutation(async ({ ctx, input }) => {
-    const userId = ctx.session.user.id;
+    .input(
+      z.object({
+        mangaId: z.string(),
+        star: z.number().min(1).max(5),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const userId = ctx.session.user.id;
 
-    // 1️⃣ kiểm tra đã rating chưa
-    const existed = await ctx.payload.find({
-      collection: "ratings",
-      where: {
-        manga: { equals: input.mangaId },
-        user: { equals: userId },
-      },
-      limit: 1,
-    });
+      // 1️⃣ kiểm tra đã rating chưa
+      const existed = await ctx.payload.find({
+        collection: "ratings",
+        where: {
+          manga: { equals: input.mangaId },
+          user: { equals: userId },
+        },
+        limit: 1,
+      });
 
-    // 2️⃣ update hoặc create rating
-    if (existed.docs.length > 0) {
+      // 2️⃣ update hoặc create rating
+      if (existed.docs.length > 0) {
+        await ctx.payload.update({
+          collection: "ratings",
+          id: existed.docs[0].id,
+          data: { star: input.star },
+        });
+      } else {
+        await ctx.payload.create({
+          collection: "ratings",
+          data: {
+            manga: input.mangaId,
+            user: userId,
+            star: input.star,
+          },
+        });
+      }
+
+      // 3️⃣ tính lại avg + count
+      const allRatings = await ctx.payload.find({
+        collection: "ratings",
+        where: {
+          manga: { equals: input.mangaId },
+        },
+        limit: 1000,
+      });
+
+      const count = allRatings.docs.length;
+      const total = allRatings.docs.reduce((sum, r) => sum + r.star, 0);
+      const avg = count > 0 ? total / count : 0;
+
+      // 4️⃣ update vào manga
       await ctx.payload.update({
-        collection: "ratings",
-        id: existed.docs[0].id,
-        data: { star: input.star },
-      });
-    } else {
-      await ctx.payload.create({
-        collection: "ratings",
+        collection: "mangas",
+        id: input.mangaId,
         data: {
-          manga: input.mangaId,
-          user: userId,
-          star: input.star,
+          rating: {
+            avg,
+            count,
+          },
         },
       });
-    }
 
-    // 3️⃣ tính lại avg + count
-    const allRatings = await ctx.payload.find({
-      collection: "ratings",
-      where: {
-        manga: { equals: input.mangaId },
-      },
-      limit: 1000,
-    });
-
-    const count = allRatings.docs.length;
-    const total = allRatings.docs.reduce((sum, r) => sum + r.star, 0);
-    const avg = count > 0 ? total / count : 0;
-
-    // 4️⃣ update vào manga
-    await ctx.payload.update({
-      collection: "mangas",
-      id: input.mangaId,
-      data: {
-        rating: {
-          avg,
-          count,
-        },
-      },
-    });
-
-    return { success: true, avg, count };
-  }),
+      return { success: true, avg, count };
+    }),
 
   getManga: baseProcedure
     .input(
@@ -378,7 +378,6 @@ export const mangasRouter = createTRPCRouter({
         },
       });
       const redisView = await redis.hget("manga:views", data.docs[0]?.id);
-
 
       return {
         ...data.docs[0],
