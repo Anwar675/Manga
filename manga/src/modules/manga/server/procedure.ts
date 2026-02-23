@@ -72,11 +72,8 @@ export const mangasRouter = createTRPCRouter({
       limit: 8,
       sort: "-latestChapter.updatedAt",
     });
-    const redisView = await redis.hget("manga:views", data.docs[0]?.id);
-    return data.docs.map((manga) => ({
-      ...manga,
-      views: (manga.views ?? 0) + Number(redisView ?? 0),
-    }));
+
+    return data.docs;
   }),
 
   ratingManga: protectedProcedure
@@ -143,6 +140,19 @@ export const mangasRouter = createTRPCRouter({
       });
 
       return { success: true, avg, count };
+    }),
+  getViewsBatch: baseProcedure
+    .input(z.object({ ids: z.array(z.string()) }))
+    .query(async ({ input }) => {
+      if (!input.ids.length) return [];
+
+      const result = await redis.hmget("manga:views", ...input.ids);
+
+      if (!result) return input.ids.map(() => 0);
+
+      return input.ids.map((id) =>
+        Number((result as Record<string, string | null>)[id] ?? 0),
+      );
     }),
 
   getManga: baseProcedure

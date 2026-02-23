@@ -21,22 +21,27 @@ type Props = {
   mangas: Mangas[];
 };
 
-export default function HomeClient({
-  category,
-  comments,
-  mangas,
-}: Props) {
+export default function HomeClient({ category, comments, mangas }: Props) {
   const trpc = useTRPC();
 
   // ✅ không dùng Suspense nữa
   const { data: rankMonth } = useQuery(
-    trpc.magas.getRankMonth.queryOptions({ page: 1 })
+    trpc.magas.getRankMonth.queryOptions({ page: 1 }),
   );
 
   const { data: rankWeek } = useQuery(
-    trpc.magas.getRankWeek.queryOptions({ page: 1 })
+    trpc.magas.getRankWeek.queryOptions({ page: 1 }),
+  );
+  const { data: redisViews } = useQuery(
+    trpc.magas.getViewsBatch.queryOptions({
+      ids: mangas.map((m) => m.id),
+    }),
   );
 
+  const mergedMangas = mangas.map((m, i) => ({
+    ...m,
+    views: (m.views ?? 0) + (redisViews?.[i] ?? 0),
+  }));
   const popularRef = useRef<HTMLDivElement>(null);
   const newUpdateRef = useRef<HTMLDivElement>(null);
   const adminChatRef = useRef<HTMLDivElement>(null);
@@ -68,7 +73,7 @@ export default function HomeClient({
       </div>
 
       <div ref={newUpdateRef}>
-        <NewUpdate category={category} mangas={mangas} />
+        <NewUpdate category={category} mangas={mergedMangas} />
       </div>
 
       <div ref={adminChatRef}>
