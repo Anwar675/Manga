@@ -5,7 +5,7 @@ import { getPayload } from "payload";
 import config from "../payload.config";
 import mime from "mime-types";
 
-const MANGA_ID = "8f7140d3-66b6-47a2-a043-3508297e38d0";
+const MANGA_ID = "a0d5fb19-7e78-4fe4-a655-09e95b6487ea";
 const ROOT_FOLDER = path.resolve(process.cwd(), "public/img/manga");
 
 async function run() {
