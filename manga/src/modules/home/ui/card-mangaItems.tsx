@@ -28,7 +28,7 @@ export const CardMangaItems = ({ newCard, manga }: CardMangaItemsProps) => {
       {newCard ? (
         <div className="pb-2 mt-4  rounded-md bg-[#fde9d3] dark:bg-[#242526] shadow-sm  cursor-pointer ">
           <div className="relative md:h-65 h-50 ">
-            <Image src={coverUrl} alt="card" fill className="rounded-t-xl" />
+            <Image src={coverUrl} alt="card" unoptimized fill className="rounded-t-xl" />
             <p
               className="px-2 py-0.5 m-2 rounded-md text-center text-white text-sm font-light absolute  bg-[linear-gradient(149deg,#d9534f,#ff9400,#ffd800,#ffd800,#ff9400,#d9534f)]
                 bg-size-[1200%_1200%]
@@ -66,7 +66,7 @@ export const CardMangaItems = ({ newCard, manga }: CardMangaItemsProps) => {
       ) : (
         <div className="py-4  cursor-pointer ">
           <div className="relative  md:h-65 h-50 ">
-            <Image src={coverUrl} alt="card" fill className="rounded-t-xl" />
+            <Image unoptimized src={coverUrl} alt="card" fill className="rounded-t-xl" />
           </div>
           <p className="truncate font-normal px-2">{manga.title}</p>
           <div className="flex px-2 justify-between items-center">

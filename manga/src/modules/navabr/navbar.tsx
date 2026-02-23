@@ -44,7 +44,7 @@ export const Navbar = () => {
       <div className="bg-navbar  2xl:px-16 w-full hidden md:flex top-0 2xl:py-6 px-12 py-4 items-center justify-between">
         <div>
           <Link href="/">
-            <Image src="/img/logo.png" alt="logo" width={120} height={100} />
+            <Image src="/img/logo.png" alt="logo" unoptimized width={120} height={100} />
           </Link>
         </div>
         <div className="">

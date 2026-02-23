@@ -24,6 +24,7 @@ export const ChatMessageItem = ({ comment }: ChatMessageItemProps) => {
             alt="avata"
             className="rounded-full"
             fill
+            unoptimized
           />
         </div>
         <div className="flex flex-col w-full">

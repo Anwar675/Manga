@@ -42,6 +42,7 @@ export const BackgroundSlider = () => {
               }
               alt={slide.title ?? "banner"}
               fill
+              unoptimized
               priority={index === 0}
               className="object-cover"
             />

@@ -111,6 +111,7 @@ export const ChapterInfor = () => {
                 <Image
                   src={imageUrl}
                   width={1000}
+                  unoptimized
                   height={1200}
                   priority={index < 2} // preload 2 ảnh đầu
                   className="w-full h-auto object-contain"

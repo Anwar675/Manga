@@ -100,6 +100,7 @@ export const ReplyList = ({
                 <Image
                   src={avatarUrl ?? "/img/background.png"}
                   fill
+                  unoptimized
                   className="rounded-full"
                   alt="User Avatar"
                 />

@@ -141,6 +141,7 @@ export function SignUpForm({ form, onSubmit, isLoading }: LoginProps) {
               src="/img/login.jpg"
               alt="Image"
               fill
+              unoptimized
               className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
             />
           </div>

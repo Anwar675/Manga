@@ -56,6 +56,7 @@ export const Search = () => {
                         ? manga.cover
                         : (manga.cover?.url ?? "/images/manga-placeholder.jpg")
                     }
+                    unoptimized
                     width={60}
                     height={60}
                     className="object-cover h-15 w-15"

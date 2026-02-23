@@ -64,7 +64,7 @@ export const AdminChat = ({ comments }: AdminChatProps) => {
     >
       <div className="p-4 items-center justify-center bg-kind gap-4 translate-y-4 flex rounded-md mx-4 font-bold">
         <div className="md:-14 md:h-12 w-8 h-8 relative">
-          <Image src="/img/speaker.png" alt="name" fill />
+          <Image src="/img/speaker.png" alt="name" fill unoptimized/>
         </div>
 
         <h1 className="md:text-3xl text-[18px]">THÔNG BÁO TỪ BAN QUẢN TRỊ</h1>

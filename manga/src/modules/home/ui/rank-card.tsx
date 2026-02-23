@@ -33,6 +33,7 @@ export const RankCard = ({ rankColor, rank, manga }: RankCardProps) => {
             ? manga.cover
             : (manga.cover?.url ?? "/images/manga-placeholder.jpg")
         }
+        unoptimized
         width={48}
         height={48}
         alt="rank"

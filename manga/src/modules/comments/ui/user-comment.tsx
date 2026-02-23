@@ -155,6 +155,7 @@ export const CommentsUser = ({ targetId, targetType }: CommentsUserProps) => {
                     <Image
                       src={avatarUrl ?? "/img/background.png"}
                       fill
+                      unoptimized
                       className="rounded-full"
                       alt="User Avatar"
                     />

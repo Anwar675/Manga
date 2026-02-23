@@ -15,7 +15,7 @@ export const Footer = () => {
             <Image src="/img/decor.png" fill alt="decor" />
         </div>
         <div className="absolute w-40 md:bottom-5 right-0 bottom-0 h-12">
-            <Image src="/img/decor.png" fill alt="decor" />
+            <Image  src="/img/decor.png" fill alt="decor" />
         </div>
         
       </div>

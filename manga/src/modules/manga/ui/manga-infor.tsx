@@ -132,6 +132,7 @@ export const MangaInfor = ({ category, manga, chapters }: MangaInforProps) => {
                     ? manga.cover
                     : (manga.cover?.url ?? "/images/manga-placeholder.jpg")
                 }
+                unoptimized
                 alt={manga.title}
                 fill
                 className="rounded-xl object-cover"

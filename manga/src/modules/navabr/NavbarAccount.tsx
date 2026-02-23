@@ -31,6 +31,7 @@ export const NavbarAccount = () => {
       <div className=" flex items-center text-[#4f4c40]  text-md  2xl:text-[16px] font-light gap-4 p-4">
         <div className="w-11 relative h-11">
           <Image
+          unoptimized
             src={
               typeof username.data?.user?.avatar === "string"
                 ? username.data.user.avatar
