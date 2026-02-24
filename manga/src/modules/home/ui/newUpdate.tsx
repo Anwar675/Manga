@@ -109,7 +109,7 @@ export const NewUpdate = ({
             </div>
           ) : (
             <Button>
-              <Link href="/pages/2">Xem thêm</Link>
+              <Link href="/pages/1">Xem thêm</Link>
             </Button>
           )}
         </div>

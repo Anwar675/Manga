@@ -24,7 +24,7 @@ export const RankCard = ({ rankColor, rank, manga }: RankCardProps) => {
   );
   return (
     <div className="flex items-center gap-4 cursor-pointer ">
-      <p className={`text-5xl ${rankColor} p-1 w-12 italic font-bold`}>
+      <p className={`text-5xl  ${rankColor} p-1 w-12 italic font-bold`}>
         {rank}
       </p>
       <Image
@@ -39,8 +39,8 @@ export const RankCard = ({ rankColor, rank, manga }: RankCardProps) => {
         alt="rank"
         className="w-12 h-12 object-cover"
       />
-      <div>
-        <h2 className="text-md font-medium">{manga.title}</h2>
+      <div className="flex-1">
+        <h2 className="text-md font-medium text-wrap">{manga.title}</h2>
         <div className="flex items-center gap-2 text-view">
           <div className="flex text-sm items-center  ">
             <Eye size={16} className="fill-gray-400" />
