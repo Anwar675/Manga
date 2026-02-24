@@ -114,6 +114,10 @@ export const MangaInfor = ({ category, manga, chapters }: MangaInforProps) => {
   const [select, setSelect] = useState<number | null>(null);
   const handleStar = (star: number) => {
     setSelect(star);
+    if (!session?.user) {
+      router.push("/sign-in");
+      return false;
+    }
     ratingManga.mutate({
       mangaId: manga.id,
       star,

@@ -63,7 +63,7 @@ const Page = () => {
 
   return (
     <div className="bg-popular">
-      <div className="bg-rank flex flex-col gap-4 p-4 mx-auto w-200 items-center ">
+      <div className="bg-rank flex flex-col gap-4 p-4 mx-auto md:w-200 w-full items-center ">
         <h1 className="text-2xl font-bold">Profile Details</h1>
 
         <div className="flex flex-col items-center">

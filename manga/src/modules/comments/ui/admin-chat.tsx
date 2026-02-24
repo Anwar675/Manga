@@ -72,7 +72,7 @@ export const AdminChat = ({ comments }: AdminChatProps) => {
 
       <div
         ref={messageRef}
-        className={`${more ? "h-77 md:h-120" : "h-52 md:h-77"} overflow-auto relative rounded-md mx-4 bg-kind my-6 pb-10 md:my-8  `}
+        className={`${more ? "h-70 md:h-120" : "h-45 md:h-77"} overflow-auto relative rounded-md mx-4 bg-kind my-6 pb-10 md:my-8  `}
       >
         {orderedComments.map((comment) => (
           <ChatMessageItem key={comment.id} comment={comment} />

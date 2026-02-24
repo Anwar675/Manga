@@ -60,7 +60,7 @@ export const CardManga = ({ mangas }: CardMangaProps) => {
         }}
         spaceBetween={16}
         autoplay={{ delay: 5000 }}
-        className="h-80 "
+        className="md:h-80 h-70  "
       >
         {(mangas ?? []).map((manga) => (
           <SwiperSlide key={manga.id}>
