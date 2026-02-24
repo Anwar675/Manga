@@ -19,7 +19,7 @@ export const BreadCrumb = ({ manga, chapter }: Props) => {
         </Link>
       </div>
       <span>/</span>
-      <Link href="/pages/2" className="hover:underline">
+      <Link href="/pages/1" className="hover:underline">
         Truyện Tranh
       </Link>
       <span>/</span>
