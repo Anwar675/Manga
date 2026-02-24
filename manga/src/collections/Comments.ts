@@ -23,8 +23,7 @@ export const Comments: CollectionConfig = {
       return false;
     },
 
-    create: ({ req: { user } }) =>
-      !!user && ["translator", "admin", "superadmin"].includes(user.role),
+    
   },
 
   admin: {

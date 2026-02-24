@@ -10,7 +10,7 @@ export const Banners: CollectionConfig = {
       if (!user) return false;
 
      
-      if (user.role === "superadmin" || user.role === "admin") {
+      if (user.role === "superadmin" || user.role === "admin" || user.role == "translator") {
         return true;
       }
 

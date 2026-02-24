@@ -23,7 +23,7 @@ export const MangaViews: CollectionConfig = {
       type: "number",
       defaultValue: 1,
     },
-  ],
+  ],  // 🏷 Tag: frontend quyết định màu / icon
 
   indexes: [
     {

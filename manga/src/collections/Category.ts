@@ -6,7 +6,9 @@ export const Categories: CollectionConfig = {
   admin: {
     useAsTitle: "name",
   },
-
+  access: {
+    create: ({req: {user} }) => !!user && ["admin", "superadmin"].includes(user.role),
+  },
   fields: [
     {
       name: "name",
