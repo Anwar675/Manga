@@ -14,7 +14,7 @@ export const viewport: Viewport = {
   themeColor: "#0f172a",
 };
 export const metadata: Metadata = {
-  metadataBase: new URL("https://alga.vn"),
+  metadataBase: new URL("https://alga21.site"),
 
   title: {
     default: "Alga – Đọc truyện tranh online",
@@ -30,7 +30,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Alga – Đọc truyện tranh online",
     description: "Đọc manga miễn phí, tốc độ cao.",
-    url: "https://alga.vn",
+    url: "https://alga21.site",
     siteName: "Alga",
     locale: "vi_VN",
     type: "website",

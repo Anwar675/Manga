@@ -14,6 +14,7 @@ import {
   getMonthKey,
 } from "@/lib/formatime";
 import { Mangas } from "@/payload-types";
+import { meili } from "@/lib/meili";
 
 async function getRankFromRedisPaginated(
   ctx: Context,
@@ -258,6 +259,22 @@ export const mangasRouter = createTRPCRouter({
       };
     }),
 
+  searchAuto: baseProcedure
+    .input(
+      z.object({
+        query: z.string(),
+      }),
+    )
+    .query(async ({ input }) => {
+      if (!input.query) return [];
+
+      const result = await meili.index("mangas").search(input.query, {
+        limit: 5,
+      });
+
+      return result.hits;
+    }),
+
   followManga: protectedProcedure
     .input(
       z.object({
@@ -356,18 +373,24 @@ export const mangasRouter = createTRPCRouter({
     )
     .query(async ({ ctx, input }) => {
       if (!input.query.trim()) return [];
-
-      const data = await ctx.payload.find({
-        collection: "mangas",
-        where: {
-          title: {
-            like: input.query,
-          },
-        },
+      const result = await meili.index("mangas").search(input.query, {
         limit: 5,
       });
 
-      return data.docs;
+      const ids = result.hits.map((m) => m.id);
+
+      const mangas = await ctx.payload.find({
+        collection: "mangas",
+        where: {
+          id: {
+            in: ids,
+          },
+        },
+      });
+
+      const map = new Map(mangas.docs.map((m) => [m.id, m]));
+
+      return ids.map((id) => map.get(id)).filter(Boolean) as Mangas[];
     }),
 
   getOne: baseProcedure

@@ -63,6 +63,8 @@ export const MangaInfor = ({ category, manga, chapters }: MangaInforProps) => {
   const { data: followStatus } = useQuery(
     trpc.magas.getFollowStatus.queryOptions({
       mangaId: manga.id,
+    },{
+      enabled: !!session?.user && !isLoading
     }),
   );
 
