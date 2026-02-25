@@ -7,7 +7,7 @@ export const Chapters: CollectionConfig = {
   access: {
     read: ({ req: { user } }) => {
       if (!user) return false;
-  
+
       if (user.role === "superadmin" || user.role === "admin") {
         return true;
       }
@@ -58,7 +58,6 @@ export const Chapters: CollectionConfig = {
       type: "text",
       index: true,
       admin: {
-        readOnly: true,
         position: "sidebar",
       },
     },
