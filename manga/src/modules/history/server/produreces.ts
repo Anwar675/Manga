@@ -1,7 +1,6 @@
 import { Mangas } from "@/payload-types";
 import {
   createTRPCRouter,
-  baseProcedure,
   protectedProcedure,
 } from "@/trpc/init";
 import z from "zod";

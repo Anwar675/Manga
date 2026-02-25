@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { Button } from "@/components/ui/button";
 import { formatDateTime } from "@/lib/formatime";
 import { CommentsUser } from "@/modules/comments/ui/user-comment";
@@ -20,6 +20,7 @@ export const ChapterInfor = () => {
   const { data: mangaData } = useSuspenseQuery(
     trpc.magas.getOne.queryOptions({ slug: manga }),
   );
+  const { mutate } = useMutation(trpc.history.saveHistory.mutationOptions());
   const { data: ChapterMany } = useSuspenseQuery(
     trpc.chapter.getMany.queryOptions({ mangaId: mangaData.id }),
   );
@@ -48,12 +49,12 @@ export const ChapterInfor = () => {
     const key = `history-${mangaData.id}`;
     const lastChapter = localStorage.getItem(key);
     if (lastChapter === chapterId.id) return;
-    saveHistoryMutation.mutate({
+    mutate({
       mangaId: mangaData.id,
       chapterId: chapterId.id,
     });
     localStorage.setItem(key, chapterId.id);
-  }, [chapterId.id, mangaData.id]);
+  }, [chapterId.id, mangaData.id, mutate]);
   const chapterNumber = chapterId.title
     ? parseInt(chapterId.title.replace(/\D/g, ""), 10)
     : undefined;
