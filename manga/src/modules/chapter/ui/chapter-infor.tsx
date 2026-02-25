@@ -1,3 +1,4 @@
+"use client"
 import { Button } from "@/components/ui/button";
 import { formatDateTime } from "@/lib/formatime";
 import { CommentsUser } from "@/modules/comments/ui/user-comment";

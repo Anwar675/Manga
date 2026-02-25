@@ -1,6 +1,7 @@
 import { getPayload } from "payload";
 import config from "../payload.config";
 import { meili } from "./meili";
+import { Mangas } from "@/payload-types";
 
 
 async function run() {
@@ -13,7 +14,7 @@ async function run() {
   });
 
   await meili.index("mangas").addDocuments(
-    mangas.docs.map((m: any) => ({
+    mangas.docs.map((m: Mangas) => ({
       id: m.id,
       title: m.title,
       views: m.views ?? 0,
