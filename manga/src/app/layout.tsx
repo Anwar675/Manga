@@ -20,6 +20,9 @@ export const metadata: Metadata = {
     default: "Alga – Đọc truyện tranh online",
     template: "%s | Alga",
   },
+  icons: {
+    icon: "/favicon.ico",
+  },
 
   description: "Web đọc manga miễn phí, cập nhật nhanh, hỗ trợ dark mode.",
 

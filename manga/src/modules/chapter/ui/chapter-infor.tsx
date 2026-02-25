@@ -2,20 +2,13 @@ import { Button } from "@/components/ui/button";
 import { formatDateTime } from "@/lib/formatime";
 import { CommentsUser } from "@/modules/comments/ui/user-comment";
 import { useTRPC } from "@/trpc/client";
-import { useSuspenseQuery } from "@tanstack/react-query";
-import {
-  
-  ArrowLeft,
-  ArrowRight,
-  Bug,
-  ChevronDown,
-  Clock,
-} from "lucide-react";
+import { useMutation, useSuspenseQuery } from "@tanstack/react-query";
+import { ArrowLeft, ArrowRight, Bug, ChevronDown, Clock } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 
-import {  useState } from "react";
+import { useEffect, useState } from "react";
 
 export const ChapterInfor = () => {
   const { chapter, manga } = useParams<{ manga: string; chapter: string }>();
@@ -29,7 +22,9 @@ export const ChapterInfor = () => {
   const { data: ChapterMany } = useSuspenseQuery(
     trpc.chapter.getMany.queryOptions({ mangaId: mangaData.id }),
   );
-
+  const saveHistoryMutation = useMutation(
+    trpc.history.saveHistory.mutationOptions(),
+  );
   const sortedChapters = [...ChapterMany].sort(
     (a, b) => a.chapterNumber - b.chapterNumber,
   );
@@ -45,8 +40,19 @@ export const ChapterInfor = () => {
       : null;
 
   const { data: chapterId } = useSuspenseQuery(
-    trpc.chapter.getOne.queryOptions({ slug: chapter , mangaId: mangaData.id }),
+    trpc.chapter.getOne.queryOptions({ slug: chapter, mangaId: mangaData.id }),
   );
+  useEffect(() => {
+    if (!chapterId?.id || !mangaData?.id) return;
+    const key = `history-${mangaData.id}`;
+    const lastChapter = localStorage.getItem(key);
+    if (lastChapter === chapterId.id) return;
+    saveHistoryMutation.mutate({
+      mangaId: mangaData.id,
+      chapterId: chapterId.id,
+    });
+    localStorage.setItem(key, chapterId.id);
+  }, [chapterId.id, mangaData.id]);
   const chapterNumber = chapterId.title
     ? parseInt(chapterId.title.replace(/\D/g, ""), 10)
     : undefined;
@@ -64,7 +70,7 @@ export const ChapterInfor = () => {
               <p>{formatDateTime(chapterId?.createdAt)}</p>
             </div>
           </div>
-          <p className="text-center py-2 mx-12 bg-rank w-full">
+          <p className="text-center py-2 mx-12 md:px-0 px-8 bg-rank w-full">
             {" "}
             Sử dụng mũi tên trái (←) hoặc phải (→) để chuyển chapter
           </p>
@@ -105,7 +111,7 @@ export const ChapterInfor = () => {
               typeof page.image === "string"
                 ? page.image
                 : page.image?.url || "/img/error.webp";
-          
+
             return (
               <div key={index} className="md:w-225 w-full relative mx-auto ">
                 <Image

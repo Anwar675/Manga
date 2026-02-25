@@ -23,7 +23,7 @@ export const Footer = () => {
         <div className="relative md:block hidden  h-10 w-10">
             <Image src="/img/logo.png" fill alt="logo" />
         </div>
-        <p className="text-[#7b8084] py-2">© 2026 Alga - Algas. Ưu tiên trải nghiệm độc giả — Thế giới truyện tranh hoàn toàn miễn phí. Liên hệ: <span className="text-text-popular">alga@gmail.com.</span> </p>
+        <p className="text-[#7b8084] py-2">© 2026 Alga - Algas. Ưu tiên trải nghiệm độc giả — Thế giới truyện tranh hoàn toàn miễn phí. Liên hệ: <span className="text-text-popular">anwaralmed24@gmail.com</span> </p>
       </div>
     </div>
   );

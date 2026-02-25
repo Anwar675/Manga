@@ -6,6 +6,7 @@ import { authRouter } from '@/modules/auth/server/procedures';
 import { mangasRouter } from '@/modules/manga/server/procedure';
 import { commentRouter } from '@/modules/comments/server/procedure';
 import { ChapterRouter } from '@/modules/chapter/server/procedure';
+import { historyRouter } from '@/modules/history/server/produreces';
 
 
 export const appRouter = createTRPCRouter({
@@ -14,7 +15,8 @@ export const appRouter = createTRPCRouter({
     auth: authRouter,
     magas: mangasRouter,
     comments: commentRouter,
-    chapter: ChapterRouter
+    chapter: ChapterRouter,
+    history: historyRouter
 
 });
 // export type definition of API

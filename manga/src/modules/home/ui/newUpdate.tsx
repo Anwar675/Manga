@@ -30,6 +30,7 @@ export const NewUpdate = ({
     "/ranking/top-month": "TOP TRUYỆN THÁNG",
     "/ranking/top-all-time": "TOP MỌI THỜI ĐẠI ",
     "/follow": "TRUYỆN BẠN THEO DÕI",
+    "/history": "TRUYỆN BẠN ĐÃ XEM"
   };
 
   const title =
