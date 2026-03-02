@@ -1,20 +1,17 @@
-
 import { postgresAdapter } from "@payloadcms/db-postgres";
 import { lexicalEditor } from "@payloadcms/richtext-lexical";
 import path from "path";
 import { buildConfig } from "payload";
 import { fileURLToPath } from "url";
 import sharp from "sharp";
-import { s3Storage } from '@payloadcms/storage-s3'
+import { s3Storage } from "@payloadcms/storage-s3";
 import { Users } from "./collections/Users";
 import { Media } from "./collections/Media";
 import { Categories } from "./collections/Category";
 import { Banners } from "./collections/Banner";
 import { Authors } from "./collections/Author";
 
-import { Manga
-  
- } from "./collections/Manga";
+import { Manga } from "./collections/Manga";
 import { Chapters } from "./collections/Chapter";
 
 import { Rating } from "./collections/Rating";
@@ -27,13 +24,36 @@ const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
 
 export default buildConfig({
+  routes: {
+     admin: "/cms-91xka-admin",
+  },
   admin: {
+    
     user: Users.slug,
     importMap: {
       baseDir: path.resolve(dirname),
     },
+
+    meta: {
+      titleSuffix: "- CMS",
+    },
+    
+    
   },
-  collections: [Users, Media, Categories, Banners, Authors, Manga, Chapters, EffectComment,Comments,Rating,Follows,History],
+  collections: [
+    Users,
+    Media,
+    Categories,
+    Banners,
+    Authors,
+    Manga,
+    Chapters,
+    EffectComment,
+    Comments,
+    Rating,
+    Follows,
+    History,
+  ],
   editor: lexicalEditor({}),
   secret: process.env.PAYLOAD_SECRET || "",
   typescript: {
@@ -43,28 +63,28 @@ export default buildConfig({
     pool: {
       connectionString: process.env.DATABASE_URL || "",
     },
-    idType: "uuid"
+    idType: "uuid",
   }),
   sharp,
   plugins: [
-  s3Storage({
-    collections: {
-      media: {
-        prefix: '',
-      generateFileURL: ({ filename }) => {
-        return `https://pub-b8eab88321ad47c1acf3905063d94661.r2.dev/${filename}`
-      }
+    s3Storage({
+      collections: {
+        media: {
+          prefix: "",
+          generateFileURL: ({ filename }) => {
+            return `https://pub-b8eab88321ad47c1acf3905063d94661.r2.dev/${filename}`;
+          },
+        },
       },
-    },
-    bucket: "manga-media",
-    config: {
-      endpoint: process.env.R2_ENDPOINT,
-      credentials: {
-        accessKeyId: process.env.R2_ACCESS_KEY!,
-        secretAccessKey: process.env.R2_SECRET!,
+      bucket: "manga-media",
+      config: {
+        endpoint: process.env.R2_ENDPOINT,
+        credentials: {
+          accessKeyId: process.env.R2_ACCESS_KEY!,
+          secretAccessKey: process.env.R2_SECRET!,
+        },
+        region: "auto",
       },
-      region: "auto",
-    },
-  }),
-  ]
+    }),
+  ],
 });
