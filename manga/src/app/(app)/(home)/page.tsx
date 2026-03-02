@@ -1,5 +1,4 @@
-export const revalidate = 60;
-
+export const dynamic = "force-dynamic";
 
 import HomeClient from "./home-client";
 import {  createCaller } from "@/trpc/server";
