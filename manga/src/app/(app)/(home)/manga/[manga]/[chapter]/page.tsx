@@ -5,7 +5,7 @@ export const revalidate = 120;
 
 async function getChapter(manga: string, chapter: string) {
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_SITE_URL}/api/chapter?manga=${manga}&chapter=${chapter}`,
+    `${process.env.NEXT_PUBLIC_APP_URL}/api/chapter?manga=${manga}&chapter=${chapter}`,
     {
       next: { revalidate: 120 },
     }
