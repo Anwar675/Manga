@@ -7,7 +7,7 @@ type PageProps = {
   params: Promise<{ genner: string }>;
 };
 
-const SITE_URL = "https://your-domain.com";
+const SITE_URL = "https://alga21.site";
 
 const formatSlug = (slug: string) =>
   decodeURIComponent(slug).replace(/-/g, " ");
