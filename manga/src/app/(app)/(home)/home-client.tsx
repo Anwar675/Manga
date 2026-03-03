@@ -24,7 +24,7 @@ type Props = {
 export default function HomeClient({ category, comments, mangas }: Props) {
   const trpc = useTRPC();
 
-  // ✅ không dùng Suspense nữa
+
   const { data: rankMonth } = useQuery(
     trpc.magas.getRankMonth.queryOptions({ page: 1 }),
   );
