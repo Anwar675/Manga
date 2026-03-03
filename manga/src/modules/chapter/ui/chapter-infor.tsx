@@ -24,9 +24,7 @@ export const ChapterInfor = () => {
   const { data: ChapterMany } = useSuspenseQuery(
     trpc.chapter.getMany.queryOptions({ mangaId: mangaData.id }),
   );
-  const saveHistoryMutation = useMutation(
-    trpc.history.saveHistory.mutationOptions(),
-  );
+  
   const sortedChapters = [...ChapterMany].sort(
     (a, b) => a.chapterNumber - b.chapterNumber,
   );
