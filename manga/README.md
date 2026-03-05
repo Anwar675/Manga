@@ -202,9 +202,10 @@ bun db:seed
 bun dev
 ```
 
-* App: http://localhost:3000
-* Admin: http://localhost:3000/admin
-* TRPC: http://localhost:3000/api/trpc
+### 4. Demo
+
+* Live: https://alga21.site
+* Admin: http://localhost:3000/cms-91xka-admin
 
 ### 4. Production
 

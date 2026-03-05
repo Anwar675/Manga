@@ -24,7 +24,6 @@ type Props = {
 export default function HomeClient({ category, comments, mangas }: Props) {
   const trpc = useTRPC();
 
-
   const { data: rankMonth } = useQuery(
     trpc.magas.getRankMonth.queryOptions({ page: 1 }),
   );
@@ -32,11 +31,35 @@ export default function HomeClient({ category, comments, mangas }: Props) {
   const { data: rankWeek } = useQuery(
     trpc.magas.getRankWeek.queryOptions({ page: 1 }),
   );
+  const weekIds = rankWeek?.docs?.map((m) => m.id) ?? [];
+
+  const { data: redisViewsWeek } = useQuery(
+    trpc.magas.getViewsBatch.queryOptions({
+      ids: weekIds,
+    }),
+  );
+  const monthIds = rankMonth?.docs?.map((m) => m.id) ?? [];
+
+  const { data: redisViewsMonth } = useQuery(
+    trpc.magas.getViewsBatch.queryOptions({
+      ids: monthIds,
+    }),
+  );
   const { data: redisViews } = useQuery(
     trpc.magas.getViewsBatch.queryOptions({
       ids: mangas.map((m) => m.id),
     }),
   );
+  const mergedRankWeek =
+    rankWeek?.docs?.map((m, i) => ({
+      ...m,
+      views: (m.views ?? 0) + (redisViewsWeek?.[i] ?? 0),
+    })) ?? [];
+  const mergedRankMonth =
+    rankMonth?.docs?.map((m, i) => ({
+      ...m,
+      views: (m.views ?? 0) + (redisViewsMonth?.[i] ?? 0),
+    })) ?? [];
 
   const mergedMangas = mangas.map((m, i) => ({
     ...m,
@@ -69,7 +92,7 @@ export default function HomeClient({ category, comments, mangas }: Props) {
       <BackgroundSlider />
 
       <div ref={popularRef}>
-        <Popular mangas={rankWeek?.docs as Mangas[]} />
+        <Popular mangas={mergedRankWeek as Mangas[]} />
       </div>
 
       <div ref={newUpdateRef}>
@@ -81,7 +104,7 @@ export default function HomeClient({ category, comments, mangas }: Props) {
       </div>
 
       <div>
-        <HotManga mangas={rankMonth?.docs as Mangas[]} />
+        <HotManga mangas={mergedRankMonth as Mangas[]} />
       </div>
 
       <ScrollTop onScroll={scrollTo} />

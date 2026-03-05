@@ -56,7 +56,9 @@ async function getRankFromRedisPaginated(
 
   const map = new Map(mangas.docs.map((m: Mangas) => [m.id, m]));
 
-  const ordered = ids.map((id) => map.get(id)).filter(Boolean);
+  const ordered = ids
+    .map((id) => map.get(id))
+    .filter((m): m is Mangas => Boolean(m));
 
   return {
     docs: ordered,

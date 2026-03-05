@@ -53,6 +53,7 @@ export const authRouter = createTRPCRouter({
     cookies.set({
       name: AUTH_COOKIE,
       value: "",
+      sameSite:"lax",
       httpOnly: true,
       path: "/",
       maxAge: 0, // 👈 xóa cookie
@@ -61,22 +62,22 @@ export const authRouter = createTRPCRouter({
     return { success: true };
   }),
   updateProfile: protectedProcedure
-  .input(
-    z.object({
-      name: z.string().min(1),
-    })
-  )
-  .mutation(async ({ ctx, input }) => {
-    const user = await ctx.payload.update({
-      collection: "users",
-      id: ctx.session.user.id,
-      data: {
-        username: input.name,
-      }
-    });
+    .input(
+      z.object({
+        name: z.string().min(1),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const user = await ctx.payload.update({
+        collection: "users",
+        id: ctx.session.user.id,
+        data: {
+          username: input.name,
+        },
+      });
 
-    return user;
-  }),
+      return user;
+    }),
 
   register: baseProcedure
     .input(registerSchema)
@@ -110,6 +111,9 @@ export const authRouter = createTRPCRouter({
       value: data.token,
       httpOnly: true,
       path: "/",
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      maxAge: 60 * 60 * 24,
     });
     return data;
   }),
