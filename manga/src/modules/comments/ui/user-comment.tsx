@@ -13,6 +13,7 @@ import { useEffect, useRef, useState } from "react";
 import { ReplyList } from "./reply";
 import { timeAgo } from "@/lib/formatime";
 import { TargetType } from "@/lib/types";
+import { useRouter } from "next/navigation";
 
 interface CommentsUserProps {
   targetId: string;
@@ -23,11 +24,12 @@ export const CommentsUser = ({ targetId, targetType }: CommentsUserProps) => {
   const [page, setPage] = useState(1);
    const [replyInputOpen, setReplyInputOpen] = useState<string | null>(null);
   const [replyListOpen, setReplyListOpen] = useState<string | null>(null);
-
+  const router  = useRouter()
   const [mainContent, setMainContent] = useState("");
   const [replyContent, setReplyContent] = useState<Record<string, string>>({});
 
   const trpc = useTRPC();
+  
   const inputRef = useRef<HTMLDivElement | null>(null);
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -55,6 +57,9 @@ export const CommentsUser = ({ targetId, targetType }: CommentsUserProps) => {
       page,
     }),
   );
+  const {data:session} = useSuspenseQuery(
+    trpc.auth.session.queryOptions()
+  )
   const userCommentGener = useMutation(
     trpc.comments.UserMessage.mutationOptions({
       onSuccess: async () => {
@@ -69,6 +74,9 @@ export const CommentsUser = ({ targetId, targetType }: CommentsUserProps) => {
   );
   const handleReply = (parentId: string) => {
     const text = replyContent[parentId];
+    if(!session?.user) {
+      router.push("/sign-in")
+    }
     if (!text?.trim()) return;
 
     userCommentGener.mutate({
@@ -86,8 +94,12 @@ export const CommentsUser = ({ targetId, targetType }: CommentsUserProps) => {
   };
 
   const handleGenerComment = () => {
+     if(!session?.user) {
+      router.push("/sign-in")
+    }
     if (!mainContent.trim()) return;
     setMainContent("");
+
     userCommentGener.mutate({
       targetId,
       targetType,
